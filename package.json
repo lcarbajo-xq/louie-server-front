@@ -1,0 +1,24 @@
+{
+  "name": "louie-server-front",
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview"
+  },
+  "dependencies": {
+    "intersection-observer": "^0.12.0",
+    "just-debounce-it": "^1.5.0",
+    "react": "^17.0.0",
+    "react-dom": "^17.0.0",
+    "wouter": "^2.7.5"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^1.0.0",
+    "sass": "^1.42.1",
+    "vite": "^2.5.10"
+  },
+  "eslintConfig": {
+    "extends": "./node_modules/standard/eslintrc.json"
+  }
+}
