@@ -47,7 +47,7 @@ const ActionTemplate = ({ tab }) => {
 }
 
 export const Library = () => {
-  const [activeTab, setActiveTab] = useState(tabs[1])
+  const [activeTab, setActiveTab] = useState(tabs[0])
 
   const { state, loading, nextBlock } = useServices(activeTab.title)
 
@@ -75,7 +75,6 @@ export const Library = () => {
           {activeTab.id === 1 && !loading && (
             <AlbumContent albums={state.albums} nextBlock={nextBlock} />
           )}
-          {/* {loadingMore &&  */}
 
           {activeTab.id === 0 && !loading && (
             <ArtistContent nextBlock={nextBlock} artists={state.artists} />

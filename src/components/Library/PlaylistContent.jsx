@@ -3,7 +3,7 @@ import { useCallback, useEffect, useRef } from 'react'
 import { useLazyLoad } from '../../hooks/useLazyLoad'
 import { Dropdown } from '../Dropdown/Dropdown'
 
-export const PlaylistContent = ({ playlists, nextBlock }) => {
+export const PlaylistContent = ({ playlists = [], nextBlock }) => {
   const externalRef = useRef()
   const { isVisible } = useLazyLoad({ externalRef, once: false })
 
