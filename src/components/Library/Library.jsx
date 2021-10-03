@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { Link } from 'wouter'
-import cover from '../../assets/app-icon.png'
 import { useServices } from '../../hooks/useServices'
 import { Dropdown } from '../Dropdown/Dropdown'
 import { Header } from '../Header/Header'
@@ -74,11 +73,7 @@ export const Library = () => {
       <div className='relative'>
         <div className='library'>
           {activeTab.id === 1 && !loading && (
-            <AlbumContent
-              albums={state.albums}
-              nextBlock={nextBlock}
-              cover={cover}
-            />
+            <AlbumContent albums={state.albums} nextBlock={nextBlock} />
           )}
           {/* {loadingMore &&  */}
 

@@ -1,8 +1,9 @@
 import debounce from 'just-debounce-it'
 import React, { useCallback, useEffect, useRef } from 'react'
 import { useLazyLoad } from '../../hooks/useLazyLoad'
+import cover from '../../assets/app-icon.png'
 
-export const AlbumContent = React.memo(({ albums = [], cover, nextBlock }) => {
+export const AlbumContent = React.memo(({ albums = [], nextBlock }) => {
   const externalRef = useRef()
   const { isVisible } = useLazyLoad({ externalRef, once: false })
 

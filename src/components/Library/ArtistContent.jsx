@@ -1,6 +1,7 @@
 import debounce from 'just-debounce-it'
 import { useCallback, useEffect, useRef } from 'react'
 import { useLazyLoad } from '../../hooks/useLazyLoad'
+import cover from '../../assets/app-icon.png'
 
 export const ArtistContent = ({ artists = [], nextBlock }) => {
   const externalRef = useRef()
