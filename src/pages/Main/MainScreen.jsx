@@ -1,7 +1,6 @@
 import React from 'react'
 import { useTheme } from '../../hooks/useTheme'
-import { NavLink } from '../../components/NavLink'
-import logo from '../../logo.svg'
+import { NavLink } from '../../components/Header/NavLink'
 import './styles.scss'
 import { Player } from '../../components/Player/Player'
 import { Library } from '../../components/Library/Library'
