@@ -1,11 +1,13 @@
 import { useState } from 'react'
 import { Link } from 'wouter'
 import cover from '../../assets/app-icon.png'
+import { useServices } from '../../hooks/useServices'
 import { Dropdown } from '../Dropdown/Dropdown'
 import { Header } from '../Header/Header'
 
 import { AlbumContent } from './AlbumContent'
 import { ArtistContent } from './ArtistContent'
+import { PlaylistContent } from './PlaylistContent'
 import './styles.scss'
 
 const tabs = [
@@ -24,14 +26,6 @@ const tabs = [
     title: 'playlists',
     href: '/library/playlists'
   }
-]
-
-const playlists = [
-  { name: 'Playlist 1' },
-  { name: 'Playlist 2' },
-  { name: 'Playlist 3' },
-  { name: 'Playlist 4' },
-  { name: 'Playlist 5' }
 ]
 
 const ActionTemplate = ({ tab }) => {
@@ -56,6 +50,8 @@ const ActionTemplate = ({ tab }) => {
 export const Library = () => {
   const [activeTab, setActiveTab] = useState(tabs[1])
 
+  const { state, loading, nextBlock } = useServices(activeTab.title)
+
   return (
     <>
       <Header title='Library'>
@@ -77,27 +73,24 @@ export const Library = () => {
 
       <div className='relative'>
         <div className='library'>
-          {activeTab.id === 1 && <AlbumContent cover={cover} />}
+          {activeTab.id === 1 && !loading && (
+            <AlbumContent
+              albums={state.albums}
+              nextBlock={nextBlock}
+              cover={cover}
+            />
+          )}
           {/* {loadingMore &&  */}
 
-          {activeTab.id === 0 && <ArtistContent />}
-          {/*  {activeTab.id === 2 && (
-            <div className='playlists'>
-              {playlists.map((playlist) => (
-                <div key={playlist} className='playlist'>
-                  <div className='playlist-name'>{playlist.name}</div>
-                  <div className='playlist-actions'>
-                    <Dropdown isOpen={true} dropdown config={{ side: 'right' }}>
-                      <div className='dropdown-action-list'>
-                        <a>Edit</a>
-                        <a>Delete</a>
-                      </div>
-                    </Dropdown>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )} */}
+          {activeTab.id === 0 && !loading && (
+            <ArtistContent nextBlock={nextBlock} artists={state.artists} />
+          )}
+          {activeTab.id === 2 && !loading && (
+            <PlaylistContent
+              playlists={state.playlists}
+              nextBlock={nextBlock}
+            />
+          )}
         </div>
       </div>
     </>

@@ -3,32 +3,37 @@ import { getItemsFromDB } from '../services/databaseService'
 
 import { DBACTIONS } from '../actions/dbActions'
 
-export const useServices = (initialState = {}, reducer) => {
-  const [state, dispatch] = useReducer(reducer, initialState)
+import { initialState, rootReducer } from '../reducers/rootReducer'
+
+export const useServices = (activeTab) => {
+  const [state, dispatch] = useReducer(rootReducer, initialState)
   const [loading, setLoading] = useState(false)
+  const [updatePage, setUpdatePage] = useState(false)
 
   const nextBlock = () => {
     dispatch({
-      type: DBACTIONS.SET_NEXT_PAGE
+      type: DBACTIONS.SET_NEXT_PAGE,
+      payload: activeTab
     })
+    setUpdatePage(true)
   }
 
   const dispatchItemsFromDB = () => {
-    const { tabName, limit, page } = state
+    const { limit, page } = state
+    const activeTabPage = page[activeTab]
 
-    getItemsFromDB(tabName, limit, page).then((data) => {
-      if (tabName === 'albums') {
-        const { albums } = data
+    getItemsFromDB(activeTab, limit, activeTabPage).then((data) => {
+      if (activeTab === 'albums') {
         dispatch({
           type: DBACTIONS.GET_ALBUMS_FROM_DATABASE,
-          payload: albums
+          payload: data.albums
         })
-      } else if (tabName === 'artists')
+      } else if (activeTab === 'artists')
         dispatch({
           type: DBACTIONS.GET_ARTISTS_FROM_DATABASE,
           payload: data.artists
         })
-      else if (tabName === 'playlists')
+      else if (activeTab === 'playlists')
         dispatch({
           type: DBACTIONS.GET_PLAYLISTS_FROM_DATABASE,
           payload: data.playlists
@@ -38,11 +43,14 @@ export const useServices = (initialState = {}, reducer) => {
 
   useEffect(
     function () {
-      setLoading(true)
-      dispatchItemsFromDB()
-      setLoading(false)
+      if (state[activeTab].length === 0 || updatePage) {
+        setLoading(true)
+        dispatchItemsFromDB()
+        setLoading(false)
+        setUpdatePage(false)
+      }
     },
-    [state.page]
+    [activeTab, updatePage]
   )
 
   return {
