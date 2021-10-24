@@ -4,7 +4,7 @@ export const NavLink = ({ href, icon, title }) => {
   const [isActive] = useRoute(href)
   return (
     <>
-      <Link href={href}>
+      <Link to={href}>
         <a className={isActive ? 'active' : ''}>
           <span className='material-icons-round'>{icon}</span>
           <div className='title'>{title}</div>

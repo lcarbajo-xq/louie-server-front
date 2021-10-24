@@ -4,12 +4,13 @@ export const initialState = {
   artists: [],
   albums: [],
   playlists: [
-    { name: 'Playlist 1' },
-    { name: 'Playlist 2' },
-    { name: 'Playlist 3' },
-    { name: 'Playlist 4' },
-    { name: 'Playlist 5' }
+    { name: 'Playlist 1', id: 1, liked: false },
+    { name: 'Playlist 2', id: 2, liked: true },
+    { name: 'Playlist 3', id: 3, liked: true },
+    { name: 'Playlist 4', id: 4, liked: false },
+    { name: 'Playlist 5', id: 5, liked: false }
   ],
+  tracks: [],
   page: {
     albums: 0,
     artists: 0
@@ -31,6 +32,13 @@ export const rootReducer = (state, action) => {
       return {
         ...state,
         artists: artists.concat(action.payload)
+      }
+    }
+    case DBACTIONS.GET_TRACKS_FROM_DATABASE: {
+      const { tracks } = state
+      return {
+        ...state,
+        tracks: tracks.concat(action.payload)
       }
     }
     case DBACTIONS.SET_NEXT_PAGE: {

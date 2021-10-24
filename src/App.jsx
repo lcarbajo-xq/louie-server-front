@@ -1,15 +1,14 @@
 import { Route, Switch } from 'wouter'
+import { Search } from './components/Search/Search'
+import { AppLayout } from './layouts/AppLayout'
 import { LoginScreen } from './pages/Login/LoginScreen'
-import { MainScreen } from './pages/Main/MainScreen'
 import './styles/styles.scss'
 
 function App() {
   return (
     <>
-      <Switch>
-        <Route path='/' component={LoginScreen} />
-        <Route path='/home' component={MainScreen} />
-      </Switch>
+      <Route path='/' component={LoginScreen} />
+      <AppLayout />
     </>
   )
 }

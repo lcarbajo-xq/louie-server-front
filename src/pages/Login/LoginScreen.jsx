@@ -17,7 +17,7 @@ export const LoginScreen = () => {
             <input placeholder='Enter Your Login Credentials' type='text' />
           </div>
 
-          <button onClick={() => setLocation('/home')}>
+          <button onClick={() => setLocation('/app/home')}>
             Login
             <i className='feather-arrow-right' />
           </button>

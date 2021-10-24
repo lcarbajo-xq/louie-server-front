@@ -3,7 +3,7 @@ import { useCallback, useEffect, useRef } from 'react'
 import { useLazyLoad } from '../../hooks/useLazyLoad'
 import cover from '../../assets/app-icon.png'
 
-export const ArtistContent = ({ artists = [], nextBlock }) => {
+export const ArtistContent = ({ artists = [], nextBlock, isLoading }) => {
   const externalRef = useRef()
   const { isVisible } = useLazyLoad({ externalRef, once: false })
 
@@ -26,7 +26,12 @@ export const ArtistContent = ({ artists = [], nextBlock }) => {
       artist.image && artist.image[1] !== '' ? artist.image[1] : cover
     return (
       <div key={artist._id} className='column'>
-        <img width='170' height='170' className='lazyload' src={imageURL} />
+        <img
+          width='170'
+          height='170'
+          className={isLoading ? 'lazyload' : ''}
+          src={imageURL}
+        />
 
         <div className='column-details'>
           <div className='title'>{artist.name}</div>

@@ -62,7 +62,7 @@ export const Library = () => {
           <Link
             className={`tab ${activeTab.id === tab.id ? 'active' : ''}`}
             key={tab.id}
-            href='/home'
+            href='/app/library'
             onClick={() => setActiveTab(tab)}
           >
             {tab.title}
@@ -72,15 +72,24 @@ export const Library = () => {
 
       <div className='relative'>
         <div className='library'>
-          {activeTab.id === 1 && !loading && (
-            <AlbumContent albums={state.albums} nextBlock={nextBlock} />
+          {activeTab.id === 1 && (
+            <AlbumContent
+              isLoading={loading}
+              albums={state.albums}
+              nextBlock={nextBlock}
+            />
           )}
 
-          {activeTab.id === 0 && !loading && (
-            <ArtistContent nextBlock={nextBlock} artists={state.artists} />
+          {activeTab.id === 0 && (
+            <ArtistContent
+              sLoading={loading}
+              nextBlock={nextBlock}
+              artists={state.artists}
+            />
           )}
-          {activeTab.id === 2 && !loading && (
+          {activeTab.id === 2 && (
             <PlaylistContent
+              isLoading={loading}
               playlists={state.playlists}
               nextBlock={nextBlock}
             />
