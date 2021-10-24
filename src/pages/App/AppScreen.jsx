@@ -1,11 +1,10 @@
-import { Route, Router, Switch } from 'wouter'
-import { NavLink } from '../components/Header/NavLink'
-import { Library } from '../components/Library/Library'
-import { Player } from '../components/Player/Player'
-import { useTheme } from '../hooks/useTheme'
-import { AppRouter } from '../routers/AppRouter'
+import { NavLink } from '../../components/Header/NavLink'
+import { Player } from '../../components/Player/Player'
+import { useTheme } from '../../hooks/useTheme'
+import { AppRouter } from '../../routers/AppRouter'
 import './styles.scss'
-export const AppLayout = () => {
+
+export const AppScreen = () => {
   const { currentTheme } = useTheme()
   return (
     <div className='app'>
