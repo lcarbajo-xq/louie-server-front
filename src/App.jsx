@@ -1,14 +1,13 @@
 import { Component, useState } from 'react'
 import { Redirect, Route, Router, Switch } from 'wouter'
-import { PlayerLayout } from './components/Player/PlayerLayout/PlayerLayout'
+// import { PlayerLayout } from './components/Player/PlayerLayout/PlayerLayout'
 import { AppContextProvider } from './context/AppContext'
 import { useTheme } from './hooks/useTheme'
 import { AppScreen } from './pages/App/AppScreen'
 import { LoginScreen } from './pages/Login/LoginScreen'
-import { NowPlayingScreen } from './pages/NowPlaying/NowPlayingScreen'
+// import { NowPlayingScreen } from './pages/NowPlaying/NowPlayingScreen'
 import { initialState, rootReducer } from './reducers/rootReducer'
 import { AuthRouter } from './routers/AuthRouter'
-import { PublicRoute } from './routers/PublicRoute'
 
 import './styles/styles.scss'
 
@@ -23,6 +22,7 @@ function App() {
           <AppScreen />
         </AuthRouter>
       </AppContextProvider>
+      {/* <div>Hello</div> */}
     </>
   )
 }

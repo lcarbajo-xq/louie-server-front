@@ -51,51 +51,53 @@ export const Library = ({ setArtist }) => {
   const { state, loading, nextBlock } = useServices(activeTab.title)
 
   return (
-    <>
-      <Header title='Library'>
-        <ActionTemplate tab={activeTab} />
-      </Header>
+    !loading && (
+      <>
+        <Header title='Library'>
+          <ActionTemplate tab={activeTab} />
+        </Header>
 
-      <div className='tabs'>
-        {tabs.map((tab) => (
-          <button
-            className={`tab ${activeTab.id === tab.id ? 'active' : ''}`}
-            key={tab.id}
-            // href='/library'
-            onClick={() => setActiveTab(tab)}
-          >
-            {tab.title}
-          </button>
-        ))}
-      </div>
-
-      <div className='relative'>
-        <div className='library'>
-          {activeTab.id === 1 && (
-            <AlbumContent
-              isLoading={loading}
-              albums={state.albums}
-              nextBlock={nextBlock}
-            />
-          )}
-
-          {activeTab.id === 0 && (
-            <ArtistContent
-              sLoading={loading}
-              nextBlock={nextBlock}
-              artists={state.artists}
-              setArtist={setArtist}
-            />
-          )}
-          {activeTab.id === 2 && (
-            <PlaylistContent
-              isLoading={loading}
-              playlists={state.playlists}
-              nextBlock={nextBlock}
-            />
-          )}
+        <div className='tabs'>
+          {tabs.map((tab) => (
+            <div
+              className={`tab ${activeTab.id === tab.id ? 'active' : ''}`}
+              key={tab.id}
+              // href='/library'
+              onClick={() => setActiveTab(tab)}
+            >
+              {tab.title}
+            </div>
+          ))}
         </div>
-      </div>
-    </>
+
+        <div className='relative'>
+          <div className='library'>
+            {activeTab.id === 1 && (
+              <AlbumContent
+                isLoading={loading}
+                albums={state.albums}
+                nextBlock={nextBlock}
+              />
+            )}
+
+            {activeTab.id === 0 && (
+              <ArtistContent
+                sLoading={loading}
+                nextBlock={nextBlock}
+                artists={state.artists}
+                setArtist={setArtist}
+              />
+            )}
+            {activeTab.id === 2 && (
+              <PlaylistContent
+                isLoading={loading}
+                playlists={state.playlists}
+                nextBlock={nextBlock}
+              />
+            )}
+          </div>
+        </div>
+      </>
+    )
   )
 }

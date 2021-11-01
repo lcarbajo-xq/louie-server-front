@@ -1,6 +1,7 @@
 import { DBACTIONS } from '../actions/dbActions'
 
 export const initialState = {
+  initialRequest: false,
   artists: [],
   albums: [],
   playlists: [

@@ -1,12 +1,11 @@
-import { useEffect, useReducer, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { getItemsFromDB } from '../services/databaseService'
 
 import { DBACTIONS } from '../actions/dbActions'
 
-import { initialState, rootReducer } from '../reducers/rootReducer'
 import { useAppContext } from '../context/AppContext'
 
-const PAGES = ['albums', 'artists', 'playlists', 'tracks']
+const PAGES = ['albums', 'artists', 'tracks']
 
 export const useServices = (activeTab = '') => {
   const [state, dispatch] = useAppContext()
@@ -22,10 +21,10 @@ export const useServices = (activeTab = '') => {
   }
 
   const dispatchItemsFromDB = () => {
-    const { limit, page } = state
+    const { limit, page, initialRequest } = state
     const activeTabPage = page[activeTab]
 
-    activeTab !== 'search'
+    initialRequest
       ? getItemsFromDB(activeTab, limit, activeTabPage).then((data) => {
           if (activeTab === 'albums') {
             dispatch({
@@ -45,7 +44,6 @@ export const useServices = (activeTab = '') => {
         })
       : PAGES.map((p) => {
           getItemsFromDB(p, limit, page[p]).then((data) => {
-            console.log(data)
             if (p === 'albums') {
               dispatch({
                 type: DBACTIONS.GET_ALBUMS_FROM_DATABASE,
@@ -72,16 +70,14 @@ export const useServices = (activeTab = '') => {
 
   useEffect(
     function () {
-      if (
-        state[activeTab]?.length === 0 ||
-        updatePage ||
-        activeTab === 'search'
-      ) {
+      if (updatePage || !state.initialRequest) {
         setLoading(true)
         dispatchItemsFromDB()
         setLoading(false)
         setUpdatePage(false)
+        state.initialRequest = true
       }
+      return () => console.log('CleanUp Services')
     },
     [activeTab, updatePage]
   )

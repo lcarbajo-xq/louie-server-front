@@ -1,12 +1,13 @@
-import { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { ShinerComponent } from '../Shiner/ShinerComponent'
 import { HorizontalScroll } from '../HorizontalScroll/HorizontalScroll'
 import './styles.scss'
 import cover from '../../assets/app-icon.png'
-import { useServices } from '../../hooks/useServices'
 import { Dropdown } from '../Dropdown/Dropdown'
 import { formatSeconds } from '../../helpers/formatSeconds'
 import { usePlayer } from '../../components/Player/usePlayer'
+
+import { useServices } from '../../hooks/useServices'
 
 export const Search = () => {
   const { state } = useServices('search')
@@ -64,19 +65,19 @@ export const Search = () => {
 
           <div className='playlists'>
             <HorizontalScroll>
-              {state?.playlists.map((playlist) => {
+              {state?.playlists?.map((playlist) => {
                 if (playlist.liked) {
                   return (
-                    <div key={playlist.id} className='playlist'>
+                    <div key={`search-${playlist.id}`} className='playlist'>
                       {playlist.name}
                     </div>
                   )
                 }
               })}
-              {state?.playlists.map((playlist) => {
+              {state?.playlists?.map((playlist) => {
                 if (!playlist.liked) {
                   return (
-                    <div key={playlist.id} className='playlist'>
+                    <div key={`search-${playlist.id}`} className='playlist'>
                       {playlist.name}
                     </div>
                   )
@@ -103,7 +104,7 @@ export const Search = () => {
           <HorizontalScroll>
             <div className='artists'>
               {state.artists?.map((artist) => (
-                <div key={artist._id} className='artist'>
+                <div key={`search-${artist._id}`} className='artist'>
                   <img
                     className={loading ? 'lazyload' : 'lazyloaded'}
                     src={
@@ -137,8 +138,8 @@ export const Search = () => {
           <h3>Albums</h3>
           <HorizontalScroll>
             <div className='albums'>
-              {state?.albums.map((album) => (
-                <div key={album._id} className='album'>
+              {state?.albums?.map((album) => (
+                <div key={`search-${album._id}`} className='album'>
                   <img
                     className={loading ? 'lazyload' : 'lazyloaded'}
                     src={
@@ -173,16 +174,16 @@ export const Search = () => {
 
           <div className='grid'>
             {/* <div className="track {{ playerService.$track.getValue()._id === track._id ? 'playing' : '' }}"> */}
-            {state.tracks.map((track) => (
+            {state.tracks?.map((track) => (
               <div
-                key={track._id}
+                key={`search-${track._id}`}
                 onClick={() => handlePlay(track._id)}
                 className='track'
               >
                 {/* <div *ngIf="options.picture" appTooltip tooltip="{{ track.artist }} - {{ track.name }}" class="image">
-<img class="lazyloa
-d" [lazyLoad]="track?.album?.picture || '/assets/app-icon-text.png'" />
-</div> */}
+    <img class="lazyloa
+    d" [lazyLoad]="track?.album?.picture || '/assets/app-icon-text.png'" />
+    </div> */}
                 <div className='image'>
                   <img
                     // className='lazyloadd'

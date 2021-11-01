@@ -28,7 +28,6 @@ export const usePlayer = (tracks = []) => {
   const [trackId, setTrackId] = useState(null)
   const [trackProgress, setTrackProgress] = useState(0)
 
-  const audioSrc = `${BASE_URL}${trackId}`
   const audioRef = useRef(new Audio())
 
   const intervalRef = useRef()
@@ -110,17 +109,19 @@ export const usePlayer = (tracks = []) => {
       //   }
       // )
       audioRef.current.pause()
+      if (trackId) {
+        const audioSrc = `${BASE_URL}${trackId}`
+        audioRef.current = new Audio(audioSrc)
+        setTrackProgress(audioRef.current.currentTime)
 
-      audioRef.current = new Audio(audioSrc)
-      setTrackProgress(audioRef.current.currentTime)
-
-      if (isReady.current) {
-        audioRef.current.play()
-        setIsPlaying(true)
-        startTimer()
-      } else {
-        // Set the isReady ref as true for the next pass
-        isReady.current = true
+        if (isReady.current) {
+          audioRef.current.play()
+          setIsPlaying(true)
+          startTimer()
+        } else {
+          // Set the isReady ref as true for the next pass
+          isReady.current = true
+        }
       }
     },
     [trackId]
