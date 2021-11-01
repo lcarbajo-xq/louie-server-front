@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { Link } from 'wouter'
 import { useServices } from '../../hooks/useServices'
 import { Dropdown } from '../Dropdown/Dropdown'
 import { Header } from '../Header/Header'
@@ -46,7 +45,7 @@ const ActionTemplate = ({ tab }) => {
   )
 }
 
-export const Library = () => {
+export const Library = ({ setArtist }) => {
   const [activeTab, setActiveTab] = useState(tabs[0])
 
   const { state, loading, nextBlock } = useServices(activeTab.title)
@@ -59,14 +58,14 @@ export const Library = () => {
 
       <div className='tabs'>
         {tabs.map((tab) => (
-          <Link
+          <button
             className={`tab ${activeTab.id === tab.id ? 'active' : ''}`}
             key={tab.id}
-            href='/app/library'
+            // href='/library'
             onClick={() => setActiveTab(tab)}
           >
             {tab.title}
-          </Link>
+          </button>
         ))}
       </div>
 
@@ -85,6 +84,7 @@ export const Library = () => {
               sLoading={loading}
               nextBlock={nextBlock}
               artists={state.artists}
+              setArtist={setArtist}
             />
           )}
           {activeTab.id === 2 && (

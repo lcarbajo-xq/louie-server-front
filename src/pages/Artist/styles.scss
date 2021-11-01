@@ -1,0 +1,150 @@
+:host {
+  overflow: auto;
+  display: block;
+  height: 100vh;
+  padding-bottom: 60px;
+  background: var(--background-color);
+}
+
+.artist-header-content {
+  padding-top: 66px;
+  padding-right: 340px;
+  padding-bottom: 36px;
+  z-index: 1;
+  padding-left: 20px;
+  background-color: #fff;
+  background: none;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 10%;
+  position: relative;
+  min-height: 350px;
+}
+
+.artist-header-background-image {
+  background-size: cover;
+  width: 50%;
+  height: 100%;
+  position: absolute;
+  right: 0;
+  top: 0;
+  background-position: 50% 25%;
+}
+
+.artist-header-background-image-overlay {
+  height: 100%;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 50%;
+  transform-origin: center left;
+  transition: tramsform 0.5s;
+
+  background: linear-gradient(0.25turn, var(--background-color), transparent);
+}
+
+.artist-header-gallery {
+  height: 100%;
+  padding-left: 170px;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 50%;
+}
+
+.artist-content {
+  padding-bottom: 20px;
+}
+
+.artist-picture {
+  width: 250px;
+  height: 250px;
+  margin: 20px;
+  border-radius: 50px;
+  object-fit: cover;
+  box-shadow: 0 2px 4px rgb(0 0 0 / 6%);
+}
+
+h3 {
+  padding-left: 10px;
+  color: var(--foreground-color);
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 800;
+  text-transform: uppercase;
+  font-size: 1rem;
+}
+
+.artist-details {
+  margin-left: 15px;
+}
+
+.artist-name {
+  font-size: 2.7rem;
+  color: var(--foreground-color);
+  font-weight: 800;
+  margin-bottom: 10px;
+}
+
+.artist-bio {
+  color: var(--foreground-color);
+}
+
+.tags {
+  list-style: none;
+  margin: 20px 0;
+  padding: 0;
+
+  .tag {
+    &:first-of-type {
+      margin-left: 15px;
+    }
+
+    &:last-of-type {
+      margin-right: 15px;
+    }
+    display: inline-block;
+    border-radius: 10px;
+    background-color: var(--background-color-4);
+    color: var(--foreground-color);
+    padding: 10px;
+
+    &.inactive {
+      color: var(--foreground-color);
+    }
+
+    &:hover {
+      color: var(--accent-color);
+      cursor: pointer;
+    }
+
+    & + .tag {
+      margin-left: 10px;
+    }
+  }
+}
+
+.play-button {
+  background-color: var(--accent-color);
+  color: white;
+  display: inline-block;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  margin-right: 15px;
+  border-radius: 20px;
+  box-shadow: 0 2px 4px rgb(0 0 0 / 6%);
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.title-action {
+  display: flex;
+  align-items: center;
+
+  h3 {
+    flex-grow: 1;
+  }
+}

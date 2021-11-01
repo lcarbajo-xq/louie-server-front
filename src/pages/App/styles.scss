@@ -6,7 +6,10 @@
   grid-template-rows: 1fr auto;
   overflow: hidden;
   padding: 0;
-  width: 100%;
+  width: 100vw;
+  &-route {
+    margin: 0 20px 0 0;
+  }
 
   &-content {
     background: var(--background-color);
@@ -15,6 +18,7 @@
     // padding-top: env(safe-area-inset-top);
     overflow: auto;
     order: 1;
+    padding: 0 25px 0 0;
   }
 
   &-menu {

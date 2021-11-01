@@ -4,11 +4,12 @@ import { getItemsFromDB } from '../services/databaseService'
 import { DBACTIONS } from '../actions/dbActions'
 
 import { initialState, rootReducer } from '../reducers/rootReducer'
+import { useAppContext } from '../context/AppContext'
 
 const PAGES = ['albums', 'artists', 'playlists', 'tracks']
 
 export const useServices = (activeTab = '') => {
-  const [state, dispatch] = useReducer(rootReducer, initialState)
+  const [state, dispatch] = useAppContext()
   const [loading, setLoading] = useState(false)
   const [updatePage, setUpdatePage] = useState(false)
 

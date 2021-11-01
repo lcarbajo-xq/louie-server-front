@@ -1,13 +1,15 @@
-import React from 'react'
-import { Router, Route } from 'wouter'
-import { Library } from '../components/Library/Library'
-import { Search } from '../components/Search/Search'
+import { Router, useRouter } from 'wouter'
 
-export const LibraryRouter = () => {
+export const LibraryRouter = ({ base = '', children }) => {
+  const router = useRouter()
+
+  const nestedBase = `${router.base}${base}`
+
   return (
     <>
-      <Route path='/library' component={Library} />
-      <Route path='/home' component={Search} />
+      <Router base={nestedBase} key={nestedBase}>
+        {children}
+      </Router>
     </>
   )
 }

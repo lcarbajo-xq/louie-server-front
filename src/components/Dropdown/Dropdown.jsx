@@ -11,14 +11,16 @@ export const Dropdown = ({ children, config }) => {
       <div onClick={() => setIsOpen(!isOpen)} className='dropdown-action-item'>
         <i className='material-icons-outlined'>more_vert</i>
       </div>
-      <div
-        id='dropup'
-        className={`dropup-content${isOpen ? ' visible' : ''}${
-          config.side === 'right' ? ' right' : 'left'
-        }`}
-      >
-        {children}
-      </div>
+      {isOpen && (
+        <div
+          id='dropup'
+          className={`dropup-content${isOpen ? ' visible' : ''}${
+            config.side === 'right' ? ' right' : 'left'
+          }`}
+        >
+          {children}
+        </div>
+      )}
     </div>
   )
 }

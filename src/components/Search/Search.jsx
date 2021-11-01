@@ -3,22 +3,24 @@ import { ShinerComponent } from '../Shiner/ShinerComponent'
 import { HorizontalScroll } from '../HorizontalScroll/HorizontalScroll'
 import './styles.scss'
 import cover from '../../assets/app-icon.png'
-import { getItemsFromDB } from '../../services/databaseService'
 import { useServices } from '../../hooks/useServices'
 import { Dropdown } from '../Dropdown/Dropdown'
 import { formatSeconds } from '../../helpers/formatSeconds'
-
-// const playlists = [
-//   { name: 'Playlist 1', id: 1, liked: false },
-//   { name: 'Playlist 2', id: 2, liked: true },
-//   { name: 'Playlist 3', id: 3, liked: true },
-//   { name: 'Playlist 4', id: 4, liked: false },
-//   { name: 'Playlist 5', id: 5, liked: false }
-// ]
+import { usePlayer } from '../../components/Player/usePlayer'
 
 export const Search = () => {
   const { state } = useServices('search')
   const [loading, setLoading] = useState(false)
+  const [trackToPlay, setTrackToPlay] = useState('')
+  const { isPlaying, setIsPlaying, setTrackId } = usePlayer(state.tracks)
+
+  const handlePlay = (id) => {
+    if (isPlaying) setIsPlaying(false)
+    else {
+      setTrackId(id)
+      setIsPlaying(true)
+    }
+  }
 
   return (
     <section className='app-route'>
@@ -172,7 +174,11 @@ export const Search = () => {
           <div className='grid'>
             {/* <div className="track {{ playerService.$track.getValue()._id === track._id ? 'playing' : '' }}"> */}
             {state.tracks.map((track) => (
-              <div key={track._id} className='track'>
+              <div
+                key={track._id}
+                onClick={() => handlePlay(track._id)}
+                className='track'
+              >
                 {/* <div *ngIf="options.picture" appTooltip tooltip="{{ track.artist }} - {{ track.name }}" class="image">
 <img class="lazyloa
 d" [lazyLoad]="track?.album?.picture || '/assets/app-icon-text.png'" />
@@ -211,31 +217,18 @@ d" [lazyLoad]="track?.album?.picture || '/assets/app-icon-text.png'" />
                 <div className='duration'>{formatSeconds(track.duration)}</div>
 
                 <div className='actions'>
-                  <Dropdown dropdown config={{ side: 'right' }}></Dropdown>
+                  <Dropdown dropdown config={{ side: 'right' }}>
+                    <div className='dropdown-action-list'>
+                      <button>Add to playlist</button>
+                      <a>Add to queue</a>
 
-                  {/* <app-dropdown #dropdown [config]="{right: true, up: true}" [header]="headerTemplate">
-<ng-template #headerTemplate let-item="item">
-<div (click)="item.onToggle()" class="dropdown-action-item"><i class="material-icons-outlined">
-more_vert
-</i></div>
-</ng-template>
+                      <a>More from artist</a>
+                      <a>Go to album</a>
+                      <a>Download</a>
 
-<div class="dropdown-action-list">
-
-<a (click)="onPlaylist()">Add to playlist</a>
-<a (click)="onQueue()">Add to queue</a>
-
-<a [routerLink]="['/', { outlets: { modal: ['modal','artists', track?.album?.artist?._id] } }]">More
-from artist</a>
-<a [routerLink]="['/', { outlets: { modal: ['modal','albums',track?.album?._id] } }]">Go to album</a>
-<a target="_blank" href="{{httpService.API_ENDPOINT}}/tracks/play/{{ track._id }}"
-download="{{track.name}}.mp3">Download</a>
-
-<a *ngIf="track?.playlists?.length > 0" (click)="onRemoveFromPlaylist()">Remove from playlist</a>
-
-
-</div>
-</app-dropdown> */}
+                      <a>Remove from playlist</a>
+                    </div>
+                  </Dropdown>
                 </div>
               </div>
             ))}

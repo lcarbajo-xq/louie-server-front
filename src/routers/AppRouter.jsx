@@ -1,13 +1,15 @@
-import { Route, Router, Switch } from 'wouter'
-import { Library } from '../components/Library/Library'
-import { Search } from '../components/Search/Search'
-import { LibraryRouter } from './LibraryRouter'
+import { Router, useRouter } from 'wouter'
 
-export const AppRouter = () => {
+export const AppRouter = ({ base = '', children }) => {
+  const router = useRouter()
+
+  const nestedBase = `${router.base}${base}`
+
   return (
-    <main className='app-content'>
-      <Route path='/app/library' component={Library} />
-      <Route path='/app/home' component={Search} />
-    </main>
+    <>
+      <Router base={nestedBase} key={nestedBase}>
+        <main className='app-content'>{children}</main>
+      </Router>
+    </>
   )
 }
