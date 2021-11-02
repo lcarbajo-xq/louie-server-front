@@ -6,6 +6,18 @@ import { searchItems } from '../services/databaseService'
 export const useInputSearch = () => {
   const [{ currentSearchQuery, searchResults }, dispatch] = useAppContext()
   const [search, setSearch] = useState('')
+  const [isEmpty, setIsEmpty] = useState(false)
+
+  useEffect(() => {
+    const hasNotResults =
+      searchResults?.artists?.length === 0 &&
+      searchResults?.albums?.length === 0 &&
+      searchResults?.tracks?.length === 0
+    if (currentSearchQuery.length === 9) setIsEmpty(!hasNotResults)
+    else {
+      setIsEmpty(hasNotResults)
+    }
+  }, [searchResults])
 
   const handleInputChange = (e) => {
     setSearch(e.target.value)
@@ -25,5 +37,11 @@ export const useInputSearch = () => {
     }
   }
 
-  return { handleInputChange, searchResults, search, currentSearchQuery }
+  return {
+    handleInputChange,
+    isEmpty,
+    search,
+    searchResults,
+    currentSearchQuery
+  }
 }
