@@ -3,7 +3,9 @@ import { Route, Router } from 'wouter'
 import { NavLink } from '../../components/Header/NavLink'
 import { Library } from '../../components/Library/Library'
 import { PlayerFooter } from '../../components/Player/PlayerFooter/PlayerFooter'
+import { usePlayer } from '../../components/Player/usePlayer'
 import { Search } from '../../components/Search/Search'
+import { useAppContext } from '../../context/AppContext'
 import { useTheme } from '../../hooks/useTheme'
 import { AppRouter } from '../../routers/AppRouter'
 import { LibraryRouter } from '../../routers/LibraryRouter'
@@ -12,7 +14,19 @@ import './styles.scss'
 
 export const AppScreen = () => {
   const { currentTheme } = useTheme()
+  const [{ currentTrack }] = useAppContext()
   const [artist, setArtist] = useState({})
+
+  const {
+    isPlaying,
+    togglePlayPause,
+    currentTime,
+    audioRef,
+    audioSrc,
+    onLoadedMetadata,
+    circumference
+  } = usePlayer(currentTrack)
+
   return (
     <div className='app'>
       <section className='app-menu'>
@@ -40,7 +54,16 @@ export const AppScreen = () => {
         </Route>
       </AppRouter>
       <footer className='app-player'>
-        <PlayerFooter />
+        <PlayerFooter
+          isPlaying={isPlaying}
+          togglePlayPause={togglePlayPause}
+          currentTime={currentTime}
+          audioRef={audioRef}
+          audioSrc={audioSrc}
+          onLoadedMetadata={onLoadedMetadata}
+          circumference={circumference}
+          currentTrack={currentTrack}
+        />
       </footer>
 
       {/* </Route> */}

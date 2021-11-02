@@ -8,20 +8,23 @@ import { formatSeconds } from '../../helpers/formatSeconds'
 import { usePlayer } from '../../components/Player/usePlayer'
 
 import { useServices } from '../../hooks/useServices'
+import { DBACTIONS } from '../../actions/dbActions'
+import { useInputSearch } from '../../hooks/useInputSearch'
 
 export const Search = () => {
-  const { state } = useServices('search')
-  const [loading, setLoading] = useState(false)
-  const [trackToPlay, setTrackToPlay] = useState('')
-  const { isPlaying, setIsPlaying, setTrackId } = usePlayer(state.tracks)
+  const { state, loading, dispatch } = useServices('search')
 
-  const handlePlay = (id) => {
-    if (isPlaying) setIsPlaying(false)
-    else {
-      setTrackId(id)
-      setIsPlaying(true)
-    }
+  const { search, searchResults, handleInputChange } = useInputSearch()
+
+  const handlePlay = (track) => {
+    dispatch({ type: DBACTIONS.SET_CURRENT_TRACK, payload: { track } })
   }
+
+  const hasResults =
+    search.length > 3 &&
+    searchResults?.artists?.length === 0 &&
+    searchResults?.albums?.length === 0 &&
+    searchResults?.tracks?.length === 0
 
   return (
     <section className='app-route'>
@@ -31,33 +34,39 @@ export const Search = () => {
             className='search-input'
             type='text'
             placeholder='Search Albums, Tracks or Artists'
+            value={search}
+            onChange={handleInputChange}
           />
         </div>
-        {loading && (
-          <>
-            <ShinerComponent
-              margin='0px 0px 5px 0px'
-              height='10px'
-              width='100px'
-            />
-            <ShinerComponent
-              margin='0px 0px 20px 0px'
-              height='10px'
-              width='100px'
-            />
-            <HorizontalScroll>
+        {hasResults ? (
+          <h3>NO</h3>
+        ) : (
+          loading && (
+            <>
               <ShinerComponent
                 margin='0px 0px 5px 0px'
-                height='30px'
+                height='10px'
                 width='100px'
               />
               <ShinerComponent
-                margin='0px 0px 5px 10px'
-                height='30px'
+                margin='0px 0px 20px 0px'
+                height='10px'
                 width='100px'
               />
-            </HorizontalScroll>
-          </>
+              <HorizontalScroll>
+                <ShinerComponent
+                  margin='0px 0px 5px 0px'
+                  height='30px'
+                  width='100px'
+                />
+                <ShinerComponent
+                  margin='0px 0px 5px 10px'
+                  height='30px'
+                  width='100px'
+                />
+              </HorizontalScroll>
+            </>
+          )
         )}
 
         <div className='playlists-wrapper'>
@@ -177,7 +186,7 @@ export const Search = () => {
             {state.tracks?.map((track) => (
               <div
                 key={`search-${track._id}`}
-                onClick={() => handlePlay(track._id)}
+                onClick={() => handlePlay(track)}
                 className='track'
               >
                 {/* <div *ngIf="options.picture" appTooltip tooltip="{{ track.artist }} - {{ track.name }}" class="image">

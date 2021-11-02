@@ -1,6 +1,14 @@
-export const PlayerControls = ({ isPlaying }) => {
+import { useEffect, useRef, useState } from 'react'
+
+export const PlayerControls = ({
+  isPlaying,
+  togglePlayPause,
+  progress = 0,
+  circumference
+}) => {
+  console.log(progress)
   return (
-    <div className='player-actions'>
+    <div onClick={togglePlayPause} className='player-actions'>
       <div className='player-actions-action'>
         <span className='material-icons-round'>
           {isPlaying ? 'pause' : 'play_arrow'}
@@ -10,11 +18,10 @@ export const PlayerControls = ({ isPlaying }) => {
             className='progress-ring'
             cx='20'
             cy='20'
-            r='19'
+            r={19}
             strokeWidth='2'
-            strokeDasharray='circumference'
-            strokeDashoffset='radialProgress'
-            // [attr.stroke-dasharray]="circumference" [attr.stroke-dashoffset]="radialProgress"
+            strokeDasharray={Math.floor(circumference)}
+            strokeDashoffset={progress}
             fillOpacity='0'
           />
         </svg>

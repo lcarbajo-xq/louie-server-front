@@ -2,8 +2,11 @@ import { DBACTIONS } from '../actions/dbActions'
 
 export const initialState = {
   initialRequest: false,
+  currentSearchQuery: '',
+  searchResults: null,
   artists: [],
   albums: [],
+  currentTrack: null,
   playlists: [
     { name: 'Playlist 1', id: 1, liked: false },
     { name: 'Playlist 2', id: 2, liked: true },
@@ -47,6 +50,27 @@ export const rootReducer = (state, action) => {
       return {
         ...state,
         page: { ...page, [action.payload]: page[action.payload] + limit }
+      }
+    }
+    case DBACTIONS.SET_CURRENT_TRACK: {
+      const { track } = action.payload
+      return {
+        ...state,
+        currentTrack: track
+      }
+    }
+    case DBACTIONS.SET_SEARCH: {
+      const { search } = action.payload
+      return {
+        ...state,
+        currentSearchQuery: search
+      }
+    }
+    case DBACTIONS.SET_SEARCH_RESULTS: {
+      const { searchResults } = action.payload
+      return {
+        ...state,
+        searchResults
       }
     }
     default:

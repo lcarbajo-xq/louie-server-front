@@ -73,9 +73,9 @@ export const useServices = (activeTab = '') => {
       if (updatePage || !state.initialRequest) {
         setLoading(true)
         dispatchItemsFromDB()
-        setLoading(false)
-        setUpdatePage(false)
         state.initialRequest = true
+        setUpdatePage(false)
+        setLoading(false)
       }
       return () => console.log('CleanUp Services')
     },
@@ -85,6 +85,7 @@ export const useServices = (activeTab = '') => {
   return {
     state,
     loading,
+    dispatch,
     nextBlock,
     dispatchItemsFromDB
   }
