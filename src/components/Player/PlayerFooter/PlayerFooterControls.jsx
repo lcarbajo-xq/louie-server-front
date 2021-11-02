@@ -6,7 +6,6 @@ export const PlayerControls = ({
   progress = 0,
   circumference
 }) => {
-  console.log(progress)
   return (
     <div onClick={togglePlayPause} className='player-actions'>
       <div className='player-actions-action'>

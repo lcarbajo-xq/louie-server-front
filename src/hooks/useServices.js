@@ -77,7 +77,6 @@ export const useServices = (activeTab = '') => {
         setUpdatePage(false)
         setLoading(false)
       }
-      return () => console.log('CleanUp Services')
     },
     [activeTab, updatePage]
   )

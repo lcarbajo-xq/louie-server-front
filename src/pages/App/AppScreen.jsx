@@ -24,7 +24,8 @@ export const AppScreen = () => {
     audioRef,
     audioSrc,
     onLoadedMetadata,
-    circumference
+    circumference,
+    handlePlay
   } = usePlayer(currentTrack)
 
   return (
@@ -44,7 +45,7 @@ export const AppScreen = () => {
       {/* <Route path='/home'> */}
       <AppRouter>
         <Route path='/home'>
-          <Search />
+          <Search handlePlay={handlePlay} />
         </Route>
         <Route path='/library'>
           <Library setArtist={setArtist} />

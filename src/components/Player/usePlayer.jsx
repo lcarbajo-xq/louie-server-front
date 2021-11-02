@@ -1,11 +1,14 @@
-import React, { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { DBACTIONS } from '../../actions/dbActions'
 import { BASE_URLS } from '../../constants/endpoints'
 import { circumference } from '../../constants/progressConstants'
+import { useAppContext } from '../../context/AppContext'
 
 export const usePlayer = (track) => {
   const [isPlaying, setIsPlaying] = useState(false)
   const [duration, setDuration] = useState(0)
   const [currentTime, setCurrentTime] = useState(0)
+  const [, dispatch] = useAppContext()
 
   const id = track?._id
 
@@ -18,6 +21,9 @@ export const usePlayer = (track) => {
     cancelAnimationFrame(animationRef.current)
     setIsPlaying(false)
     setCurrentTime(0)
+    return () => {
+      cancelAnimationFrame(animationRef.current)
+    }
   }, [track])
 
   const onLoadedMetadata = () => {
@@ -48,6 +54,15 @@ export const usePlayer = (track) => {
     animationRef.current = requestAnimationFrame(whilePlaying)
   }
 
+  const handlePlay = (trackClicked) => {
+    if (trackClicked._id !== id) {
+      dispatch({
+        type: DBACTIONS.SET_CURRENT_TRACK,
+        payload: { track: trackClicked }
+      })
+    }
+  }
+
   return {
     audioSrc,
     onLoadedMetadata,
@@ -55,6 +70,7 @@ export const usePlayer = (track) => {
     isPlaying,
     audioRef,
     currentTime,
-    circumference
+    circumference,
+    handlePlay
   }
 }

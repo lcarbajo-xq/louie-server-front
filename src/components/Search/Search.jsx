@@ -1,24 +1,20 @@
-import React, { useEffect, useMemo, useState } from 'react'
 import { ShinerComponent } from '../Shiner/ShinerComponent'
 import { HorizontalScroll } from '../HorizontalScroll/HorizontalScroll'
-import './styles.scss'
+
 import cover from '../../assets/app-icon.png'
 import { Dropdown } from '../Dropdown/Dropdown'
 import { formatSeconds } from '../../helpers/formatSeconds'
-import { usePlayer } from '../../components/Player/usePlayer'
 
 import { useServices } from '../../hooks/useServices'
 import { DBACTIONS } from '../../actions/dbActions'
 import { useInputSearch } from '../../hooks/useInputSearch'
 
-export const Search = () => {
+import './styles.scss'
+
+export const Search = ({ handlePlay }) => {
   const { state, loading, dispatch } = useServices('search')
 
   const { search, searchResults, handleInputChange } = useInputSearch()
-
-  const handlePlay = (track) => {
-    dispatch({ type: DBACTIONS.SET_CURRENT_TRACK, payload: { track } })
-  }
 
   const hasResults =
     search.length > 3 &&
