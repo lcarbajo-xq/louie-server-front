@@ -10,6 +10,7 @@ import { useTheme } from '../../hooks/useTheme'
 import { AppRouter } from '../../routers/AppRouter'
 import { LibraryRouter } from '../../routers/LibraryRouter'
 import { ArtistsScreen } from '../Artist/ArtistsScreen'
+import { TracksScreen } from '../Tracks/TracksScreen'
 import './styles.scss'
 
 export const AppScreen = () => {
@@ -49,6 +50,9 @@ export const AppScreen = () => {
         </Route>
         <Route path='/library'>
           <Library setArtist={setArtist} />
+        </Route>
+        <Route path='/tracks'>
+          <TracksScreen />
         </Route>
         <Route path='/library/artist/:id'>
           {(params) => <ArtistsScreen artist={artist} id={params.id} />}

@@ -14,7 +14,7 @@ export const Dropdown = ({ children, config }) => {
       {isOpen && (
         <div
           id='dropup'
-          className={`dropup-content${isOpen ? ' visible' : ''}${
+          className={`dropup-content${isOpen ? ' visible' : ''} ${
             config.side === 'right' ? ' right' : 'left'
           }`}
         >
