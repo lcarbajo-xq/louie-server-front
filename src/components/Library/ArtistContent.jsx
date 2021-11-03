@@ -2,7 +2,7 @@ import debounce from 'just-debounce-it'
 import { useCallback, useEffect, useRef } from 'react'
 import { useLazyLoad } from '../../hooks/useLazyLoad'
 import cover from '../../assets/app-icon.png'
-import { Link } from 'wouter'
+import { ArtistCard } from './ArtistCard'
 
 export const ArtistContent = ({
   artists = [],
@@ -10,8 +10,7 @@ export const ArtistContent = ({
   isLoading,
   setArtist
 }) => {
-  const externalRef = useRef()
-  const { isVisible } = useLazyLoad({ externalRef, once: false })
+  const { elementRef: lastElementRef, isLazyLoad } = useLazyLoad()
 
   const debounceLoadMore = useCallback(
     debounce(() => {
@@ -20,32 +19,32 @@ export const ArtistContent = ({
     []
   )
 
-  useEffect(
-    function () {
-      if (isVisible) debounceLoadMore()
-    },
-    [isVisible]
-  )
+  useEffect(() => {
+    if (isLazyLoad) {
+      debounceLoadMore()
+    }
+  }, [isLazyLoad])
 
-  return artists.map((artist) => {
-    const imageURL =
-      artist.image && artist.image[1] !== '' ? artist.image[1] : cover
-    return (
-      <div key={artist._id} onClick={() => setArtist(artist)}>
-        <Link href={`/library/artist/${artist._id}`} className='column'>
-          <img
-            width='170'
-            height='170'
-            className={isLoading ? 'lazyload' : ''}
-            src={imageURL}
-          />
-
-          <div className='column-details'>
-            <div className='title'>{artist.name}</div>
+  return (
+    <>
+      {artists.map((artist) => {
+        const imageURL =
+          artist.image && artist.image[1] !== undefined
+            ? artist.image[1]
+            : cover
+        console.log(imageURL)
+        return (
+          <div key={artist._id} onClick={() => setArtist(artist)}>
+            <ArtistCard
+              imageURL={imageURL}
+              name={artist.name}
+              id={artist._id}
+              setArtist={setArtist}
+            />
           </div>
-          <div id='visor' className='visor' ref={externalRef}></div>
-        </Link>
-      </div>
-    )
-  })
+        )
+      })}
+      <div ref={lastElementRef}></div>
+    </>
+  )
 }

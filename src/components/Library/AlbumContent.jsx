@@ -1,12 +1,12 @@
 import debounce from 'just-debounce-it'
-import React, { useCallback, useEffect, useRef } from 'react'
-import { useLazyLoad } from '../../hooks/useLazyLoad'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import cover from '../../assets/app-icon.png'
+import { useLazyLoad } from '../../hooks/useLazyLoad'
+import { AlbumCard } from './AlbumCard'
 
 export const AlbumContent = React.memo(
   ({ albums = [], nextBlock, isLoading }) => {
-    const externalRef = useRef()
-    const { isVisible } = useLazyLoad({ externalRef, once: false })
+    const { elementRef: lastElementRef, isLazyLoad } = useLazyLoad()
 
     const debounceLoadMore = useCallback(
       debounce(() => {
@@ -15,28 +15,29 @@ export const AlbumContent = React.memo(
       []
     )
 
-    useEffect(
-      function () {
-        if (isVisible) {
-          debounceLoadMore()
-        }
-      },
-      [isVisible]
-    )
+    useEffect(() => {
+      if (isLazyLoad) {
+        debounceLoadMore()
+      }
+    }, [isLazyLoad])
 
-    return albums.map((album) => {
-      const imageURL =
-        album.image && album.image[5] !== '' ? album.image[5] : cover
-      return (
-        <div key={album._id} className='column'>
-          <img className={isLoading ? 'lazyload' : ''} src={imageURL} />
-          <div className='column-details'>
-            <div className='title'>{album.artist.name}</div>
-            <div className='subtitle'>{album.name}</div>
-          </div>
-          <div id='visor' className='visor' ref={externalRef}></div>
-        </div>
-      )
-    })
+    return (
+      <>
+        {albums.map((album) => {
+          const imageURL =
+            album.image && album.image[5] !== '' ? album.image[5] : cover
+          return (
+            <AlbumCard
+              key={album._id}
+              id={album._id}
+              imageURL={imageURL}
+              artist={album.artist}
+              name={album.name}
+            />
+          )
+        })}
+        <div ref={lastElementRef}></div>
+      </>
+    )
   }
 )
