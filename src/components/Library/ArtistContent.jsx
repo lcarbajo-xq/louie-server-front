@@ -32,14 +32,12 @@ export const ArtistContent = ({
           artist.image && artist.image[1] !== undefined
             ? artist.image[1]
             : cover
-        console.log(imageURL)
         return (
           <div key={artist._id} onClick={() => setArtist(artist)}>
             <ArtistCard
               imageURL={imageURL}
               name={artist.name}
               id={artist._id}
-              setArtist={setArtist}
             />
           </div>
         )
