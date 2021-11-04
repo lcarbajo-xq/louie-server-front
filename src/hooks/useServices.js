@@ -21,7 +21,8 @@ export const useServices = (activeTab = '') => {
   }
 
   const dispatchItemsFromDB = () => {
-    const { limit, page, initialRequest } = state
+    const { library } = state
+    const { limit, page, initialRequest } = library
     const activeTabPage = page[activeTab]
 
     initialRequest

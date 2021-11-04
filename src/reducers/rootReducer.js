@@ -4,52 +4,88 @@ export const initialState = {
   initialRequest: false,
   currentSearchQuery: '',
   searchResults: null,
-  artists: [],
-  albums: [],
-  currentTrack: null,
-  playlists: [
-    { name: 'Playlist 1', id: 1, liked: false },
-    { name: 'Playlist 2', id: 2, liked: true },
-    { name: 'Playlist 3', id: 3, liked: true },
-    { name: 'Playlist 4', id: 4, liked: false },
-    { name: 'Playlist 5', id: 5, liked: false }
-  ],
-  tracks: [],
-  page: {
-    albums: 0,
-    artists: 0
+  home: {
+    playlists: [
+      { name: 'Playlist 1', id: 1, liked: false },
+      { name: 'Playlist 2', id: 2, liked: true },
+      { name: 'Playlist 3', id: 3, liked: true },
+      { name: 'Playlist 4', id: 4, liked: false },
+      { name: 'Playlist 5', id: 5, liked: false }
+    ]
   },
-  limit: 20
+  currentTrack: null,
+  library: {
+    artists: [],
+    albums: [],
+    playlists: [
+      { name: 'Playlist 1', id: 1, liked: false },
+      { name: 'Playlist 2', id: 2, liked: true },
+      { name: 'Playlist 3', id: 3, liked: true },
+      { name: 'Playlist 4', id: 4, liked: false },
+      { name: 'Playlist 5', id: 5, liked: false }
+    ],
+    tracks: [],
+    page: {
+      albums: 0,
+      artists: 0
+    },
+    limit: 20
+  }
 }
 
 export const rootReducer = (state, action) => {
+  console.log(action)
   switch (action.type) {
-    case DBACTIONS.GET_ALBUMS_FROM_DATABASE: {
-      const { albums } = state
+    case DBACTIONS.SET_INITIAL_STATE: {
+      const { albums, artists, tracks } = action.payload
       return {
         ...state,
-        albums: albums.concat(action.payload)
+        home: {
+          ...state.home,
+          albums,
+          artists,
+          tracks
+        }
+      }
+    }
+    case DBACTIONS.GET_ALBUMS_FROM_DATABASE: {
+      const { albums } = state.library
+      return {
+        ...state,
+        library: {
+          ...state.library,
+          albums: albums.concat(action.payload)
+        }
       }
     }
     case DBACTIONS.GET_ARTISTS_FROM_DATABASE: {
-      const { artists } = state
+      const { artists } = state.library
       return {
         ...state,
-        artists: artists.concat(action.payload)
+        library: {
+          ...state.library,
+          artists: artists.concat(action.payload)
+        }
       }
     }
     case DBACTIONS.GET_TRACKS_FROM_DATABASE: {
-      const { tracks } = state
+      const { tracks } = state.library
       return {
         ...state,
-        tracks: tracks.concat(action.payload)
+        library: {
+          ...state.library,
+          tracks: tracks.concat(action.payload)
+        }
       }
     }
     case DBACTIONS.SET_NEXT_PAGE: {
-      const { page, limit } = state
+      const { page, limit } = state.library
       return {
         ...state,
-        page: { ...page, [action.payload]: page[action.payload] + limit }
+        library: {
+          ...state.library,
+          page: { ...page, [action.payload]: page[action.payload] + limit }
+        }
       }
     }
     case DBACTIONS.SET_CURRENT_TRACK: {

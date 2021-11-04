@@ -52,7 +52,7 @@ export const AppScreen = () => {
           <Library setArtist={setArtist} />
         </Route>
         <Route path='/tracks'>
-          <TracksScreen />
+          <TracksScreen handlePlay={handlePlay} />
         </Route>
         <Route path='/library/artist/:id'>
           {(params) => <ArtistsScreen artist={artist} id={params.id} />}

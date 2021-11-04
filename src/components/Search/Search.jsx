@@ -1,23 +1,21 @@
-import { ShinerComponent } from '../Shiner/ShinerComponent'
 import { HorizontalScroll } from '../HorizontalScroll/HorizontalScroll'
-
-import cover from '../../assets/app-icon.png'
 import { Dropdown } from '../Dropdown/Dropdown'
-import { formatSeconds } from '../../helpers/formatSeconds'
-
-import { useServices } from '../../hooks/useServices'
-import { DBACTIONS } from '../../actions/dbActions'
-import { useInputSearch } from '../../hooks/useInputSearch'
-
-import './styles.scss'
 import { SearchPlaceholder } from './SearchPlaceholder'
 import { ArtistCard } from '../Library/ArtistCard'
 import { AlbumCard } from '../Library/AlbumCard'
+import { useAppContext } from '../../context/AppContext'
+import { formatSeconds } from '../../helpers/formatSeconds'
+import { useInputSearch } from '../../hooks/useInputSearch'
+import cover from '../../assets/app-icon.png'
+
+import './styles.scss'
 
 const NoResults = () => <h3>No Results found</h3>
 
 export const Search = ({ handlePlay }) => {
-  const { state, loading } = useServices('search')
+  const [{ home }] = useAppContext()
+
+  const loading = false
 
   const { search, isEmpty, handleInputChange, searchResults } = useInputSearch()
 
@@ -45,7 +43,7 @@ export const Search = ({ handlePlay }) => {
 
                 <div className='playlists'>
                   <HorizontalScroll>
-                    {state?.playlists?.map((playlist) => {
+                    {home?.playlists?.map((playlist) => {
                       if (playlist.liked) {
                         return (
                           <div
@@ -57,7 +55,7 @@ export const Search = ({ handlePlay }) => {
                         )
                       }
                     })}
-                    {state?.playlists?.map((playlist) => {
+                    {home?.playlists?.map((playlist) => {
                       if (!playlist.liked) {
                         return (
                           <div
@@ -76,7 +74,7 @@ export const Search = ({ handlePlay }) => {
                 <h3>Artists</h3>
                 <HorizontalScroll>
                   <div className='artists'>
-                    {state?.artists?.map((artist) => {
+                    {home?.artists?.map((artist) => {
                       const imageURL =
                         artist.image && artist.image[1] !== undefined
                           ? artist.image[1]
@@ -99,7 +97,7 @@ export const Search = ({ handlePlay }) => {
                 <h3>Albums</h3>
                 <HorizontalScroll>
                   <div className='albums'>
-                    {state?.albums?.map((album) => {
+                    {home?.albums?.map((album) => {
                       const imageURL =
                         album.image && album.image[5] !== ''
                           ? album.image[5]
@@ -128,7 +126,7 @@ export const Search = ({ handlePlay }) => {
 
                 <div className='grid'>
                   {/* <div className="track {{ playerService.$track.getValue()._id === track._id ? 'playing' : '' }}"> */}
-                  {state?.tracks?.map((track) => (
+                  {home?.tracks?.map((track) => (
                     <div
                       key={`search-${track._id}`}
                       onClick={() => handlePlay(track)}

@@ -75,7 +75,7 @@ export const Library = ({ setArtist }) => {
             {activeTab.id === 1 && (
               <AlbumContent
                 isLoading={loading}
-                albums={state.albums}
+                albums={state?.library?.albums}
                 nextBlock={nextBlock}
               />
             )}
@@ -84,14 +84,14 @@ export const Library = ({ setArtist }) => {
               <ArtistContent
                 sLoading={loading}
                 nextBlock={nextBlock}
-                artists={state.artists}
+                artists={state?.library?.artists}
                 setArtist={setArtist}
               />
             )}
             {activeTab.id === 2 && (
               <PlaylistContent
                 isLoading={loading}
-                playlists={state.playlists}
+                playlists={state?.library?.playlists}
                 nextBlock={nextBlock}
               />
             )}

@@ -14,3 +14,16 @@ export const searchItems = (query) => {
   const url = `http://localhost:5000/search/?search=${query}`
   return fetch(url).then((json) => json.json())
 }
+
+export const fetchInitialData = async () => {
+  const collections = ['tracks', 'albums', 'artists']
+  let url
+  const fetchData = await Promise.all(
+    collections.map((collection) => {
+      url = `http://localhost:5000/${collection}/random`
+      return fetch(url).then((json) => json.json())
+    })
+  )
+
+  return fetchData
+}
