@@ -80,13 +80,12 @@ export const Search = ({ handlePlay }) => {
                           ? artist.image[1]
                           : cover
                       return (
-                        <div key={artist._id}>
-                          <ArtistCard
-                            imageURL={imageURL}
-                            name={artist.name}
-                            id={artist._id}
-                          />
-                        </div>
+                        <ArtistCard
+                          key={artist._id}
+                          imageURL={imageURL}
+                          name={artist.name}
+                          id={artist._id}
+                        />
                       )
                     })}
                   </div>

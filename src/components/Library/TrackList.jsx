@@ -1,11 +1,17 @@
+import { useState } from 'react'
 import { formatSeconds } from '../../helpers/formatSeconds'
 import { Dropdown } from '../Dropdown/Dropdown'
+import { usePlayer } from '../Player/usePlayer'
+import { Tooltip } from '../Tooltip/Tooltip'
 
-export const TrackList = ({ tracks, handlePlay }) => {
+export const TrackList = ({ tracks, title = 'Tracks' }) => {
+  const { handlePlay } = usePlayer()
+  const [isDropDownOpen, setDropDownIsOpen] = useState(false)
+
   return (
     <div className='tracks-wrapper'>
       <div className='title-wrapper'>
-        <h3>Tracks</h3>
+        <h3>{title}</h3>
         <div className='action'>
           <div className='play-button'>Play</div>
         </div>
@@ -31,35 +37,26 @@ export const TrackList = ({ tracks, handlePlay }) => {
                 }`}
               />
             </div>
-
             <div className='details'>
               <div className='overflow-text'>
                 <div className='title'>{track.name}</div>
                 <div className='subtitle'>{track.artist}</div>
               </div>
             </div>
-
-            {/* Tooltip */}
-
-            <div
-              className='actions lossless'
-              // appTooltip
-              // tooltip='Lyrics availalbe'
-            >
+            <Tooltip className='actions lossless' tooltip='lyrics available'>
               <i className='feather feather-list'></i>
-            </div>
-            <div className='actions lossless'>
-              {/* appTooltip tooltip='Lossless'> */}
-              <i className='feather feather-headphones'></i>
-            </div>
+            </Tooltip>
+            <Tooltip className='actions lossless' tooltip='Lossless'>
+              <i className='feather feather-headphones' />
+            </Tooltip>
 
-            {/*  | formatSeconds} */}
-            <div className='duration'>{formatSeconds(track.duration)}</div>
-
+            <Tooltip className='duration' tooltip='duration'>
+              {formatSeconds(track.duration)}
+            </Tooltip>
             <div className='actions'>
-              <Dropdown dropdown config={{ side: 'right' }}>
+              <Dropdown id={track._id} dropdown config={{ side: 'right' }}>
                 <div className='dropdown-action-list'>
-                  <button>Add to playlist</button>
+                  <a>Add to playlist</a>
                   <a>Add to queue</a>
 
                   <a>More from artist</a>
