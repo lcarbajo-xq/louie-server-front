@@ -11,13 +11,15 @@ export const Dropdown = ({ children, config, id }) => {
   const [state, dispatch] = useAppContext()
 
   useEffect(() => {
+    return () => handleUnmountDropdown()
+  }, [])
+
+  useEffect(() => {
     if (state.activeDropdown === id) {
       setIsOpen(true)
     } else {
       setIsOpen(false)
     }
-
-    return () => handleUnmountDropdown()
   }, [state?.activeDropdown])
 
   const handleUnmountDropdown = () => {
