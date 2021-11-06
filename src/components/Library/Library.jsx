@@ -1,4 +1,6 @@
-import { useEffect, useState } from 'react'
+import debounce from 'just-debounce-it'
+import { useCallback, useEffect, useState } from 'react'
+import { useLazyLoad } from '../../hooks/useLazyLoad'
 import { useServices } from '../../hooks/useServices'
 import { Dropdown } from '../Dropdown/Dropdown'
 import { Header } from '../Header/Header'
@@ -31,7 +33,7 @@ const ActionTemplate = ({ tab }) => {
     <Dropdown dropdown config={{ side: 'right' }}>
       {tab.id === tabs[2].id ? (
         <div className='dropdown-action-list'>
-          <a onClick={() => {}}>
+          <a onClick={() => setActiveTab(tab)}>
             New Playlist<i className='material-icons-outlined'>add</i>
           </a>
         </div>
@@ -48,7 +50,22 @@ const ActionTemplate = ({ tab }) => {
 export const Library = ({ setArtist }) => {
   const [activeTab, setActiveTab] = useState(tabs[0])
 
-  const { state, loading, nextBlock } = useServices(activeTab.title)
+  const { elementRef, isLazyLoad } = useLazyLoad()
+
+  const { libraryData, loading, nextBlock } = useServices(activeTab.title)
+
+  const debounceLoadMore = useCallback(
+    debounce(() => {
+      nextBlock(activeTab.title)
+    }, 1000),
+    [activeTab]
+  )
+
+  useEffect(() => {
+    if (isLazyLoad) {
+      debounceLoadMore()
+    }
+  }, [isLazyLoad])
 
   return (
     !loading && (
@@ -72,29 +89,30 @@ export const Library = ({ setArtist }) => {
 
         <div className='relative'>
           <div className='library'>
-            {activeTab.id === 1 && (
+            {!loading && activeTab.id === 1 && (
               <AlbumContent
                 isLoading={loading}
-                albums={state?.library?.albums}
+                albums={libraryData?.albums}
                 nextBlock={nextBlock}
               />
             )}
 
-            {activeTab.id === 0 && (
+            {!loading && activeTab.id === 0 && (
               <ArtistContent
-                sLoading={loading}
+                isLoading={loading}
                 nextBlock={nextBlock}
-                artists={state?.library?.artists}
+                artists={libraryData?.artists}
                 setArtist={setArtist}
               />
             )}
-            {activeTab.id === 2 && (
+            {!loading && activeTab.id === 2 && (
               <PlaylistContent
                 isLoading={loading}
-                playlists={state?.library?.playlists}
+                playlists={libraryData?.playlists}
                 nextBlock={nextBlock}
               />
             )}
+            {!loading && <div className='visor' ref={elementRef}></div>}
           </div>
         </div>
       </>

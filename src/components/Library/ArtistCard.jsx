@@ -3,6 +3,7 @@ import { useLazyLoad } from '../../hooks/useLazyLoad'
 
 export const ArtistCard = ({ name, imageURL, id }) => {
   const { isLazyLoad, elementRef } = useLazyLoad()
+
   return (
     <Link href={`/library/artist/${id}`} className='column'>
       <img

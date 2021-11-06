@@ -10,21 +10,6 @@ export const ArtistContent = ({
   isLoading,
   setArtist
 }) => {
-  const { elementRef: lastElementRef, isLazyLoad } = useLazyLoad()
-
-  const debounceLoadMore = useCallback(
-    debounce(() => {
-      nextBlock('artists')
-    }, 1000),
-    []
-  )
-
-  useEffect(() => {
-    if (isLazyLoad) {
-      debounceLoadMore()
-    }
-  }, [isLazyLoad])
-
   return (
     <>
       {artists.map((artist) => {
@@ -42,7 +27,6 @@ export const ArtistContent = ({
           </div>
         )
       })}
-      <div ref={lastElementRef}></div>
     </>
   )
 }

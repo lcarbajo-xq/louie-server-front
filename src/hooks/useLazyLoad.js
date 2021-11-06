@@ -1,15 +1,16 @@
 import { useEffect, useRef, useState } from 'react'
 
-export function useLazyLoad() {
+export function useLazyLoad(msg = null) {
   const [isLazyLoad, setIsLazyLoad] = useState(false)
   const elementRef = useRef()
   const observer = useRef()
 
   const onObserve = (entries) => {
+    setIsLazyLoad(false)
     entries.forEach((entry) => {
-      if (entry.intersectionRatio > 0.1) {
+      if (entry.intersectionRatio > 0.01) {
         setIsLazyLoad(true)
-        observer.current.disconnect(elementRef.current)
+        observer.current.observe(elementRef.current)
       }
     })
   }
@@ -28,7 +29,9 @@ export function useLazyLoad() {
       }
     })
 
-    return () => observer && observer.current.disconnect(elementRef.current)
+    return () => {
+      observer && observer.current?.disconnect(elementRef.current)
+    }
   }, [elementRef])
 
   return { isLazyLoad, elementRef }

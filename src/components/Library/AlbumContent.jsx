@@ -10,7 +10,7 @@ export const AlbumContent = React.memo(
 
     const debounceLoadMore = useCallback(
       debounce(() => {
-        nextBlock('albums')
+        nextBlock()
       }, 1000),
       []
     )
@@ -36,7 +36,6 @@ export const AlbumContent = React.memo(
             />
           )
         })}
-        <div ref={lastElementRef}></div>
       </>
     )
   }

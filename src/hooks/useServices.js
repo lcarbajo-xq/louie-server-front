@@ -12,80 +12,60 @@ export const useServices = (activeTab = '') => {
   const [loading, setLoading] = useState(false)
   const [updatePage, setUpdatePage] = useState(false)
 
-  const nextBlock = () => {
+  const nextBlock = (name) => {
     dispatch({
       type: DBACTIONS.SET_NEXT_PAGE,
-      payload: activeTab
+      payload: name
     })
     setUpdatePage(true)
   }
 
+  // const getLibraryDataFromState = () => {
+  //   console.log(activeTab)
+  //   if (state?.library) setLibraryData(state.library)
+  // }
+
   const dispatchItemsFromDB = () => {
     const { library } = state
-    const { limit, page, initialRequest } = library
+    const { limit, page } = library
     const activeTabPage = page[activeTab]
 
-    initialRequest
-      ? getItemsFromDB(activeTab, limit, activeTabPage).then((data) => {
-          if (activeTab === 'albums') {
-            dispatch({
-              type: DBACTIONS.GET_ALBUMS_FROM_DATABASE,
-              payload: data.albums
-            })
-          } else if (activeTab === 'artists')
-            dispatch({
-              type: DBACTIONS.GET_ARTISTS_FROM_DATABASE,
-              payload: data.artists
-            })
-          // else if (activeTab === 'playlists')
-          //   dispatch({
-          //     type: DBACTIONS.GET_PLAYLISTS_FROM_DATABASE,
-          //     payload: data.playlists
-          //   })
+    getItemsFromDB(activeTab, limit, activeTabPage).then((data) => {
+      if (activeTab === 'albums') {
+        dispatch({
+          type: DBACTIONS.GET_ALBUMS_FROM_DATABASE,
+          payload: data.albums
         })
-      : PAGES.map((p) => {
-          getItemsFromDB(p, limit, page[p]).then((data) => {
-            if (p === 'albums') {
-              dispatch({
-                type: DBACTIONS.GET_ALBUMS_FROM_DATABASE,
-                payload: data.albums
-              })
-            } else if (p === 'artists')
-              dispatch({
-                type: DBACTIONS.GET_ARTISTS_FROM_DATABASE,
-                payload: data.artists
-              })
-            // else if (p === 'playlists')
-            //   dispatch({
-            //     type: DBACTIONS.GET_PLAYLISTS_FROM_DATABASE,
-            //     payload: data.playlists
-            //   })
-            else if (p === 'tracks')
-              dispatch({
-                type: DBACTIONS.GET_TRACKS_FROM_DATABASE,
-                payload: data.tracks
-              })
-          })
+      } else if (activeTab === 'artists') {
+        dispatch({
+          type: DBACTIONS.GET_ARTISTS_FROM_DATABASE,
+          payload: data.artists
         })
+      }
+      setUpdatePage(false)
+    })
   }
+
+  // else if (activeTab === 'playlists')
+  //   dispatch({
+  //     type: DBACTIONS.GET_PLAYLISTS_FROM_DATABASE,
+  //     payload: data.playlists
+  //   })
 
   useEffect(
     function () {
-      if (updatePage || !state.initialRequest) {
+      if (updatePage) {
         setLoading(true)
         dispatchItemsFromDB()
-        state.initialRequest = true
-        setUpdatePage(false)
         setLoading(false)
       }
     },
-    [activeTab, updatePage]
+    [updatePage]
   )
 
   return {
-    state,
+    libraryData: state?.library,
     loading,
-    dispatch,
     nextBlock,
     dispatchItemsFromDB
   }

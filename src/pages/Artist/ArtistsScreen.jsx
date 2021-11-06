@@ -4,6 +4,9 @@ import cover from '../../assets/app-icon.png'
 import { Dropdown } from '../../components/Dropdown/Dropdown'
 import { Header } from '../../components/Header/Header'
 import { HorizontalScroll } from '../../components/HorizontalScroll/HorizontalScroll'
+import { AlbumCard } from '../../components/Library/AlbumCard'
+import { TrackList } from '../../components/Library/TrackList'
+import { usePlayer } from '../../components/Player/usePlayer'
 import { formatSeconds } from '../../helpers/formatSeconds'
 import { getArtistFromDB } from '../../services/databaseService'
 import './styles.scss'
@@ -1400,17 +1403,17 @@ export const ArtistsScreen = ({ artist, id }) => {
           <h3>Albums</h3>
           <div className='albums'>
             <HorizontalScroll>
-              {artistPage.albums.map((album) => {
+              {artistPage?.albums?.map((album) => {
+                const imageURL =
+                  album.image && album.image[5] !== '' ? album.image[5] : cover
                 return (
-                  <div key={album._id} className='album'>
-                    <Link href='#'>
-                      <img src={album.image[3] || cover} />
-                      <div className='column-details'>
-                        <div className='title'>{album.name}</div>
-                        <div className='subtitle'>{album.artist.name}</div>
-                      </div>
-                    </Link>
-                  </div>
+                  <AlbumCard
+                    key={album._id}
+                    id={album._id}
+                    imageURL={imageURL}
+                    artist={album.artist}
+                    name={album.name}
+                  />
                 )
               })}
             </HorizontalScroll>
@@ -1418,56 +1421,7 @@ export const ArtistsScreen = ({ artist, id }) => {
         </div>
 
         <div className='track-list'>
-          <div className='title-action'>
-            <h3>Popular</h3>
-            <div className='float-right'>
-              <div className='play-button'>Play</div>
-            </div>
-          </div>
-
-          <div className='grid'>
-            {tracks.map((track) => (
-              <div key={track._id} className='track'>
-                <div className='image'>
-                  <img
-                    // className='lazyloadd'
-                    src={`http://localhost:5000${
-                      track?.album?.image[0] || cover
-                    }`}
-                  />
-                </div>
-
-                <div className='details'>
-                  <div className='overflow-text'>
-                    <div className='title'>{track.name}</div>
-                    <div className='subtitle'>{track.artist}</div>
-                  </div>
-                </div>
-                <div className='actions lossless'>
-                  <i className='feather feather-list'></i>
-                </div>
-                <div className='actions lossless'>
-                  <i className='feather feather-headphones'></i>
-                </div>
-                <div className='duration'>{formatSeconds(track.duration)}</div>
-
-                <div className='actions'>
-                  <Dropdown dropdown config={{ side: 'right' }}>
-                    <div className='dropdown-action-list'>
-                      <button>Add to playlist</button>
-                      <a>Add to queue</a>
-
-                      <a>More from artist</a>
-                      <a>Go to album</a>
-                      <a>Download</a>
-
-                      <a>Remove from playlist</a>
-                    </div>
-                  </Dropdown>
-                </div>
-              </div>
-            ))}
-          </div>
+          <TrackList tracks={tracks} title='Popular' />
         </div>
       </div>
     )

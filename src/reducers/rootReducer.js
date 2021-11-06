@@ -1,7 +1,8 @@
 import { DBACTIONS } from '../actions/dbActions'
 
 export const initialState = {
-  initialRequest: false,
+  tabs: ['artists', 'albums'],
+  activeDropdown: null,
   currentSearchQuery: '',
   searchResults: null,
   home: {
@@ -107,6 +108,13 @@ export const rootReducer = (state, action) => {
       return {
         ...state,
         searchResults
+      }
+    }
+    case DBACTIONS.SET_ACTIVE_DROPDOWN: {
+      const { dropdownElement } = action.payload
+      return {
+        ...state,
+        activeDropdown: dropdownElement
       }
     }
     default:
