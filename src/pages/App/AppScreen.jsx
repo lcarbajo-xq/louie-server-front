@@ -35,7 +35,7 @@ export const AppScreen = () => {
       {/* <Route path='/home'> */}
       <AppRouter>
         <Route path='/home'>
-          <Search handlePlay={handlePlay} />
+          <Search />
         </Route>
         <Route path='/library'>
           <Library setArtist={setArtist} />

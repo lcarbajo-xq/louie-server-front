@@ -59,13 +59,18 @@ h3 {
     color: var(--foreground-color);
     padding: 10px;
 
-    &.inactive {
-      color: var(--foreground-color);
-    }
-
     &:hover {
       background-color: var(--accent-color);
       cursor: pointer;
+    }
+
+    &.inactive {
+      color: var(--foreground-color);
+      background-color: red;
+      &:hover {
+        cursor: pointer;
+        opacity: 0.5;
+      }
     }
 
     & + .playlist {

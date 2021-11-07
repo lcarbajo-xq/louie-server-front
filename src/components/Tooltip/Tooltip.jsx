@@ -8,7 +8,6 @@ export const Tooltip = ({ className, tooltip, children, delay = 400 }) => {
   const showTip = () => {
     if (tipInterval.current) clearInterval(tipInterval.current)
     tipInterval.current = setInterval(() => {
-      console.log('Hover')
       setActiveTooltip(true)
     }, delay)
   }
@@ -30,8 +29,5 @@ export const Tooltip = ({ className, tooltip, children, delay = 400 }) => {
         </div>
       </div>
     </>
-
-    //   <div data-tooltip>{tooltip}</div>
-    // </div>
   )
 }
