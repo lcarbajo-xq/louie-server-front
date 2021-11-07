@@ -5,13 +5,13 @@ import { BASE_URLS } from '../../constants/endpoints'
 import { circumference } from '../../constants/progressConstants'
 import { useAppContext } from '../../context/AppContext'
 
-export const usePlayer = (track) => {
+export const usePlayer = () => {
   const [isPlaying, setIsPlaying] = useState(false)
   const [duration, setDuration] = useState(0)
   const [currentTime, setCurrentTime] = useState(0)
-  const [, dispatch] = useAppContext()
+  const [{ currentTrack }, dispatch] = useAppContext()
 
-  const id = track?._id
+  const id = currentTrack?._id
 
   const audioSrc = id ? `${BASE_URLS.play}${id}` : ''
 
@@ -26,10 +26,9 @@ export const usePlayer = (track) => {
   useEffect(() => {
     setIsPlaying(false)
     return () => {
-      console.log('UNSUSCRIBE')
       cancelAnimationFrame(animationRef.current)
     }
-  }, [track])
+  }, [currentTrack])
 
   const onLoadedMetadata = () => {
     if (audioRef.current) {
@@ -55,7 +54,6 @@ export const usePlayer = (track) => {
     if (audioRef?.current?.duration) {
       const value = audioRef?.current?.currentTime / duration
       const currentProgressCircumference = Math.floor(value * circumference)
-
       setCurrentTime(currentProgressCircumference)
       animationRef.current = requestAnimationFrame(whilePlaying)
     }
