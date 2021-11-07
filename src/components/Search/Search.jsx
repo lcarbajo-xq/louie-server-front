@@ -43,7 +43,7 @@ export const Search = ({ handlePlay }) => {
               <div className='playlists-wrapper'>
                 <h3>Playlists</h3>
 
-                <div className='playlists'>
+                <div className='playlists-scroll'>
                   <HorizontalScroll>
                     {home?.playlists?.map((playlist) => {
                       if (playlist.private) {
