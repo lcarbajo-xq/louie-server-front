@@ -35,52 +35,52 @@ export const TrackList = ({ tracks, title = 'Tracks' }) => {
       <div className='grid'>
         {/* <div className="track {{ playerService.$track.getValue()._id === track._id ? 'playing' : '' }}"> */}
         {tracks?.map((track) => (
-          <div
-            key={`search-${track._id}`}
-            onClick={() => handlePlay(track)}
-            className='track'
-          >
+          <div key={`search-${track._id}`} className='track'>
             {/* <div *ngIf="options.picture" appTooltip tooltip="{{ track.artist }} - {{ track.name }}" class="image">
     <img class="lazyloa
     d" [lazyLoad]="track?.album?.picture || '/assets/app-icon-text.png'" />
     </div> */}
-            <div className='image'>
-              <img
-                // className='lazyloadd'
-                src={`http://localhost:5000${
-                  track?.album?.image[0] || '../../assets/app-icon.png'
-                }`}
-              />
-            </div>
-            <div className='details'>
-              <div className='overflow-text'>
-                <div className='title'>{track.name}</div>
-                <div className='subtitle'>{track.artist}</div>
+            <div onClick={() => handlePlay(track)} className='track-metadata'>
+              <div className='image'>
+                <img
+                  // className='lazyloadd'
+                  src={`http://localhost:5000${
+                    track?.album?.image[0] || '../../assets/app-icon.png'
+                  }`}
+                />
+              </div>
+              <div className='details'>
+                <div className='overflow-text'>
+                  <div className='title'>{track.name}</div>
+                  <div className='subtitle'>{track.artist}</div>
+                </div>
               </div>
             </div>
-            <Tooltip className='actions lossless' tooltip='lyrics available'>
-              <i className='feather feather-list'></i>
-            </Tooltip>
-            <Tooltip className='actions lossless' tooltip='Lossless'>
-              <i className='feather feather-headphones' />
-            </Tooltip>
+            <div className='track-actions'>
+              <Tooltip className='actions lossless' tooltip='lyrics available'>
+                <i className='feather feather-list'></i>
+              </Tooltip>
+              <Tooltip className='actions lossless' tooltip='Lossless'>
+                <i className='feather feather-headphones' />
+              </Tooltip>
 
-            <Tooltip className='duration' tooltip='duration'>
-              {formatSeconds(track.duration)}
-            </Tooltip>
-            <div className='actions'>
-              <Dropdown id={track._id} dropdown config={{ side: 'right' }}>
-                <div className='dropdown-action-list'>
-                  <a>Add to playlist</a>
-                  <a>Add to queue</a>
+              <Tooltip className='duration' tooltip='duration'>
+                {formatSeconds(track.duration)}
+              </Tooltip>
+              <div className='actions'>
+                <Dropdown id={track._id} dropdown config={{ side: 'right' }}>
+                  <div className='dropdown-action-list'>
+                    <a>Add to playlist</a>
+                    <a>Add to queue</a>
 
-                  <a>More from artist</a>
-                  <a>Go to album</a>
-                  <a>Download</a>
+                    <a>More from artist</a>
+                    <a>Go to album</a>
+                    <a>Download</a>
 
-                  <a>Remove from playlist</a>
-                </div>
-              </Dropdown>
+                    <a>Remove from playlist</a>
+                  </div>
+                </Dropdown>
+              </div>
             </div>
           </div>
         ))}
