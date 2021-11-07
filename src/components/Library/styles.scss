@@ -18,6 +18,7 @@ button {
     }
     &:hover {
       cursor: pointer;
+      // color: var(--foreground-color);
       background-color: var(--accent-color);
     }
     .image {
