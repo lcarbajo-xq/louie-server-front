@@ -1,10 +1,9 @@
-import { Route, useLocation } from 'wouter'
+import { useLocation } from 'wouter'
 import logo from '../../assets/logo.png'
-import { AppScreen } from '../App/AppScreen'
 import './styles.scss'
 
 export const LoginScreen = ({ setAuth }) => {
-  const [location, setLocation] = useLocation()
+  const [, setLocation] = useLocation()
   return (
     <div className='login'>
       <div className='login-container'>
@@ -18,13 +17,12 @@ export const LoginScreen = ({ setAuth }) => {
             <input placeholder='Enter Your Login Credentials' type='text' />
           </div>
 
-          <button onClick={() => setLocation('/app')}>
+          <button onClick={() => setLocation('/app/home')}>
             Login
             <i className='feather-arrow-right' />
           </button>
         </form>
       </div>
-      <Route path='/app' component={AppScreen} />
     </div>
   )
 }

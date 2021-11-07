@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from 'react'
+import debounce from 'just-debounce-it'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { DBACTIONS } from '../../actions/dbActions'
 import { BASE_URLS } from '../../constants/endpoints'
 import { circumference } from '../../constants/progressConstants'
@@ -18,10 +19,14 @@ export const usePlayer = (track) => {
   const animationRef = useRef()
 
   useEffect(() => {
-    cancelAnimationFrame(animationRef.current)
+    return () =>
+      animationRef?.current && cancelAnimationFrame(animationRef.current)
+  }, [])
+
+  useEffect(() => {
     setIsPlaying(false)
-    setCurrentTime(0)
     return () => {
+      console.log('UNSUSCRIBE')
       cancelAnimationFrame(animationRef.current)
     }
   }, [track])
@@ -38,24 +43,27 @@ export const usePlayer = (track) => {
     setIsPlaying(!prevIsPlaying)
 
     if (!prevIsPlaying) {
-      audioRef.current.play()
+      audioRef?.current?.play()
       animationRef.current = requestAnimationFrame(whilePlaying)
     } else {
-      audioRef.current.pause()
+      audioRef?.current?.pause()
       cancelAnimationFrame(animationRef.current)
     }
   }
 
   const whilePlaying = () => {
-    const value = audioRef.current.currentTime / duration
+    if (audioRef?.current?.duration) {
+      const value = audioRef?.current?.currentTime / duration
+      const currentProgressCircumference = Math.floor(value * circumference)
 
-    const currentProgressCircumference = Math.floor(value * circumference)
-    setCurrentTime(currentProgressCircumference)
-    animationRef.current = requestAnimationFrame(whilePlaying)
+      setCurrentTime(currentProgressCircumference)
+      animationRef.current = requestAnimationFrame(whilePlaying)
+    }
   }
 
   const handlePlay = (trackClicked) => {
     if (trackClicked._id !== id) {
+      setIsPlaying(false)
       dispatch({
         type: DBACTIONS.SET_CURRENT_TRACK,
         payload: { track: trackClicked }

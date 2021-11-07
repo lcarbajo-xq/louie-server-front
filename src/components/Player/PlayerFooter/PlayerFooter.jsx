@@ -6,19 +6,20 @@ import { useEffect, useRef, useState } from 'react'
 import { formatSeconds } from '../../../helpers/formatSeconds'
 import { usePlayer } from '../usePlayer'
 
-export const PlayerFooter = ({
-  currentTrack,
-  isPlaying,
-  togglePlayPause,
-  currentTime,
-  audioRef,
-  audioSrc,
-  onLoadedMetadata,
-  circumference
-}) => {
+export const PlayerFooter = () => {
   // const changeCurrentTime = () => {
   //   setCurrentTime(audioRef.current.currentTime / maxProgress)
   // }
+  const [{ currentTrack }] = useAppContext()
+  const {
+    isPlaying,
+    togglePlayPause,
+    currentTime,
+    audioRef,
+    audioSrc,
+    onLoadedMetadata,
+    circumference
+  } = usePlayer(currentTrack)
 
   return (
     <div className='player'>

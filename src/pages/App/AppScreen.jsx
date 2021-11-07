@@ -15,19 +15,8 @@ import './styles.scss'
 
 export const AppScreen = () => {
   const { currentTheme } = useTheme()
-  const [{ currentTrack }] = useAppContext()
+  const { handlePlay } = usePlayer()
   const [artist, setArtist] = useState({})
-
-  const {
-    isPlaying,
-    togglePlayPause,
-    currentTime,
-    audioRef,
-    audioSrc,
-    onLoadedMetadata,
-    circumference,
-    handlePlay
-  } = usePlayer(currentTrack)
 
   return (
     <div className='app'>
@@ -59,16 +48,7 @@ export const AppScreen = () => {
         </Route>
       </AppRouter>
       <footer className='app-player'>
-        <PlayerFooter
-          isPlaying={isPlaying}
-          togglePlayPause={togglePlayPause}
-          currentTime={currentTime}
-          audioRef={audioRef}
-          audioSrc={audioSrc}
-          onLoadedMetadata={onLoadedMetadata}
-          circumference={circumference}
-          currentTrack={currentTrack}
-        />
+        <PlayerFooter />
       </footer>
 
       {/* </Route> */}

@@ -24,8 +24,11 @@ export const AlbumContent = React.memo(
     return (
       <>
         {albums.map((album) => {
-          const imageURL =
-            album.image && album.image[5] !== '' ? album.image[5] : cover
+          const imageURL = album.image
+            ? album.image[5] !== ''
+              ? album.image[5]
+              : cover
+            : cover
           return (
             <AlbumCard
               key={album._id}
