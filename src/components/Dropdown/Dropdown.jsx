@@ -10,9 +10,9 @@ export const Dropdown = ({ children, config, id }) => {
   const [isOpen, setIsOpen] = useState(false)
   const [state, dispatch] = useAppContext()
 
-  useEffect(() => {
-    return () => handleUnmountDropdown()
-  }, [])
+  // useEffect(() => {
+  //   return () => handleUnmountDropdown()
+  // }, [])
 
   useEffect(() => {
     if (state.activeDropdown === id) {
@@ -21,13 +21,6 @@ export const Dropdown = ({ children, config, id }) => {
       setIsOpen(false)
     }
   }, [state?.activeDropdown])
-
-  const handleUnmountDropdown = () => {
-    dispatch({
-      type: DBACTIONS.SET_ACTIVE_DROPDOWN,
-      payload: { dropdownElement: null }
-    })
-  }
 
   const handleDropdownClick = () => {
     if (!isOpen) {

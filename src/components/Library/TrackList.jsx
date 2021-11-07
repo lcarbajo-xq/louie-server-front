@@ -1,4 +1,6 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { DBACTIONS } from '../../actions/dbActions'
+import { useAppContext } from '../../context/AppContext'
 import { formatSeconds } from '../../helpers/formatSeconds'
 import { Dropdown } from '../Dropdown/Dropdown'
 import { usePlayer } from '../Player/usePlayer'
@@ -6,7 +8,20 @@ import { Tooltip } from '../Tooltip/Tooltip'
 
 export const TrackList = ({ tracks, title = 'Tracks' }) => {
   const { handlePlay } = usePlayer()
-  const [isDropDownOpen, setDropDownIsOpen] = useState(false)
+  const [, dispatch] = useAppContext()
+
+  const handleUnmountDropdown = () => {
+    dispatch({
+      type: DBACTIONS.SET_ACTIVE_DROPDOWN,
+      payload: { dropdownElement: null }
+    })
+  }
+
+  useEffect(() => {
+    return () => handleUnmountDropdown()
+  }, [])
+
+  //Aqui deberíamos saber el dropdown que está activo: activeDropdown
 
   return (
     <div className='tracks-wrapper'>
