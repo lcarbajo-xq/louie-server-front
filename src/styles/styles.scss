@@ -148,8 +148,9 @@ a {
   border-radius: 5px;
   display: flex;
   align-items: center;
-  &:hover {
-    // background-color: var(--accent-color);
+  &:hover,
+  &.active {
+    background-color: var(--accent-color);
     // color: white;
     cursor: pointer;
   }

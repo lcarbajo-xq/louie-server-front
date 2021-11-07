@@ -34,7 +34,10 @@ export const Dropdown = ({ children, config, id }) => {
 
   return (
     <div className='dropup'>
-      <div onClick={handleDropdownClick} className='dropdown-action-item'>
+      <div
+        onClick={handleDropdownClick}
+        className={`dropdown-action-item${isOpen ? ' active' : ''} `}
+      >
         <i className='material-icons-outlined'>more_vert</i>
       </div>
       {isOpen && (
