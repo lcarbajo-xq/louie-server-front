@@ -52,7 +52,7 @@ export const Dropdown = ({ children, config, id }) => {
         <div
           id='dropup'
           className={`dropup-content${isOpen ? ' visible' : ''} ${
-            config.side === 'right' ? ' right' : 'left'
+            config.side === 'right' ? ' right' : ' left'
           }`}
         >
           {children}

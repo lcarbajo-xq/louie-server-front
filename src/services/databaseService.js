@@ -16,10 +16,11 @@ export const searchItems = (query) => {
 }
 
 export const fetchInitialData = async () => {
-  const collections = ['tracks', 'albums', 'artists']
+  const collections = ['tracks', 'albums', 'artists', 'playlists']
   let url
   const fetchData = await Promise.all(
     collections.map((collection) => {
+      console.log(collection)
       url = `http://localhost:5000/${collection}/random`
       return fetch(url).then((json) => json.json())
     })

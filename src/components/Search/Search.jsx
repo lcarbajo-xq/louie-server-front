@@ -44,10 +44,10 @@ export const Search = ({ handlePlay }) => {
                 <div className='playlists'>
                   <HorizontalScroll>
                     {home?.playlists?.map((playlist) => {
-                      if (playlist.liked) {
+                      if (playlist.private) {
                         return (
                           <div
-                            key={`search-${playlist.id}`}
+                            key={`search-${playlist._id}`}
                             className='playlist'
                           >
                             {playlist.name}
@@ -56,10 +56,10 @@ export const Search = ({ handlePlay }) => {
                       }
                     })}
                     {home?.playlists?.map((playlist) => {
-                      if (!playlist.liked) {
+                      if (!playlist.private) {
                         return (
                           <div
-                            key={`search-${playlist.id}`}
+                            key={`search-${playlist._id}`}
                             className='playlist'
                           >
                             {playlist.name}

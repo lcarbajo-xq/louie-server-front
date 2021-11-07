@@ -41,16 +41,15 @@ export const useServices = (activeTab = '') => {
           type: DBACTIONS.GET_ARTISTS_FROM_DATABASE,
           payload: data.artists
         })
+      } else if (activeTab === 'playlists') {
+        dispatch({
+          type: DBACTIONS.GET_PLAYLISTS_FROM_DATABASE,
+          payload: data.playlists
+        })
       }
       setUpdatePage(false)
     })
   }
-
-  // else if (activeTab === 'playlists')
-  //   dispatch({
-  //     type: DBACTIONS.GET_PLAYLISTS_FROM_DATABASE,
-  //     payload: data.playlists
-  //   })
 
   useEffect(
     function () {

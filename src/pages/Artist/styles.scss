@@ -20,15 +20,18 @@
   position: relative;
   min-height: 350px;
 }
+.artist-header-details-wrapper {
+  max-width: 350px;
+}
 
 .artist-header-background-image {
   background-size: cover;
-  width: 50%;
+  width: 60%;
   height: 100%;
   position: absolute;
   right: 0;
   top: 0;
-  background-position: 50% 25%;
+  background-position: 25% 25%;
 }
 
 .artist-header-background-image-overlay {
@@ -36,7 +39,7 @@
   position: absolute;
   right: 0;
   top: 0;
-  width: 50%;
+  width: 60%;
   transform-origin: center left;
   transition: tramsform 0.5s;
 
@@ -79,7 +82,7 @@ h3 {
 }
 
 .artist-name {
-  font-size: 2.7rem;
+  font-size: 4rem;
   color: var(--foreground-color);
   font-weight: 800;
   margin-bottom: 10px;
@@ -93,6 +96,7 @@ h3 {
   list-style: none;
   margin: 20px 0;
   padding: 0;
+  text-transform: capitalize;
 
   .tag {
     &:first-of-type {
@@ -132,7 +136,7 @@ h3 {
   padding-top: 10px;
   padding-bottom: 10px;
   margin-right: 15px;
-  border-radius: 20px;
+  border-radius: 10px;
   box-shadow: 0 2px 4px rgb(0 0 0 / 6%);
 
   &:hover {

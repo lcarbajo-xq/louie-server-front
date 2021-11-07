@@ -1,34 +1,21 @@
 import { DBACTIONS } from '../actions/dbActions'
 
 export const initialState = {
-  tabs: ['artists', 'albums'],
+  tabs: ['artists', 'albums', 'playlists'],
   activeDropdown: null,
   currentSearchQuery: '',
   searchResults: null,
-  home: {
-    playlists: [
-      { name: 'Playlist 1', id: 1, liked: false },
-      { name: 'Playlist 2', id: 2, liked: true },
-      { name: 'Playlist 3', id: 3, liked: true },
-      { name: 'Playlist 4', id: 4, liked: false },
-      { name: 'Playlist 5', id: 5, liked: false }
-    ]
-  },
+  home: {},
   currentTrack: null,
   library: {
     artists: [],
     albums: [],
-    playlists: [
-      { name: 'Playlist 1', id: 1, liked: false },
-      { name: 'Playlist 2', id: 2, liked: true },
-      { name: 'Playlist 3', id: 3, liked: true },
-      { name: 'Playlist 4', id: 4, liked: false },
-      { name: 'Playlist 5', id: 5, liked: false }
-    ],
+    playlists: [],
     tracks: [],
     page: {
       albums: 0,
-      artists: 0
+      artists: 0,
+      playlists: 0
     },
     limit: 20
   }
@@ -38,14 +25,15 @@ export const rootReducer = (state, action) => {
   console.log(action)
   switch (action.type) {
     case DBACTIONS.SET_INITIAL_STATE: {
-      const { albums, artists, tracks } = action.payload
+      const { albums, artists, tracks, playlists } = action.payload
       return {
         ...state,
         home: {
           ...state.home,
           albums,
           artists,
-          tracks
+          tracks,
+          playlists
         }
       }
     }
@@ -66,6 +54,16 @@ export const rootReducer = (state, action) => {
         library: {
           ...state.library,
           artists: artists.concat(action.payload)
+        }
+      }
+    }
+    case DBACTIONS.GET_PLAYLISTS_FROM_DATABASE: {
+      const { playlists } = state.library
+      return {
+        ...state,
+        library: {
+          ...state.library,
+          playlists: playlists.concat(action.payload)
         }
       }
     }

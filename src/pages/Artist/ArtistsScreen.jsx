@@ -1365,15 +1365,19 @@ export const ArtistsScreen = ({ artist, id }) => {
               ></div>
               <div className='artist-header-background-image-overlay'></div>
             </div>
-            <h3 className='artist-name'>{artistPage.name}</h3>
-            <div className='artist-bio'>{`Albums: ${artistPage.total}`}</div>
+            <div className='artist-header-details-wrapper'>
+              <h3 className='artist-name'>{artistPage.name}</h3>
+              <div className='artist-bio'>{artistPage.bio}</div>
+            </div>
+
             <div className='artist-header-gallery'></div>
           </div>
           <div className='width-expand@md'>
             <div className='artist-details'>
               {/* <div className='artist-name'>{artist.name}</div> */}
-              <div className='artist-bio'>{artistPage.bio}</div>
+              {/* <div className='artist-bio'>{artistPage.bio}</div> */}
             </div>
+            <h3>Tags</h3>
             <div className='tags'>
               <HorizontalScroll>
                 {artistPage?.tags.map((tag) => {

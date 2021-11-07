@@ -15,7 +15,8 @@ export const AppContextProvider = ({ initialState, reducer, children }) => {
         payload: {
           albums: data[1].albums,
           artists: data[2].artists,
-          tracks: data[0].tracks
+          tracks: data[0].tracks,
+          playlists: data[3].playlists
         }
       })
     })
@@ -31,6 +32,12 @@ export const AppContextProvider = ({ initialState, reducer, children }) => {
       dispatch({
         type: DBACTIONS.GET_ARTISTS_FROM_DATABASE,
         payload: data.artists
+      })
+    })
+    getItemsFromDB('playlists', limit, page['playlists']).then((data) => {
+      dispatch({
+        type: DBACTIONS.GET_PLAYLISTS_FROM_DATABASE,
+        payload: data.playlists
       })
     })
     tabs.forEach((item) => {

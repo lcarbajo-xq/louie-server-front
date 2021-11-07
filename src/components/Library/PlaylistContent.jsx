@@ -25,16 +25,15 @@ export const PlaylistContent = ({ playlists = [], nextBlock }) => {
   return (
     <div className='playlists'>
       {playlists.map((playlist) => (
-        <div key={playlist.name} className='playlist'>
+        <div key={playlist._id} className='playlist'>
           <div className='playlist-name'>{playlist.name}</div>
-          <div className='playlist-actions'>
-            <Dropdown isOpen={true} dropdown config={{ side: 'right' }}>
-              <div className='dropdown-action-list'>
-                <a>Edit</a>
-                <a>Delete</a>
-              </div>
-            </Dropdown>
-          </div>
+
+          <Dropdown isOpen={true} dropdown config={{ side: 'right' }}>
+            <div className='dropdown-action-list'>
+              <a>Edit</a>
+              <a>Delete</a>
+            </div>
+          </Dropdown>
         </div>
       ))}
       <div id='visor' className='visor' ref={externalRef}></div>

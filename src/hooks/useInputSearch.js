@@ -13,7 +13,8 @@ export const useInputSearch = () => {
       search.length > 0 &&
       searchResults?.artists?.length === 0 &&
       searchResults?.albums?.length === 0 &&
-      searchResults?.tracks?.length === 0
+      searchResults?.tracks?.length === 0 &&
+      searchResults?.playlists?.length === 0
     setIsEmpty(hasNotResults)
   }, [searchResults])
 
