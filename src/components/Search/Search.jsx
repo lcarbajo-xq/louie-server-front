@@ -10,6 +10,7 @@ import cover from '../../assets/app-icon.png'
 
 import './styles.scss'
 import { TrackList } from '../Library/TrackList'
+import { useLocation } from 'wouter'
 
 const NoResults = () => <h3>No Results found</h3>
 

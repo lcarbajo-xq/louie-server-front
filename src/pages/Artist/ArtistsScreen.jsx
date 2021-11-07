@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Link, useRoute } from 'wouter'
+import { Link, useLocation, useRoute } from 'wouter'
 import cover from '../../assets/app-icon.png'
 import { Dropdown } from '../../components/Dropdown/Dropdown'
 import { Header } from '../../components/Header/Header'
@@ -1334,6 +1334,8 @@ const tracks = [
 export const ArtistsScreen = ({ artist, id }) => {
   const [artistPage, setArtist] = useState(null)
   const [loading, setLoading] = useState(false)
+  const location = useLocation()
+
   useEffect(() => {
     setLoading(true)
     getArtistFromDB(id).then((data) => {
