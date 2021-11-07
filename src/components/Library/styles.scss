@@ -20,6 +20,20 @@ button {
       cursor: pointer;
       background-color: var(--accent-color);
     }
+    .image {
+      min-width: 60px;
+      text-align: center;
+      border-radius: 50%;
+      margin-right: 25px;
+
+      img {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgb(0 0 0 / 6%);
+      }
+    }
   }
 }
 

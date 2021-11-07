@@ -26,6 +26,12 @@ export const PlaylistContent = ({ playlists = [], nextBlock }) => {
     <div className='playlists'>
       {playlists.map((playlist) => (
         <div key={playlist._id} className='playlist'>
+          <div className='image'>
+            <img
+              // className='lazyload'
+              src={playlist.images[0] || '../../assets/app-icon.png'}
+            />
+          </div>
           <div className='playlist-name'>{playlist.name}</div>
 
           <Dropdown isOpen={true} dropdown config={{ side: 'right' }}>
