@@ -37,7 +37,7 @@
 px
 ; */
   padding-top: 66px;
-  padding-right: 340px;
+  padding-right: 50%;
   padding-left: 20px;
   padding-bottom: 36px;
   width: 800px;
@@ -125,6 +125,7 @@ h3 {
   color: var(--foreground-color);
   padding-left: 15px;
   padding-top: 15px;
+  line-height: 1.4rem;
 }
 
 .tags {

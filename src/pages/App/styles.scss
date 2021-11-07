@@ -38,10 +38,12 @@
       padding: 15px;
       text-align: center;
       color: var(--foreground-color);
-      opacity: 0.2;
+      opacity: 0.4;
 
       &.active {
-        color: var(--accent-color);
+        color: var(--glass-opacity);
+        background-color: var(--accent-color);
+        border-radius: 10px;
         opacity: 1;
 
         span {
