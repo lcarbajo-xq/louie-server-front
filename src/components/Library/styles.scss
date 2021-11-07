@@ -3,15 +3,22 @@ button {
 }
 
 .playlists {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   .playlist {
     padding: 15px;
     margin-bottom: 15px;
     border-radius: 5px;
     display: flex !important;
     align-items: center;
+
     .playlist-name {
       color: var(--foreground-color);
       flex-grow: 1;
+      overflow: hidden;
+      white-space: nowrap;
+      width: 0;
+      text-overflow: ellipsis;
     }
     .playlist-actions {
       color: var(--foreground-color);
