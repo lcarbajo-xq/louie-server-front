@@ -5,7 +5,10 @@
 :root,
 html[data-theme='light'] {
   --active-color: #114694;
-  --accent-color: #114694;
+  --accent-color: #087570;
+  --seek-before-width-progress: 0;
+  --seek-before-width-volume: 0;
+  --seek-before-color: #087570;
 
   --swiper-theme-color: #ffffff !important;
   --cropper-outline-color: rgba(0, 0, 0, 0.8);
@@ -35,7 +38,10 @@ html[data-theme='light'] {
 
 html[data-theme='dark'] {
   --active-color: #2065cc;
-  --accent-color: #114694;
+  --accent-color: #087570;
+  --seek-before-width-progress: 0;
+  --seek-before-width-volume: 0;
+  --seek-before-color: #087570;
 
   --swiper-theme-color: #ffffff !important;
   --cropper-outline-color: rgba(0, 0, 0, 0.8);

@@ -21,7 +21,7 @@ export const BottomSheet = ({
           </div>
 
           <div
-            class='bottom-sheet-content'
+            className='bottom-sheet-content'
             style={{ maxHeight: options?.maxHeight }}
           >
             {children}

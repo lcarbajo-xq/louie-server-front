@@ -5,14 +5,72 @@ import './styles.scss'
 import cover from '../../assets/app-icon.png'
 import { Slider } from '../../components/Slider/Slider'
 import { BottomSheet } from '../../components/BottomSheet/BottomSheet'
+import { useAppContext } from '../../context/AppContext'
+import { formatSeconds } from '../../helpers/formatSeconds'
+import { usePlayer } from '../../components/Player/usePlayer'
+import { useAudioPlayer } from '../../hooks/useAudioPlayer'
+import { BASE_URLS } from '../../constants/endpoints'
 
 export const NowPlayingScreen = () => {
+  const [{ currentTrack }] = useAppContext()
+  // const {
+  //   currentTime,
+  //   isPlaying,
+  //   togglePlayPause,
+  //   audioRef,
+  //   progressRef,
+  //   onChangeRange,
+  //   audioSrc,
+  //   onLoadedMetadata
+  // } = usePlayer()
+
+  const audioSrc = currentTrack?._id
+    ? `${BASE_URLS.play}${currentTrack._id}`
+    : ''
+
+  const {
+    ready,
+    loading,
+    error,
+    playing,
+    paused,
+    duration,
+    mute,
+    loop,
+    volume,
+    seek,
+    rate,
+    onToggle,
+    onPlay,
+    onPause,
+    onMute,
+    onLoop,
+    onVolume,
+    onRate,
+    onSeek
+  } = useAudioPlayer({
+    audioSrc,
+    preload: true,
+    autoplay: false,
+    volume: 0.5,
+    mute: false,
+    loop: false,
+    rate: 1.0
+  })
+
+  const handleClickBack = () => {
+    window.history.back()
+  }
+
   return (
     <div className='container mx-auto'>
       <div className='playing'>
         <div className='playing-header'>
           <div className='playing-header-action'>
-            <div className='playing-header-action-item'>
+            <div
+              onClick={handleClickBack}
+              className='playing-header-action-item'
+            >
               <i className='feather-chevron-down'></i>
             </div>
           </div>
@@ -36,16 +94,22 @@ export const NowPlayingScreen = () => {
         </div>
         <div className='playing-carousel'>
           <div className='image-wrap'>
-            <img src={cover} />
+            <img
+              src={
+                currentTrack.album.image[0]
+                  ? `http://localhost:5000${currentTrack.album.image[0]}`
+                  : cover
+              }
+            />
           </div>
         </div>
         <div className='playing-track'>
           <div className='playing-track-details'>
             <div className='name'>
-              <div className='overflow-text'>Techno Trap</div>
+              <div className='overflow-text'>{currentTrack.name}</div>
             </div>
 
-            <div className='artists'>Zen Mantra</div>
+            <div className='artists'>{currentTrack.artist}</div>
           </div>
 
           <div className='playing-track-actions'>
@@ -56,30 +120,28 @@ export const NowPlayingScreen = () => {
         </div>
         <div className='playing-progress'>
           <div className='playing-progress-slider'>
-            {/* <input
-              type='range'
-              value={0}
-              step='1'
-              min='0'
-              max={500}
-              className='progress'
-              onChange={(e) => {}}
-            /> */}
             <Slider
-              seekable
-              options={{ vertical: false, autosize: false }}
-              buffer={100}
-              value={0}
+              // seekable
+              // options={{ vertical: false, autosize: false }}
+              // buffer={100}
+              type='progress'
+              handleChange={onSeek}
+              value={seek}
+              max={duration}
             />
             <div className='playing-progress-time'>
-              <div className='current'>00 | 00</div>
+              <div className='current'>
+                {!isNaN(seek) && formatSeconds(seek)}
+              </div>
 
-              <div className='total'>99 | 99</div>
+              <div className='total'>
+                {!isNaN(duration) && formatSeconds(duration)}
+              </div>
             </div>
           </div>
           {/* <app-slider [seekable]="!(buffering && playing)" [options]="{vertical: false, autoSize: false}"
-					[buffer]="buffer" [value]="progress" (valueChange)="onProgress($event)">
-				</app-slider> 
+  				[buffer]="buffer" [value]="progress" (valueChange)="onProgress($event)">
+  			</app-slider>
                 				<app-loading [loading]="buffering && playing"></app-loading>*/}
         </div>
 
@@ -92,9 +154,9 @@ export const NowPlayingScreen = () => {
               <span className='material-icons-round'>skip_previous</span>
             </div>
 
-            <div className=' playback'>
+            <div onClick={onToggle} className=' playback'>
               <span className='material-icons-round'>
-                {true ? 'pause' : 'play_arrow'}
+                {ready && playing ? 'pause' : 'play_arrow'}
               </span>
             </div>
 
@@ -111,15 +173,15 @@ export const NowPlayingScreen = () => {
           <div className='playing-volume-controls'>
             <div className='playing-volume-controls-level'>
               {/* <i *ngIf="volume === 0" class="feather-volume-x"></i>
-					<i *ngIf="volume <= 20 && volume > 0" class="feather-volume"></i>
-					<i *ngIf="volume < 50 && volume > 20" class="feather-volume-1"></i>
-					<i *ngIf="volume >= 50" class="feather-volume-2"></i> */}
+  				<i *ngIf="volume <= 20 && volume > 0" class="feather-volume"></i>
+  				<i *ngIf="volume < 50 && volume > 20" class="feather-volume-1"></i>
+  				<i *ngIf="volume >= 50" class="feather-volume-2"></i> */}
               <i className='feather-volume-x' />
             </div>
             <div className='playing-volume-controls-slider'>
               {/* <app-slider [options]="{vertical: false, autoSize: false}" [value]="volume"
-						(valueChange)="onVolume($event)">
-					</app-slider> */}
+  					(valueChange)="onVolume($event)">
+  				</app-slider> */}
               {/* <input
                 type='range'
                 value={0}
@@ -130,7 +192,9 @@ export const NowPlayingScreen = () => {
               /> */}
               <Slider
                 options={{ vertical: false, autosize: false }}
-                value={0}
+                type='volume'
+                value={volume}
+                handleChange={onVolume}
               />
             </div>
           </div>
@@ -157,7 +221,7 @@ export const NowPlayingScreen = () => {
             </div>
           </div>
         </div>
-        <BottomSheet>
+        {/* <BottomSheet>
           <div className='playing-header'>
             <div className='playing-header-action'>
               <div className='playing-header-action-item'>
@@ -176,7 +240,7 @@ export const NowPlayingScreen = () => {
               </div>
             </div>
           </div>
-        </BottomSheet>
+        </BottomSheet> */}
       </div>
     </div>
   )

@@ -5,8 +5,9 @@ import { useAppContext } from '../../../context/AppContext'
 import { useEffect, useRef, useState } from 'react'
 import { formatSeconds } from '../../../helpers/formatSeconds'
 import { usePlayer } from '../usePlayer'
+import { Link } from 'wouter'
 
-export const PlayerFooter = () => {
+export const PlayerFooter = ({ handleClickPlayer }) => {
   // const changeCurrentTime = () => {
   //   setCurrentTime(audioRef.current.currentTime / maxProgress)
   // }
@@ -14,7 +15,7 @@ export const PlayerFooter = () => {
   const {
     isPlaying,
     togglePlayPause,
-    currentTime,
+    circumferenceProgress,
     audioRef,
     audioSrc,
     onLoadedMetadata,
@@ -30,7 +31,7 @@ export const PlayerFooter = () => {
         preload='metadata'
       />
 
-      <div className='player-metadata'>
+      <div onClick={handleClickPlayer} className='player-metadata'>
         <div className='player-metadata-image'>
           <img
             src={
@@ -41,20 +42,20 @@ export const PlayerFooter = () => {
             alt='cover'
           />
         </div>
-        <div className='player-metadata-details'>
+        <Link href='/player' className='player-metadata-details'>
           <div className='player-metadata-details-artist'>
             {currentTrack?.artist}
           </div>
           <div className='player-metadata-details-song'>
             {currentTrack?.name}
           </div>
-        </div>
+        </Link>
         {/* <div className='player-metadata-details-song'>
           {duration && !isNaN(duration) && formatSeconds(duration)}
         </div> */}
       </div>
       <PlayerControls
-        progress={currentTime}
+        progress={circumferenceProgress}
         circumference={circumference}
         togglePlayPause={togglePlayPause}
         isPlaying={isPlaying}

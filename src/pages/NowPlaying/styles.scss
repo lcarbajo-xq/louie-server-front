@@ -76,7 +76,6 @@
       .name {
         font-size: 1.5rem;
         font-weight: 600;
-
         overflow: auto;
         white-space: nowrap;
         text-overflow: ellipsis;
@@ -204,7 +203,7 @@
       flex-direction: row;
       align-items: center;
       padding: 15px;
-      flex-grow: 1;
+      // flex-grow: 1;
       position: relative;
       &-level {
         opacity: 0.6;
@@ -214,7 +213,7 @@
       }
       &-slider {
         position: relative;
-        flex-grow: 1;
+        // flex-grow: 1;
       }
     }
   }

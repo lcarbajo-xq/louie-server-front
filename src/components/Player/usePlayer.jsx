@@ -8,23 +8,25 @@ import { useAppContext } from '../../context/AppContext'
 export const usePlayer = () => {
   const [isPlaying, setIsPlaying] = useState(false)
   const [duration, setDuration] = useState(0)
+  const [audioSrc, setAudioSrc] = useState('')
   const [currentTime, setCurrentTime] = useState(0)
+  const [circumferenceProgress, setCircumferenceProgress] = useState(0)
   const [{ currentTrack }, dispatch] = useAppContext()
 
-  const id = currentTrack?._id
-
-  const audioSrc = id ? `${BASE_URLS.play}${id}` : ''
-
   const audioRef = useRef()
+  const progressRef = useRef()
   const animationRef = useRef()
 
   useEffect(() => {
-    return () =>
+    console.log(audioSrc)
+    return () => {
       animationRef?.current && cancelAnimationFrame(animationRef.current)
+    }
   }, [])
 
   useEffect(() => {
     setIsPlaying(false)
+    setAudioSrc(currentTrack?._id ? `${BASE_URLS.play}${currentTrack._id}` : '')
     return () => {
       cancelAnimationFrame(animationRef.current)
     }
@@ -34,13 +36,22 @@ export const usePlayer = () => {
     if (audioRef.current) {
       const seconds = Math.floor(audioRef.current.duration)
       setDuration(seconds)
+      if (progressRef.current) {
+        progressRef.current.max = seconds
+      }
     }
+  }
+
+  const onChangeRange = () => {
+    audioRef.current.currentTime = progressRef.current.value
+    // changePlayerCurrentTime()
+    console.log(audioRef.current.currentTime)
   }
 
   const togglePlayPause = () => {
     const prevIsPlaying = isPlaying
     setIsPlaying(!prevIsPlaying)
-
+    audioRef.current.currentTime = 70
     if (!prevIsPlaying) {
       audioRef?.current?.play()
       animationRef.current = requestAnimationFrame(whilePlaying)
@@ -50,17 +61,26 @@ export const usePlayer = () => {
     }
   }
 
+  const changePlayerCurrentTime = () => {
+    const newTime = (audioRef.current.currentTime / duration) * 100
+
+    progressRef.current.style.setProperty('--seek-before-width', `${newTime}%`)
+    setCurrentTime(progressRef.current.value)
+  }
+
   const whilePlaying = () => {
     if (audioRef?.current?.duration) {
       const value = audioRef?.current?.currentTime / duration
       const currentProgressCircumference = Math.floor(value * circumference)
-      setCurrentTime(currentProgressCircumference)
+      progressRef.current.value = audioRef.current.currentTime
+      setCircumferenceProgress(currentProgressCircumference)
+      changePlayerCurrentTime()
       animationRef.current = requestAnimationFrame(whilePlaying)
     }
   }
 
   const handlePlay = (trackClicked) => {
-    if (trackClicked._id !== id) {
+    if (trackClicked._id !== currentTrack?._id) {
       setIsPlaying(false)
       dispatch({
         type: DBACTIONS.SET_CURRENT_TRACK,
@@ -74,9 +94,12 @@ export const usePlayer = () => {
     onLoadedMetadata,
     togglePlayPause,
     isPlaying,
-    audioRef,
     currentTime,
+    audioRef,
+    progressRef,
+    circumferenceProgress,
     circumference,
+    onChangeRange,
     handlePlay
   }
 }
