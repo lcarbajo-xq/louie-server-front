@@ -186,9 +186,9 @@ export const Search = () => {
             </div>
 
             {!search.length > 0 ? (
-              <TrackList tracks={home.tracks} />
+              <TrackList tracks={home?.tracks} />
             ) : (
-              <TrackList tracks={searchResults.tracks} />
+              <TrackList tracks={searchResults?.tracks} />
             )}
           </>
         )}
