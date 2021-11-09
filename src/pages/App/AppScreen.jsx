@@ -17,8 +17,10 @@ import './styles.scss'
 export const AppScreen = () => {
   const { currentTheme } = useTheme()
   const { handlePlay } = usePlayer()
-  const [bigPLayerSelected, toggleBigPLayerSelected] = useState(false)
+  const [{ bigPlayerSelected }] = useAppContext()
   const [artist, setArtist] = useState({})
+
+  console.log(bigPlayerSelected)
 
   return (
     <div className='app'>
@@ -52,9 +54,9 @@ export const AppScreen = () => {
           {(params) => <ArtistsScreen artist={artist} id={params.id} />}
         </Route>
       </AppRouter>
-      {!bigPLayerSelected && (
+      {!bigPlayerSelected && (
         <footer className='app-player'>
-          <PlayerFooter handleClickPlayer={toggleBigPLayerSelected} />
+          <PlayerFooter />
         </footer>
       )}
       {/* </Route> */}

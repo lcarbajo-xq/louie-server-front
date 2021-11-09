@@ -6,12 +6,13 @@ import { useEffect, useRef, useState } from 'react'
 import { formatSeconds } from '../../../helpers/formatSeconds'
 import { usePlayer } from '../usePlayer'
 import { Link } from 'wouter'
+import { DBACTIONS } from '../../../actions/dbActions'
 
-export const PlayerFooter = ({ handleClickPlayer }) => {
+export const PlayerFooter = () => {
   // const changeCurrentTime = () => {
   //   setCurrentTime(audioRef.current.currentTime / maxProgress)
   // }
-  const [{ currentTrack }] = useAppContext()
+  const [{ currentTrack }, dispatch] = useAppContext()
   const {
     isPlaying,
     togglePlayPause,
@@ -22,6 +23,12 @@ export const PlayerFooter = ({ handleClickPlayer }) => {
     circumference
   } = usePlayer(currentTrack)
 
+  const handleTogglePlaye = () => {
+    dispatch({
+      type: DBACTIONS.SET_BIG_PLAYER_UI
+    })
+  }
+
   return (
     <div className='player'>
       <audio
@@ -31,7 +38,7 @@ export const PlayerFooter = ({ handleClickPlayer }) => {
         preload='metadata'
       />
 
-      <div onClick={handleClickPlayer} className='player-metadata'>
+      <div onClick={handleTogglePlaye} className='player-metadata'>
         <div className='player-metadata-image'>
           <img
             src={

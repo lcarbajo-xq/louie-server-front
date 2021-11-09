@@ -2,6 +2,7 @@ import { DBACTIONS } from '../actions/dbActions'
 
 export const initialState = {
   tabs: ['artists', 'albums', 'playlists'],
+  bigPlayerSelected: false,
   activeDropdown: null,
   currentSearchQuery: '',
   searchResults: null,
@@ -113,6 +114,13 @@ export const rootReducer = (state, action) => {
       return {
         ...state,
         activeDropdown: dropdownElement
+      }
+    }
+    case DBACTIONS.SET_BIG_PLAYER_UI: {
+      const isBigPlayerSelected = state.bigPlayerSelected
+      return {
+        ...state,
+        bigPlayerSelected: !isBigPlayerSelected
       }
     }
     default:

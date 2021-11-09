@@ -10,9 +10,10 @@ import { formatSeconds } from '../../helpers/formatSeconds'
 import { usePlayer } from '../../components/Player/usePlayer'
 import { useAudioPlayer } from '../../hooks/useAudioPlayer'
 import { BASE_URLS } from '../../constants/endpoints'
+import { DBACTIONS } from '../../actions/dbActions'
 
 export const NowPlayingScreen = () => {
-  const [{ currentTrack }] = useAppContext()
+  const [{ currentTrack }, dispatch] = useAppContext()
   // const {
   //   currentTime,
   //   isPlaying,
@@ -59,6 +60,9 @@ export const NowPlayingScreen = () => {
   })
 
   const handleClickBack = () => {
+    dispatch({
+      type: DBACTIONS.SET_BIG_PLAYER_UI
+    })
     window.history.back()
   }
 
@@ -182,14 +186,6 @@ export const NowPlayingScreen = () => {
               {/* <app-slider [options]="{vertical: false, autoSize: false}" [value]="volume"
   					(valueChange)="onVolume($event)">
   				</app-slider> */}
-              {/* <input
-                type='range'
-                value={0}
-                step='1'
-                min='0'
-                max={20}
-                onChange={(e) => {}}
-              /> */}
               <Slider
                 options={{ vertical: false, autosize: false }}
                 type='volume'
