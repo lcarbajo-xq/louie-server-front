@@ -10,6 +10,11 @@ export const getArtistFromDB = (id) => {
   return fetch(url).then((json) => json.json())
 }
 
+export const getAlbumFromDB = (id) => {
+  const url = `http://localhost:5000/albums/${id}`
+  return fetch(url).then((json) => json.json())
+}
+
 export const searchItems = (query) => {
   const url = `http://localhost:5000/search/?search=${query}`
   return fetch(url).then((json) => json.json())

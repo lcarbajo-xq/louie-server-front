@@ -9,6 +9,7 @@ import { useAppContext } from '../../context/AppContext'
 import { useTheme } from '../../hooks/useTheme'
 import { AppRouter } from '../../routers/AppRouter'
 import { LibraryRouter } from '../../routers/LibraryRouter'
+import { AlbumScreen } from '../Album/AlbumScreen'
 import { ArtistsScreen } from '../Artist/ArtistsScreen'
 import { NowPlayingScreen } from '../NowPlaying/NowPlayingScreen'
 import { TracksScreen } from '../Tracks/TracksScreen'
@@ -19,8 +20,7 @@ export const AppScreen = () => {
   const { handlePlay } = usePlayer()
   const [{ bigPlayerSelected }] = useAppContext()
   const [artist, setArtist] = useState({})
-
-  console.log(bigPlayerSelected)
+  const [album, setAlbum] = useState({})
 
   return (
     <div className='app'>
@@ -42,7 +42,7 @@ export const AppScreen = () => {
           <Search />
         </Route>
         <Route path='/library'>
-          <Library setArtist={setArtist} />
+          <Library setArtist={setArtist} setAlbum={setAlbum} />
         </Route>
         <Route path='/tracks'>
           <TracksScreen handlePlay={handlePlay} />
@@ -52,6 +52,9 @@ export const AppScreen = () => {
         </Route>
         <Route path='/library/artist/:id'>
           {(params) => <ArtistsScreen artist={artist} id={params.id} />}
+        </Route>
+        <Route path='/library/album/:id'>
+          {(params) => <AlbumScreen album={album} id={params.id} />}
         </Route>
       </AppRouter>
       {!bigPlayerSelected && (

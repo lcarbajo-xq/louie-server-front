@@ -1,10 +1,11 @@
+import { Link } from 'wouter'
 import { useLazyLoad } from '../../hooks/useLazyLoad'
 
 export const AlbumCard = ({ id, artist, name, imageURL }) => {
   const { isLazyLoad, elementRef } = useLazyLoad()
 
   return (
-    <div key={id} className='column'>
+    <Link href={`/library/album/${id}`} key={id} className='column'>
       <img
         ref={elementRef}
         className={!isLazyLoad ? 'lazyload' : ''}
@@ -15,6 +16,6 @@ export const AlbumCard = ({ id, artist, name, imageURL }) => {
         <div className='title'>{artist.name}</div>
         <div className='subtitle'>{name}</div>
       </div>
-    </div>
+    </Link>
   )
 }
