@@ -11,12 +11,13 @@ import { usePlayer } from '../../components/Player/usePlayer'
 import { useAudioPlayer } from '../../hooks/useAudioPlayer'
 import { BASE_URLS } from '../../constants/endpoints'
 import { DBACTIONS } from '../../actions/dbActions'
-import { useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { TrackList } from '../../components/Library/TrackList'
 
 export const NowPlayingScreen = () => {
   const [{ currentTrack, home }, dispatch] = useAppContext()
   const [queueVisible, toggleQueueVisible] = useState(false)
+  const [queueDuuration, setQueueDuration] = useState(0)
   // const {
   //   currentTime,
   //   isPlaying,
@@ -61,6 +62,18 @@ export const NowPlayingScreen = () => {
     loop: false,
     rate: 1.0
   })
+
+  const queueDuration = useMemo(() => {
+    let queueLength = 0
+    home?.tracks.forEach((track) => {
+      if (track.duration) {
+        console.log(track.duration)
+        queueLength += track.duration
+        console.log(queueLength)
+      }
+    })
+    return queueLength
+  }, [home?.tracks])
 
   const handleClickBack = () => {
     dispatch({
@@ -246,7 +259,11 @@ export const NowPlayingScreen = () => {
               </div>
               <div className='playing-queue-header-playing'>
                 <div className='title'>Queue</div>
-                <div className='subtitle'>12 Songs in queue 12 | 11</div>
+                <div className='subtitle'>
+                  {`${
+                    home?.tracks.length
+                  } Songs in queue | Duration: ${formatSeconds(queueDuration)}`}
+                </div>
               </div>
 
               <div className='playing-queue-header-action'>
