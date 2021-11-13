@@ -11,9 +11,12 @@ import { usePlayer } from '../../components/Player/usePlayer'
 import { useAudioPlayer } from '../../hooks/useAudioPlayer'
 import { BASE_URLS } from '../../constants/endpoints'
 import { DBACTIONS } from '../../actions/dbActions'
+import { useState } from 'react'
+import { TrackList } from '../../components/Library/TrackList'
 
 export const NowPlayingScreen = () => {
-  const [{ currentTrack }, dispatch] = useAppContext()
+  const [{ currentTrack, home }, dispatch] = useAppContext()
+  const [queueVisible, toggleQueueVisible] = useState(false)
   // const {
   //   currentTime,
   //   isPlaying,
@@ -41,7 +44,7 @@ export const NowPlayingScreen = () => {
     volume,
     seek,
     rate,
-    onToggle,
+    onTogglePlayback,
     onPlay,
     onPause,
     onMute,
@@ -66,6 +69,34 @@ export const NowPlayingScreen = () => {
     window.history.back()
   }
 
+  const handleLikeTrack = () => {
+    console.log('like')
+  }
+
+  const handleShuffle = () => {
+    console.log('Shuffle')
+  }
+
+  const handleRepeat = () => {
+    console.log('Repeat')
+  }
+
+  const handleQueue = () => {
+    console.log('Queue')
+    toggleQueueVisible(!queueVisible)
+  }
+
+  const handleNextSong = () => {
+    console.log('Next')
+  }
+
+  const handlePrevSong = () => {
+    console.log('Previous')
+  }
+
+  const handleDrag = (e) => {
+    console.log(e)
+  }
   return (
     <div className='container mx-auto'>
       <div className='playing'>
@@ -117,7 +148,7 @@ export const NowPlayingScreen = () => {
           </div>
 
           <div className='playing-track-actions'>
-            <div className='active'>
+            <div onClick={handleLikeTrack} className='active'>
               <i className='feather-heart'></i>
             </div>
           </div>
@@ -150,26 +181,32 @@ export const NowPlayingScreen = () => {
         </div>
 
         <div className='playing-controls'>
-          <div className='playing-controls-control active'>
+          <div
+            onClick={handleShuffle}
+            className='playing-controls-control shuffle active'
+          >
             <span className='material-icons-round '>shuffle</span>
           </div>
           <div className='playing-controls-control grow'>
-            <div className=' skip disabled'>
+            <div onClick={handlePrevSong} className='skip disabled'>
               <span className='material-icons-round'>skip_previous</span>
             </div>
 
-            <div onClick={onToggle} className=' playback'>
+            <div onClick={onTogglePlayback} className=' playback'>
               <span className='material-icons-round'>
                 {ready && playing ? 'pause' : 'play_arrow'}
               </span>
             </div>
 
-            <div className='skip'>
+            <div onClick={handleNextSong} className='skip'>
               <span className='material-icons-round'>skip_next</span>
             </div>
           </div>
 
-          <div className='playing-controls-control repeat'>
+          <div
+            onClick={handleRepeat}
+            className='playing-controls-control repeat'
+          >
             <span className='material-icons-round'>repeat</span>
           </div>
         </div>
@@ -195,48 +232,37 @@ export const NowPlayingScreen = () => {
             </div>
           </div>
         </div>
-        <div className='playing-queue'>
-          <div className='playing-queue-header'>
-            <div className='playing-queue-header-action'>
-              <div
-                className='playing-header-action-item'
-                style={{ paddingRight: '15px' }}
-              >
-                <i className='material-icons-round'>keyboard_arrow_up</i>
+        {!queueVisible ? (
+          <div className='playing-queue'>
+            <div className='playing-queue-header'>
+              <div className='playing-queue-header-action'>
+                <div
+                  onClick={handleQueue}
+                  className='playing-header-action-item'
+                  style={{ paddingRight: '15px' }}
+                >
+                  <i className='material-icons-round'>keyboard_arrow_up</i>
+                </div>
               </div>
-            </div>
-            <div className='playing-queue-header-playing'>
-              <div className='title'>Queue</div>
-              <div className='subtitle'>12 Songs in queue 12 | 11</div>
-            </div>
+              <div className='playing-queue-header-playing'>
+                <div className='title'>Queue</div>
+                <div className='subtitle'>12 Songs in queue 12 | 11</div>
+              </div>
 
-            <div className='playing-queue-header-action'>
-              <div className='playing-header-action-item'>
-                <i className='material-icons-round'>queue_music</i>
+              <div className='playing-queue-header-action'>
+                <div className='playing-header-action-item'>
+                  <i className='material-icons-round'>queue_music</i>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        {/* <BottomSheet>
-          <div className='playing-header'>
-            <div className='playing-header-action'>
-              <div className='playing-header-action-item'>
-                <i className='feather-chevron-down'></i>
-              </div>
-            </div>
-
-            <div className='playing-header-playing'>
-              <div className='title'>12</div>
-              <div className='subtitle'>Songs in queue</div>
-            </div>
-
-            <div className='playing-header-action'>
-              <div className='playing-header-action-item'>
-                <i className='feather feather-trash'></i>
-              </div>
-            </div>
-          </div>
-        </BottomSheet> */}
+        ) : (
+          <>
+            <BottomSheet handleQueue={handleQueue} visible={queueVisible}>
+              <TrackList tracks={home?.tracks} actions={false} />
+            </BottomSheet>
+          </>
+        )}
       </div>
     </div>
   )

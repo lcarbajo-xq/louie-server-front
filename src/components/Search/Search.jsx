@@ -8,6 +8,7 @@ import cover from '../../assets/app-icon.png'
 
 import './styles.scss'
 import { TrackList } from '../Library/TrackList'
+import { TrackContent } from '../Library/TrackContent'
 
 const NoResults = () => <h3>No Results found</h3>
 
@@ -186,9 +187,9 @@ export const Search = () => {
             </div>
 
             {!search.length > 0 ? (
-              <TrackList tracks={home?.tracks} />
+              <TrackContent tracks={home?.tracks} />
             ) : (
-              <TrackList tracks={searchResults?.tracks} />
+              <TrackContent tracks={searchResults?.tracks} />
             )}
           </>
         )}

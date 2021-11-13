@@ -131,7 +131,7 @@ export const useAudioPlayer = ({
 
   //Method to be called when we psuh play/pause button
 
-  const onToggle = () => {
+  const onTogglePlayback = () => {
     if (!audio) return
     if (audioReady) audio.play()
     if (audioPlaying) audio.pause()
@@ -191,7 +191,7 @@ export const useAudioPlayer = ({
     volume: audioVolume,
     seek: audioSeek,
     rate: audioRate,
-    onToggle,
+    onTogglePlayback,
     onPlay,
     onPause,
     onMute,

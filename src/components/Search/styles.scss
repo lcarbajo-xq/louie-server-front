@@ -222,6 +222,7 @@ h3 {
   align-items: center;
   position: relative;
   justify-content: space-between;
+  padding: 0 15px;
   &:hover {
     background-color: var(--accent-color);
     cursor: pointer;
@@ -296,7 +297,7 @@ h3 {
   .track-actions {
     display: flex;
     align-items: center;
-    flex: 0.5;
+    // flex: 0.5;
     .actions {
       padding: 10px;
     }
