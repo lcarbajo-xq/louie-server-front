@@ -1,13 +1,11 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { DBACTIONS } from '../../actions/dbActions'
 import { useAppContext } from '../../context/AppContext'
 import { formatSeconds } from '../../helpers/formatSeconds'
 import { Dropdown } from '../Dropdown/Dropdown'
-import { usePlayer } from '../Player/usePlayer'
 import { Tooltip } from '../Tooltip/Tooltip'
 
 export const TrackList = ({ tracks, actions = true }) => {
-  const { handlePlay } = usePlayer()
   const [, dispatch] = useAppContext()
 
   const handleUnmountDropdown = () => {
@@ -17,14 +15,16 @@ export const TrackList = ({ tracks, actions = true }) => {
     })
   }
 
+  const handlePlay = (track) => {
+    dispatch({
+      type: DBACTIONS.SET_CURRENT_TRACK,
+      payload: { track }
+    })
+  }
+
   useEffect(() => {
     return () => handleUnmountDropdown()
   }, [])
-
-  //Aqui deberíamos saber el dropdown que está activo: activeDropdown
-  {
-    /* <div className="track {{ playerService.$track.getValue()._id === track._id ? 'playing' : '' }}"> */
-  }
 
   return tracks?.map((track) => (
     <div key={`search-${track._id}`} className='track'>

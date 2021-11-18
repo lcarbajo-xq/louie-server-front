@@ -7,7 +7,7 @@ import { useAppContext } from '../../context/AppContext'
 import { formatSeconds } from '../../helpers/formatSeconds'
 import './styles.scss'
 
-export const TracksScreen = ({ handlePlay }) => {
+export const TracksScreen = () => {
   const [{ home }] = useAppContext()
   return (
     <>
@@ -57,7 +57,7 @@ export const TracksScreen = ({ handlePlay }) => {
         </HorizontalScroll>
       </div>
 
-      <TrackContent tracks={home.tracks} handlePlay={handlePlay} />
+      <TrackContent tracks={home.tracks} />
     </>
   )
 }

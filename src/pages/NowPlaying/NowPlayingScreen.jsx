@@ -1,84 +1,47 @@
 import { Link } from 'wouter'
 import { Dropdown } from '../../components/Dropdown/Dropdown'
-import { Header } from '../../components/Header/Header'
 import './styles.scss'
 import cover from '../../assets/app-icon.png'
 import { Slider } from '../../components/Slider/Slider'
 import { BottomSheet } from '../../components/BottomSheet/BottomSheet'
 import { useAppContext } from '../../context/AppContext'
 import { formatSeconds } from '../../helpers/formatSeconds'
-import { usePlayer } from '../../components/Player/usePlayer'
-import { useAudioPlayer } from '../../hooks/useAudioPlayer'
-import { BASE_URLS } from '../../constants/endpoints'
 import { DBACTIONS } from '../../actions/dbActions'
 import { useEffect, useMemo, useState } from 'react'
 import { TrackList } from '../../components/Library/TrackList'
 
-export const NowPlayingScreen = () => {
+export const NowPlayingScreen = ({
+  ready,
+  playing,
+  duration,
+  volume,
+  seek,
+  onTogglePlayback,
+  onVolume,
+  onSeek
+}) => {
   const [{ currentTrack, home }, dispatch] = useAppContext()
   const [queueVisible, toggleQueueVisible] = useState(false)
-  const [queueDuuration, setQueueDuration] = useState(0)
-  // const {
-  //   currentTime,
-  //   isPlaying,
-  //   togglePlayPause,
-  //   audioRef,
-  //   progressRef,
-  //   onChangeRange,
-  //   audioSrc,
-  //   onLoadedMetadata
-  // } = usePlayer()
-
-  const audioSrc = currentTrack?._id
-    ? `${BASE_URLS.play}${currentTrack._id}`
-    : ''
-
-  const {
-    ready,
-    loading,
-    error,
-    playing,
-    paused,
-    duration,
-    mute,
-    loop,
-    volume,
-    seek,
-    rate,
-    onTogglePlayback,
-    onPlay,
-    onPause,
-    onMute,
-    onLoop,
-    onVolume,
-    onRate,
-    onSeek
-  } = useAudioPlayer({
-    audioSrc,
-    preload: true,
-    autoplay: false,
-    volume: 0.5,
-    mute: false,
-    loop: false,
-    rate: 1.0
-  })
 
   const queueDuration = useMemo(() => {
     let queueLength = 0
     home?.tracks.forEach((track) => {
       if (track.duration) {
-        console.log(track.duration)
         queueLength += track.duration
-        console.log(queueLength)
       }
     })
     return queueLength
   }, [home?.tracks])
 
+  useEffect(() => {
+    return () =>
+      dispatch({
+        type: DBACTIONS.SET_BIG_PLAYER_UI,
+        payload: false
+      })
+  }, [])
+
   const handleClickBack = () => {
-    dispatch({
-      type: DBACTIONS.SET_BIG_PLAYER_UI
-    })
     window.history.back()
   }
 
@@ -95,7 +58,6 @@ export const NowPlayingScreen = () => {
   }
 
   const handleQueue = () => {
-    console.log('Queue')
     toggleQueueVisible(!queueVisible)
   }
 
@@ -207,7 +169,7 @@ export const NowPlayingScreen = () => {
 
             <div onClick={onTogglePlayback} className=' playback'>
               <span className='material-icons-round'>
-                {ready && playing ? 'pause' : 'play_arrow'}
+                {playing ? 'pause' : 'play_arrow'}
               </span>
             </div>
 

@@ -1,13 +1,9 @@
 import { useEffect, useState } from 'react'
-import { Link, useLocation, useRoute } from 'wouter'
 import cover from '../../assets/app-icon.png'
-import { Dropdown } from '../../components/Dropdown/Dropdown'
 import { Header } from '../../components/Header/Header'
 import { HorizontalScroll } from '../../components/HorizontalScroll/HorizontalScroll'
 import { AlbumCard } from '../../components/Library/AlbumCard'
 import { TrackList } from '../../components/Library/TrackList'
-import { usePlayer } from '../../components/Player/usePlayer'
-import { formatSeconds } from '../../helpers/formatSeconds'
 import { getArtistFromDB } from '../../services/databaseService'
 import './styles.scss'
 const albums = [
@@ -1331,10 +1327,9 @@ const tracks = [
   }
 ]
 
-export const ArtistsScreen = ({ artist, id }) => {
+export const ArtistsScreen = ({ id }) => {
   const [artistPage, setArtist] = useState(null)
   const [loading, setLoading] = useState(false)
-  const location = useLocation()
 
   useEffect(() => {
     setLoading(true)

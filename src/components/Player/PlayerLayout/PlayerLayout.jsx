@@ -1,29 +1,9 @@
-import { usePlayer } from '../usePlayer'
 import { PlayerControls } from './PlayerControls'
 import './styles.scss'
 import { prominent } from 'color.js'
 import Backdrop from './Backdrop'
 
-prominent('js-logo.jpg', { amount: 1 }).then((color) => {
-  console.log(color) // [241, 221, 63]
-})
-const coverUrl =
-  'http://localhost:5000/albums/art/557216bf4cb8578f12bfd721a284d9f8.png'
-
 export const PlayerLayout = ({ cover = coverUrl }) => {
-  const {
-    duration,
-    onScrub,
-    onScrubEnd,
-    trackProgress,
-    track,
-    nextTrack,
-    prevTrack,
-    trackStyling,
-    setIsPlaying,
-    isPlaying
-  } = usePlayer()
-
   const { title, artist, color } = track
 
   return (

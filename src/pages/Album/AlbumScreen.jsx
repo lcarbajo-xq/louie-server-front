@@ -1381,7 +1381,7 @@ export const AlbumScreen = ({ id }) => {
         <>
           <h3>{`More from ${albumData?.artist?.name}`}</h3>
           <HorizontalScroll>
-            <div class='albums'>
+            <div className='albums'>
               {albums.map((album) => {
                 const imageURL =
                   album.image && album.image[5] !== '' ? album.image[5] : cover

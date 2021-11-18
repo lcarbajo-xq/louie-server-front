@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { circumference } from '../constants/progressConstants'
 
 export const useAudioPlayer = ({
   audioSrc,
@@ -19,10 +20,12 @@ export const useAudioPlayer = ({
   const [audioMute, setAudioMute] = useState(false)
   const [audioLoop, setAudioLoop] = useState(false)
   const [audioVolume, setAudioVolume] = useState(volume)
-  const [audioSeek, setAudioSeek] = useState(rate)
+  const [audioSeek, setAudioSeek] = useState(0)
+  const [audioSeekCircumference, setAudioSeekCircumference] = useState(0)
   const [audioRate, setAudioRate] = useState(0)
 
   const audioSeekRef = useRef()
+  const audioElementRef = useRef()
 
   // Instance of a new Audio setting up the initial values
 
@@ -116,7 +119,10 @@ export const useAudioPlayer = ({
   useEffect(() => {
     const animate = () => {
       const seek = audio?.currentTime
+      const value = audio?.currentTime / audioDuration
+      const seekCircumference = Math.floor(value * circumference)
       setAudioSeek(seek)
+      setAudioSeekCircumference(seekCircumference)
       audioSeekRef.current = requestAnimationFrame(animate)
     }
     if (audio && audioPlaying) {
@@ -191,6 +197,9 @@ export const useAudioPlayer = ({
     volume: audioVolume,
     seek: audioSeek,
     rate: audioRate,
+    progressCircumference: audioSeekCircumference,
+    audioElementRef,
+    audioSrc,
     onTogglePlayback,
     onPlay,
     onPause,

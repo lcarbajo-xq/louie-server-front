@@ -2,43 +2,28 @@ import './styles.scss'
 import cover from '../../../assets/app-icon.png'
 import { PlayerControls } from './PlayerFooterControls'
 import { useAppContext } from '../../../context/AppContext'
-import { useEffect, useRef, useState } from 'react'
-import { formatSeconds } from '../../../helpers/formatSeconds'
-import { usePlayer } from '../usePlayer'
 import { Link } from 'wouter'
 import { DBACTIONS } from '../../../actions/dbActions'
+import { circumference } from '../../../constants/progressConstants'
 
-export const PlayerFooter = () => {
-  // const changeCurrentTime = () => {
-  //   setCurrentTime(audioRef.current.currentTime / maxProgress)
-  // }
+export const PlayerFooter = ({
+  onTogglePlayback,
+  playing,
+  ready,
+  progressCircumference
+}) => {
   const [{ currentTrack }, dispatch] = useAppContext()
-  const {
-    isPlaying,
-    togglePlayPause,
-    circumferenceProgress,
-    audioRef,
-    audioSrc,
-    onLoadedMetadata,
-    circumference
-  } = usePlayer(currentTrack)
 
-  const handleTogglePlaye = () => {
+  const handleTogglePlayer = () => {
     dispatch({
-      type: DBACTIONS.SET_BIG_PLAYER_UI
+      type: DBACTIONS.SET_BIG_PLAYER_UI,
+      payload: true
     })
   }
 
   return (
     <div className='player'>
-      <audio
-        onLoadedMetadata={onLoadedMetadata}
-        ref={audioRef}
-        src={audioSrc}
-        preload='metadata'
-      />
-
-      <div onClick={handleTogglePlaye} className='player-metadata'>
+      <div onClick={handleTogglePlayer} className='player-metadata'>
         <div className='player-metadata-image'>
           <img
             src={
@@ -62,10 +47,10 @@ export const PlayerFooter = () => {
         </div> */}
       </div>
       <PlayerControls
-        progress={circumferenceProgress}
+        progress={progressCircumference}
         circumference={circumference}
-        togglePlayPause={togglePlayPause}
-        isPlaying={isPlaying}
+        togglePlayPause={onTogglePlayback}
+        isPlaying={playing}
       />
     </div>
   )

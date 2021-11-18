@@ -1,14 +1,13 @@
 import { useState } from 'react'
-import { Route, Router } from 'wouter'
+import { Route } from 'wouter'
 import { NavLink } from '../../components/Header/NavLink'
 import { Library } from '../../components/Library/Library'
 import { PlayerFooter } from '../../components/Player/PlayerFooter/PlayerFooter'
-import { usePlayer } from '../../components/Player/usePlayer'
 import { Search } from '../../components/Search/Search'
 import { useAppContext } from '../../context/AppContext'
+import { useAudioPlayer2 } from '../../hooks/useAudioPlayer2'
 import { useTheme } from '../../hooks/useTheme'
 import { AppRouter } from '../../routers/AppRouter'
-import { LibraryRouter } from '../../routers/LibraryRouter'
 import { AlbumScreen } from '../Album/AlbumScreen'
 import { ArtistsScreen } from '../Artist/ArtistsScreen'
 import { NowPlayingScreen } from '../NowPlaying/NowPlayingScreen'
@@ -16,11 +15,42 @@ import { TracksScreen } from '../Tracks/TracksScreen'
 import './styles.scss'
 
 export const AppScreen = () => {
-  const { currentTheme } = useTheme()
-  const { handlePlay } = usePlayer()
+  useTheme()
   const [{ bigPlayerSelected }] = useAppContext()
   const [artist, setArtist] = useState({})
   const [album, setAlbum] = useState({})
+
+  const {
+    audioSrc,
+    ready,
+    loading,
+    error,
+    playing,
+    paused,
+    duration,
+    mute,
+    loop,
+    volume,
+    seek,
+    progressCircumference,
+    rate,
+    audioElementRef,
+    onTogglePlayback,
+    onPlay,
+    onPause,
+    onMute,
+    onLoop,
+    onVolume,
+    onRate,
+    onSeek
+  } = useAudioPlayer2({
+    preload: true,
+    autoplay: false,
+    volume: 0.5,
+    mute: false,
+    loop: false,
+    rate: 1.0
+  })
 
   return (
     <div className='app'>
@@ -45,10 +75,19 @@ export const AppScreen = () => {
           <Library setArtist={setArtist} setAlbum={setAlbum} />
         </Route>
         <Route path='/tracks'>
-          <TracksScreen handlePlay={handlePlay} />
+          <TracksScreen />
         </Route>
         <Route path='/player'>
-          <NowPlayingScreen />
+          <NowPlayingScreen
+            ready={ready}
+            playing={playing}
+            duration={duration}
+            volume={volume}
+            seek={seek}
+            onTogglePlayback={onTogglePlayback}
+            onVolume={onVolume}
+            onSeek={onSeek}
+          />
         </Route>
         <Route path='/library/artist/:id'>
           {(params) => <ArtistsScreen artist={artist} id={params.id} />}
@@ -57,9 +96,15 @@ export const AppScreen = () => {
           {(params) => <AlbumScreen album={album} id={params.id} />}
         </Route>
       </AppRouter>
+      <audio ref={audioElementRef} src={audioSrc} preload='metadata' />
       {!bigPlayerSelected && (
         <footer className='app-player'>
-          <PlayerFooter />
+          <PlayerFooter
+            onTogglePlayback={onTogglePlayback}
+            playing={playing}
+            ready={ready}
+            progressCircumference={progressCircumference}
+          />
         </footer>
       )}
       {/* </Route> */}

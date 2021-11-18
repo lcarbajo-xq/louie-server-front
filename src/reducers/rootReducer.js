@@ -117,10 +117,9 @@ export const rootReducer = (state, action) => {
       }
     }
     case DBACTIONS.SET_BIG_PLAYER_UI: {
-      const isBigPlayerSelected = state.bigPlayerSelected
       return {
         ...state,
-        bigPlayerSelected: !isBigPlayerSelected
+        bigPlayerSelected: action.payload
       }
     }
     default:
