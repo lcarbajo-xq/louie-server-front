@@ -5,6 +5,7 @@ import { useAppContext } from '../../../context/AppContext'
 import { Link } from 'wouter'
 import { DBACTIONS } from '../../../actions/dbActions'
 import { circumference } from '../../../constants/progressConstants'
+import { Spinner } from '../../Spinner/Spinner'
 
 export const PlayerFooter = ({
   onTogglePlayback,
@@ -46,12 +47,17 @@ export const PlayerFooter = ({
           {duration && !isNaN(duration) && formatSeconds(duration)}
         </div> */}
       </div>
-      <PlayerControls
-        progress={progressCircumference}
-        circumference={circumference}
-        togglePlayPause={onTogglePlayback}
-        isPlaying={playing}
-      />
+      {currentTrack &&
+        (ready ? (
+          <PlayerControls
+            progress={progressCircumference}
+            circumference={circumference}
+            togglePlayPause={onTogglePlayback}
+            isPlaying={playing}
+          />
+        ) : (
+          <Spinner />
+        ))}
     </div>
   )
 }

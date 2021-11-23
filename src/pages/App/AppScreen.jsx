@@ -5,7 +5,7 @@ import { Library } from '../../components/Library/Library'
 import { PlayerFooter } from '../../components/Player/PlayerFooter/PlayerFooter'
 import { Search } from '../../components/Search/Search'
 import { useAppContext } from '../../context/AppContext'
-import { useAudioPlayer2 } from '../../hooks/useAudioPlayer2'
+import { useAudioPlayer } from '../../hooks/useAudioPlayer'
 import { useTheme } from '../../hooks/useTheme'
 import { AppRouter } from '../../routers/AppRouter'
 import { AlbumScreen } from '../Album/AlbumScreen'
@@ -37,13 +37,17 @@ export const AppScreen = () => {
     audioElementRef,
     onTogglePlayback,
     onPlay,
+    onNext,
     onPause,
+    onError,
+    onAbort,
     onMute,
     onLoop,
+    onLoadedData,
     onVolume,
     onRate,
     onSeek
-  } = useAudioPlayer2({
+  } = useAudioPlayer({
     preload: true,
     autoplay: false,
     volume: 0.5,
@@ -87,6 +91,7 @@ export const AppScreen = () => {
             onTogglePlayback={onTogglePlayback}
             onVolume={onVolume}
             onSeek={onSeek}
+            onNext={onNext}
           />
         </Route>
         <Route path='/library/artist/:id'>
@@ -96,7 +101,14 @@ export const AppScreen = () => {
           {(params) => <AlbumScreen album={album} id={params.id} />}
         </Route>
       </AppRouter>
-      <audio ref={audioElementRef} src={audioSrc} preload='metadata' />
+      <audio
+        onLoadedData={onLoadedData}
+        ref={audioElementRef}
+        src={audioSrc}
+        onError={onError}
+        onAbort={onAbort}
+        preload='metadata'
+      />
       {!bigPlayerSelected && (
         <footer className='app-player'>
           <PlayerFooter
