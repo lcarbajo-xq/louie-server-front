@@ -5,7 +5,7 @@ import { formatSeconds } from '../../helpers/formatSeconds'
 import { Dropdown } from '../Dropdown/Dropdown'
 import { Tooltip } from '../Tooltip/Tooltip'
 
-export const TrackList = ({ tracks, actions = true }) => {
+export const TrackList = ({ tracks, actions = true, title = 'Tracks' }) => {
   const [, dispatch] = useAppContext()
 
   const handleUnmountDropdown = () => {

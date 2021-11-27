@@ -8,6 +8,7 @@ export const initialState = {
   searchResults: null,
   home: {},
   currentTrack: null,
+  queue: [],
   library: {
     artists: [],
     albums: [],
@@ -111,15 +112,29 @@ export const rootReducer = (state, action) => {
     }
     case DBACTIONS.SET_ACTIVE_DROPDOWN: {
       const { dropdownElement } = action.payload
-      return {
-        ...state,
-        activeDropdown: dropdownElement
+
+      if (dropdownElement === state.activeDropdown) {
+        return {
+          ...state,
+          activeDropdown: null
+        }
+      } else {
+        return {
+          ...state,
+          activeDropdown: dropdownElement
+        }
       }
     }
     case DBACTIONS.SET_BIG_PLAYER_UI: {
       return {
         ...state,
         bigPlayerSelected: action.payload
+      }
+    }
+    case DBACTIONS.SET_TRACK_LIST: {
+      return {
+        ...state,
+        queue: [...action.payload]
       }
     }
     default:

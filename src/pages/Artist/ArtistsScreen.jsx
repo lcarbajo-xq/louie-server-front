@@ -3,7 +3,7 @@ import cover from '../../assets/app-icon.png'
 import { Header } from '../../components/Header/Header'
 import { HorizontalScroll } from '../../components/HorizontalScroll/HorizontalScroll'
 import { AlbumCard } from '../../components/Library/AlbumCard'
-import { TrackList } from '../../components/Library/TrackList'
+import { TrackContent } from '../../components/Library/TrackContent'
 import { getArtistFromDB } from '../../services/databaseService'
 import './styles.scss'
 const albums = [
@@ -1404,25 +1404,31 @@ export const ArtistsScreen = ({ id }) => {
           <h3>Albums</h3>
           <div className='albums'>
             <HorizontalScroll>
-              {artistPage?.albums?.map((album) => {
-                const imageURL =
-                  album.image && album.image[5] !== '' ? album.image[5] : cover
-                return (
-                  <AlbumCard
-                    key={album._id}
-                    id={album._id}
-                    imageURL={imageURL}
-                    artist={album.artist}
-                    name={album.name}
-                  />
-                )
-              })}
+              {artistPage?.albums.length > 0 ? (
+                artistPage?.albums?.map((album) => {
+                  const imageURL =
+                    album.image && album.image[5] !== ''
+                      ? album.image[5]
+                      : cover
+                  return (
+                    <AlbumCard
+                      key={album._id}
+                      id={album._id}
+                      imageURL={imageURL}
+                      artist={album.artist}
+                      name={album.name}
+                    />
+                  )
+                })
+              ) : (
+                <h3>No Albums</h3>
+              )}
             </HorizontalScroll>
           </div>
         </div>
 
         <div className='track-list'>
-          <TrackList tracks={tracks} title='Popular' />
+          <TrackContent tracks={tracks} title='Popular' />
         </div>
       </div>
     )

@@ -35,9 +35,12 @@ export const AppScreen = () => {
     progressCircumference,
     rate,
     audioElementRef,
+    queueTrackNumber,
+    isLast,
     onTogglePlayback,
     onPlay,
     onNext,
+    onPrevious,
     onPause,
     onError,
     onAbort,
@@ -83,15 +86,20 @@ export const AppScreen = () => {
         </Route>
         <Route path='/player'>
           <NowPlayingScreen
+            trackNumber={queueTrackNumber}
+            isLast={isLast}
             ready={ready}
             playing={playing}
             duration={duration}
             volume={volume}
+            mute={mute}
             seek={seek}
             onTogglePlayback={onTogglePlayback}
             onVolume={onVolume}
             onSeek={onSeek}
+            onMute={onMute}
             onNext={onNext}
+            onPrevious={onPrevious}
           />
         </Route>
         <Route path='/library/artist/:id'>
@@ -102,7 +110,7 @@ export const AppScreen = () => {
         </Route>
       </AppRouter>
       <audio
-        onLoadedData={onLoadedData}
+        onCanPlay={onLoadedData}
         ref={audioElementRef}
         src={audioSrc}
         onError={onError}

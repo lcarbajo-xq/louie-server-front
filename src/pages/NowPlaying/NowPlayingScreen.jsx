@@ -16,12 +16,19 @@ export const NowPlayingScreen = ({
   duration,
   volume,
   seek,
+  mute,
+  trackNumber,
   onTogglePlayback,
   onVolume,
-  onSeek
+  onSeek,
+  onMute,
+  onNext,
+  onPrevious,
+  isLast
 }) => {
   const [{ currentTrack, home }, dispatch] = useAppContext()
   const [queueVisible, toggleQueueVisible] = useState(false)
+  const [volumeClassName, setVolumeClassName] = useState('')
 
   const queueDuration = useMemo(() => {
     let queueLength = 0
@@ -40,6 +47,18 @@ export const NowPlayingScreen = ({
         payload: false
       })
   }, [])
+
+  useEffect(() => {
+    console.log('VOLUME')
+    if (mute === true || volume === 0) setVolumeClassName('feather-volume-x')
+    else if (volume <= 0.2) setVolumeClassName(' feather-volume')
+    else if (volume < 0.5) setVolumeClassName('feather-volume-1')
+    else if (volume >= 0.5) setVolumeClassName('feather-volume-2')
+  }, [volume, mute])
+
+  const handleMute = () => {
+    onMute()
+  }
 
   const handleClickBack = () => {
     window.history.back()
@@ -62,11 +81,11 @@ export const NowPlayingScreen = ({
   }
 
   const handleNextSong = () => {
-    console.log('Next')
+    onNext()
   }
 
   const handlePrevSong = () => {
-    console.log('Previous')
+    onPrevious()
   }
 
   const handleDrag = (e) => {
@@ -163,7 +182,10 @@ export const NowPlayingScreen = ({
             <span className='material-icons-round '>shuffle</span>
           </div>
           <div className='playing-controls-control grow'>
-            <div onClick={handlePrevSong} className='skip disabled'>
+            <div
+              onClick={handlePrevSong}
+              className={`skip${trackNumber === 0 ? ' disabled' : ''}`}
+            >
               <span className='material-icons-round'>skip_previous</span>
             </div>
 
@@ -173,7 +195,10 @@ export const NowPlayingScreen = ({
               </span>
             </div>
 
-            <div onClick={handleNextSong} className='skip'>
+            <div
+              onClick={handleNextSong}
+              className={`skip${isLast ? ' disabled' : ''}`}
+            >
               <span className='material-icons-round'>skip_next</span>
             </div>
           </div>
@@ -187,12 +212,8 @@ export const NowPlayingScreen = ({
         </div>
         <div className='playing-volume'>
           <div className='playing-volume-controls'>
-            <div className='playing-volume-controls-level'>
-              {/* <i *ngIf="volume === 0" class="feather-volume-x"></i>
-  				<i *ngIf="volume <= 20 && volume > 0" class="feather-volume"></i>
-  				<i *ngIf="volume < 50 && volume > 20" class="feather-volume-1"></i>
-  				<i *ngIf="volume >= 50" class="feather-volume-2"></i> */}
-              <i className='feather-volume-x' />
+            <div className='playing-volume-controls-level' onClick={handleMute}>
+              <i className={volumeClassName} />
             </div>
             <div className='playing-volume-controls-slider'>
               {/* <app-slider [options]="{vertical: false, autoSize: false}" [value]="volume"

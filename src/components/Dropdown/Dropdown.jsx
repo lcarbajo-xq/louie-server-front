@@ -11,6 +11,7 @@ export const Dropdown = ({ children, config, id }) => {
   const [state, dispatch] = useAppContext()
 
   useEffect(() => {
+    console.log('ACTIVE')
     if (state.activeDropdown === id) {
       setIsOpen(true)
     } else {
