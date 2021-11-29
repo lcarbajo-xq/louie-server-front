@@ -15,6 +15,11 @@ export const getAlbumFromDB = (id) => {
   return fetch(url).then((json) => json.json())
 }
 
+export const getPlaylistFromDB = (id) => {
+  const url = `http://localhost:5000/playlists/${id}`
+  return fetch(url).then((json) => json.json())
+}
+
 export const searchItems = (query) => {
   const url = `http://localhost:5000/search/?search=${query}`
   return fetch(url).then((json) => json.json())

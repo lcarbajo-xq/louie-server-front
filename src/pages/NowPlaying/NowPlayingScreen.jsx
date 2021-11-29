@@ -26,19 +26,19 @@ export const NowPlayingScreen = ({
   onPrevious,
   isLast
 }) => {
-  const [{ currentTrack, home }, dispatch] = useAppContext()
+  const [{ currentTrack, queue }, dispatch] = useAppContext()
   const [queueVisible, toggleQueueVisible] = useState(false)
   const [volumeClassName, setVolumeClassName] = useState('')
 
   const queueDuration = useMemo(() => {
     let queueLength = 0
-    home?.tracks.forEach((track) => {
+    queue?.forEach((track) => {
       if (track.duration) {
         queueLength += track.duration
       }
     })
     return queueLength
-  }, [home?.tracks])
+  }, [queue])
 
   useEffect(() => {
     return () =>
@@ -243,9 +243,9 @@ export const NowPlayingScreen = ({
               <div className='playing-queue-header-playing'>
                 <div className='title'>Queue</div>
                 <div className='subtitle'>
-                  {`${
-                    home?.tracks.length
-                  } Songs in queue | Duration: ${formatSeconds(queueDuration)}`}
+                  {`${queue?.length} Songs in queue | Duration: ${formatSeconds(
+                    queueDuration
+                  )}`}
                 </div>
               </div>
 
@@ -259,7 +259,7 @@ export const NowPlayingScreen = ({
         ) : (
           <>
             <BottomSheet handleQueue={handleQueue} visible={queueVisible}>
-              <TrackList tracks={home?.tracks} actions={false} />
+              <TrackList tracks={queue && queue} actions={false} />
             </BottomSheet>
           </>
         )}

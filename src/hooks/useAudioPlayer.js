@@ -561,7 +561,7 @@ export const useAudioPlayer = ({
   loop = false,
   rate = 1.0
 }) => {
-  const [{ queue }, dispatch] = useAppContext()
+  const [{ queue, home }, dispatch] = useAppContext()
   const [audioIndex, setAudioIndex] = useState(0)
   const [audioSrc, setAudioSrc] = useState('')
   const [audioReady, setAudioReady] = useState(false)
@@ -590,14 +590,15 @@ export const useAudioPlayer = ({
 
   useEffect(() => {
     setAudioSeek(0)
-    trackList[audioIndex] &&
-      setAudioSrc(`${BASE_URLS.play}${trackList[audioIndex]._id}`)
-    dispatch({
-      type: DBACTIONS.SET_CURRENT_TRACK,
-      payload: { track: trackList[audioIndex] }
-    })
-    setIsLast(audioIndex === trackList.length - 1)
-  }, [audioIndex])
+    if (queue[audioIndex]) {
+      setAudioSrc(`${BASE_URLS.play}${queue[audioIndex]._id}`)
+      dispatch({
+        type: DBACTIONS.SET_CURRENT_TRACK,
+        payload: { track: queue[audioIndex] }
+      })
+      setIsLast(audioIndex === queue.length - 1)
+    }
+  }, [audioIndex, queue])
 
   //Instance of load the Audio Element once it is created
 
@@ -618,7 +619,10 @@ export const useAudioPlayer = ({
       setAudioReady(true)
       setAudioDuration(audioElementRef?.current.duration)
       setAudioLoop(loop)
-      if (audioPlaying) handlePlay()
+      if (audioPlaying) {
+        cancelAnimationFrame(audioSeekRef?.current)
+        handlePlay()
+      }
     }
   }
 
@@ -660,7 +664,7 @@ export const useAudioPlayer = ({
   //Method to be called when we psuh play/pause button
 
   const animate = () => {
-    console.log('ANIMATION')
+    console.log('ANIMATE')
     const seek = audioElementRef?.current.currentTime
     const value = audioElementRef?.current.currentTime / audioDuration
     const seekCircumference = Math.floor(value * circumference)

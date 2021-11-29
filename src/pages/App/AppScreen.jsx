@@ -11,6 +11,7 @@ import { AppRouter } from '../../routers/AppRouter'
 import { AlbumScreen } from '../Album/AlbumScreen'
 import { ArtistsScreen } from '../Artist/ArtistsScreen'
 import { NowPlayingScreen } from '../NowPlaying/NowPlayingScreen'
+import { PlaylisScreen } from '../Playlist/PlaylisScreen'
 import { TracksScreen } from '../Tracks/TracksScreen'
 import './styles.scss'
 
@@ -107,6 +108,9 @@ export const AppScreen = () => {
         </Route>
         <Route path='/library/album/:id'>
           {(params) => <AlbumScreen album={album} id={params.id} />}
+        </Route>
+        <Route path='/library/playlist/:id'>
+          {(params) => <PlaylisScreen id={params.id} />}
         </Route>
       </AppRouter>
       <audio

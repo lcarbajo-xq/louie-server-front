@@ -1,7 +1,17 @@
+import { DBACTIONS } from '../../actions/dbActions'
+import { useAppContext } from '../../context/AppContext'
 import { Header } from '../Header/Header'
 import './styles.scss'
 
 const BttomSheetHeader = ({ handleQueue }) => {
+  const [{ queue }, dispatch] = useAppContext()
+  const handleRemovePlaylist = () => {
+    dispatch({
+      type: DBACTIONS.SET_TRACK_LIST,
+      payload: []
+    })
+  }
+
   return (
     <div className='playing-header'>
       <div className='playing-header-action'>
@@ -11,11 +21,11 @@ const BttomSheetHeader = ({ handleQueue }) => {
       </div>
 
       <div className='playing-header-playing'>
-        <div className='title'>12</div>
+        <div className='title'>{queue.length}</div>
         <div className='subtitle'>Songs in queue</div>
       </div>
 
-      <div className='playing-header-action'>
+      <div onClick={handleRemovePlaylist} className='playing-header-action'>
         <div className='playing-header-action-item'>
           <i className='feather feather-trash'></i>
         </div>

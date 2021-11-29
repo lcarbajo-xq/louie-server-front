@@ -2,20 +2,22 @@
   padding-bottom: 40px;
 
   display: flex;
-  align-items: center;
   color: var(--foreground-color);
   .album-picture {
     width: 250px;
     height: 250px;
     margin: 20px;
-
+    align-self: center;
     border-radius: 10px;
     box-shadow: 0 2px 4px rgb(0 0 0 / 6%);
   }
 
+  .picture {
+    align-self: center;
+  }
+
   .details {
     margin: 20px;
-
     .album-artist {
       color: var(--foreground-color);
       // opacity: 0.5;
@@ -28,35 +30,36 @@
         width: 64px;
         height: 64px;
         border-radius: 10px;
-        margin-right: 10px;
+        // margin-right: 10px;
         box-shadow: 0 2px 4px rgb(0 0 0 / 6%);
         object-fit: cover;
       }
 
-      &:hover {
+      .album-title {
+        font-size: 2.7rem;
         color: var(--foreground-color);
+        font-weight: 800;
+        margin-bottom: 10px;
+      }
+
+      .album-length {
+        font-size: 1rem;
+        font-weight: 600;
+        margin-bottom: 10px;
+      }
+
+      .play-button {
+        background-color: transparent;
+        color: var(--foreground-color);
+        margin-top: 20px;
+        border: 1px solid var(--border-color);
+        border-radius: 10px;
+      }
+      &:hover {
+        color: var(--accent-color);
         opacity: 1;
         cursor: pointer;
       }
-    }
-    .album-title {
-      font-size: 2.7rem;
-      color: var(--foreground-color);
-      font-weight: 800;
-      margin-bottom: 10px;
-    }
-
-    .album-length {
-      font-size: 1rem;
-      font-weight: 600;
-      margin-bottom: 10px;
-    }
-
-    .play-all {
-      background-color: transparent;
-      color: var(--foreground-color);
-      border: 1px solid var(--border-color);
-      border-radius: 10px;
     }
   }
 }
@@ -74,9 +77,8 @@ h3 {
 @media all and (max-width: 1000px) {
   .album-meta {
     flex-direction: column;
-    text-align: center;
-    justify-content: center;
-    padding-bottom: 20px;
+    // justify-content: center;
+    padding-bottom: 10px;
 
     .album-title {
       font-size: 1.7rem;
@@ -86,7 +88,7 @@ h3 {
     }
 
     .album-artist {
-      justify-content: center;
+      // justify-content: center;
     }
   }
 }

@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react'
 import { getAlbumFromDB } from '../../services/databaseService'
 import { AlbumCard } from '../../components/Library/AlbumCard'
 import { HorizontalScroll } from '../../components/HorizontalScroll/HorizontalScroll'
+import { Link } from 'wouter'
 
 const albums = [
   {
@@ -1358,17 +1359,20 @@ export const AlbumScreen = ({ id }) => {
         <div className='details'>
           {/* <div [routerLink]="['/', { outlets: { modal: ['modal', 'artists', album?.artist?._id] } }]"
            */}
-          <div className='album-artist'>
+
+          <div className='album-title'>{albumData?.name}</div>
+          {/* <div>{{ tracks.length }} Songs; <i appTooltip tooltip="Duration" className="feather-clock"></i> {{ duration |
+				formatSeconds }}</div> */}
+          <Link
+            href={`/library/artist/${albumData?.artist._id}`}
+            className='album-artist'
+          >
             <img
               className='artist-picture'
               src={albumData?.artist?.image[0] || cover}
             />
             {albumData?.artist?.name}
-          </div>
-
-          <div className='album-title'>{albumData?.name}</div>
-          {/* <div>{{ tracks.length }} Songs; <i appTooltip tooltip="Duration" className="feather-clock"></i> {{ duration |
-				formatSeconds }}</div> */}
+          </Link>
           <div className='album-length'>
             23 Songs | 41:43
             <i className='feather-clock'></i>
