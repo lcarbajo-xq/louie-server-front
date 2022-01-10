@@ -3,7 +3,7 @@ import cover from '../../assets/app-icon.png'
 import { Header } from '../../components/Header/Header'
 import { HorizontalScroll } from '../../components/HorizontalScroll/HorizontalScroll'
 import { AlbumCard } from '../../components/Library/AlbumCard'
-import { TrackContent } from '../../components/Library/TrackContent'
+import { TrackList } from '../../components/Library/TrackList'
 import { getArtistFromDB } from '../../services/databaseService'
 import './styles.scss'
 const albums = [
@@ -1346,7 +1346,8 @@ export const ArtistsScreen = ({ id }) => {
   return (
     !loading &&
     artistPage && (
-      <div className='container mx-auto'>
+      // <div className='container mx-auto'>
+      <>
         <Header title={`Artist: ${artistPage?.name}`} />
         <div className='artist-content'>
           {/* <div className='grid'>
@@ -1428,9 +1429,9 @@ export const ArtistsScreen = ({ id }) => {
         </div>
 
         <div className='track-list'>
-          <TrackContent tracks={tracks} title='Popular' />
+          <TrackList tracks={tracks} title='Popular' />
         </div>
-      </div>
+      </>
     )
   )
 }

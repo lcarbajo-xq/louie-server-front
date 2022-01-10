@@ -210,3 +210,12 @@ a {
 .lazyloaded {
   opacity: 1;
 }
+
+.opacityZero {
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.opacityVisible {
+  opacity: 1;
+}

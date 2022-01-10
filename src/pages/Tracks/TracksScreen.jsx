@@ -1,7 +1,6 @@
 import { Dropdown } from '../../components/Dropdown/Dropdown'
 import { Header } from '../../components/Header/Header'
 import { HorizontalScroll } from '../../components/HorizontalScroll/HorizontalScroll'
-import { TrackContent } from '../../components/Library/TrackContent'
 import { TrackList } from '../../components/Library/TrackList'
 import { useAppContext } from '../../context/AppContext'
 import { formatSeconds } from '../../helpers/formatSeconds'
@@ -57,7 +56,7 @@ export const TracksScreen = () => {
         </HorizontalScroll>
       </div>
 
-      <TrackContent tracks={home.tracks} />
+      <TrackList tracks={home.tracks} />
     </>
   )
 }

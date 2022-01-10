@@ -3,6 +3,7 @@ import { Route } from 'wouter'
 import { NavLink } from '../../components/Header/NavLink'
 import { Library } from '../../components/Library/Library'
 import { PlayerFooter } from '../../components/Player/PlayerFooter/PlayerFooter'
+import { SpotifyWebPlayer } from '../../components/Player/SpotifyPlayer/SpotifyWebPlayer'
 import { Search } from '../../components/Search/Search'
 import { useAppContext } from '../../context/AppContext'
 import { useAudioPlayer } from '../../hooks/useAudioPlayer'
@@ -17,7 +18,7 @@ import './styles.scss'
 
 export const AppScreen = () => {
   useTheme()
-  const [{ bigPlayerSelected }] = useAppContext()
+  const [{ bigPlayerSelected, accessToken, currentTrack }] = useAppContext()
   const [artist, setArtist] = useState({})
   const [album, setAlbum] = useState({})
 
@@ -115,6 +116,7 @@ export const AppScreen = () => {
       </AppRouter>
       <audio
         onCanPlay={onLoadedData}
+        onLoadedMetadata={onLoadedData}
         ref={audioElementRef}
         src={audioSrc}
         onError={onError}
@@ -123,12 +125,13 @@ export const AppScreen = () => {
       />
       {!bigPlayerSelected && (
         <footer className='app-player'>
-          <PlayerFooter
+          {/* <PlayerFooter
             onTogglePlayback={onTogglePlayback}
             playing={playing}
             ready={ready}
             progressCircumference={progressCircumference}
-          />
+          /> */}
+          {accessToken && <SpotifyWebPlayer token={accessToken} />}
         </footer>
       )}
       {/* </Route> */}

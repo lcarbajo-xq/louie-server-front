@@ -36,3 +36,8 @@ export const fetchInitialData = async () => {
   )
   return fetchData
 }
+
+export const getAccessToken = async () => {
+  const url = 'http://localhost:5000/auth'
+  return fetch(url).then((json) => json.json())
+}

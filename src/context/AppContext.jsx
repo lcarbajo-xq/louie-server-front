@@ -1,6 +1,10 @@
 import { createContext, useContext, useEffect, useReducer } from 'react'
 import { DBACTIONS } from '../actions/dbActions'
-import { fetchInitialData, getItemsFromDB } from '../services/databaseService'
+import {
+  fetchInitialData,
+  getAccessToken,
+  getItemsFromDB
+} from '../services/databaseService'
 
 const AppContext = createContext()
 
@@ -44,6 +48,12 @@ export const AppContextProvider = ({ initialState, reducer, children }) => {
       dispatch({
         type: DBACTIONS.SET_NEXT_PAGE,
         payload: item
+      })
+    })
+    getAccessToken().then((data) => {
+      dispatch({
+        type: DBACTIONS.SET_ACCESS_TOKEN,
+        payload: data.accessToken
       })
     })
   }, [])

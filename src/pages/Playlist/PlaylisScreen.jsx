@@ -19,7 +19,7 @@ export const PlaylisScreen = ({ id }) => {
   }, [])
 
   return (
-    <div className='container mx-auto'>
+    <>
       <Header
         title={`Playlist: ${playlistData?.playlist?.name} by ${playlistData?.playlist?.author?.id}`}
         static='true'
@@ -52,7 +52,11 @@ export const PlaylisScreen = ({ id }) => {
           <div className='play-button'>Play</div>
         </div>
       </div>
-      <TrackList tracks={playlistData?.tracks} type='spotify' />
-    </div>
+      <TrackList
+        contextUri={playlistData?.playlist?.uri}
+        tracks={playlistData?.tracks}
+        type='spotify'
+      />
+    </>
   )
 }

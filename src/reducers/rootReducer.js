@@ -24,7 +24,7 @@ export const initialState = {
 }
 
 export const rootReducer = (state, action) => {
-  console.log(action)
+  console.log(action.type)
   switch (action.type) {
     case DBACTIONS.SET_INITIAL_STATE: {
       const { albums, artists, tracks, playlists } = action.payload
@@ -90,7 +90,7 @@ export const rootReducer = (state, action) => {
       }
     }
     case DBACTIONS.SET_CURRENT_TRACK: {
-      const { track } = action.payload
+      const track = action.payload
       return {
         ...state,
         currentTrack: track
@@ -135,6 +135,12 @@ export const rootReducer = (state, action) => {
       return {
         ...state,
         queue: [...action.payload]
+      }
+    }
+    case DBACTIONS.SET_ACCESS_TOKEN: {
+      return {
+        ...state,
+        accessToken: action.payload
       }
     }
     default:

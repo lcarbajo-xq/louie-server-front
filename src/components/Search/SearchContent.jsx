@@ -1,9 +1,9 @@
 import { HorizontalScroll } from '../HorizontalScroll/HorizontalScroll'
 import { AlbumCard } from '../Library/AlbumCard'
 import { ArtistCard } from '../Library/ArtistCard'
-import { TrackContent } from '../Library/TrackContent'
 import cover from '../../assets/app-icon.png'
 import { Link } from 'wouter'
+import { TrackList } from '../Library/TrackList'
 
 export const SearchContent = ({ title = 'Welcome!', content }) => {
   return (
@@ -72,7 +72,7 @@ export const SearchContent = ({ title = 'Welcome!', content }) => {
         </HorizontalScroll>
       </div>
 
-      <TrackContent tracks={content?.tracks} />
+      <TrackList tracks={content?.tracks} />
     </>
   )
 }

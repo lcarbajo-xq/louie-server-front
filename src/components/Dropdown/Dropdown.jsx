@@ -8,35 +8,14 @@ const basic = (items) => {
 }
 export const Dropdown = ({ children, config, id }) => {
   const [isOpen, setIsOpen] = useState(false)
-  const [state, dispatch] = useAppContext()
-
-  useEffect(() => {
-    console.log('ACTIVE')
-    if (state.activeDropdown === id) {
-      setIsOpen(true)
-    } else {
-      setIsOpen(false)
-    }
-  }, [state?.activeDropdown])
-
-  const handleDropdownClick = () => {
-    if (!isOpen) {
-      dispatch({
-        type: DBACTIONS.SET_ACTIVE_DROPDOWN,
-        payload: { dropdownElement: id }
-      })
-    } else {
-      dispatch({
-        type: DBACTIONS.SET_ACTIVE_DROPDOWN,
-        payload: { dropdownElement: null }
-      })
-    }
+  const toggleDropdown = () => {
+    setIsOpen((prev) => !prev)
   }
 
   return (
-    <div className='dropup'>
+    <div className='dropup' onMouseLeave={toggleDropdown}>
       <div
-        onClick={handleDropdownClick}
+        onClick={toggleDropdown}
         className={`dropdown-action-item${isOpen ? ' active' : ''} `}
       >
         <i className='material-icons-outlined'>more_vert</i>
