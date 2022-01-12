@@ -7,7 +7,6 @@ export const initialState = {
   currentSearchQuery: '',
   searchResults: null,
   home: {},
-  currentTrack: null,
   queue: [],
   library: {
     artists: [],
@@ -87,13 +86,6 @@ export const rootReducer = (state, action) => {
           ...state.library,
           page: { ...page, [action.payload]: page[action.payload] + limit }
         }
-      }
-    }
-    case DBACTIONS.SET_CURRENT_TRACK: {
-      const track = action.payload
-      return {
-        ...state,
-        currentTrack: track
       }
     }
     case DBACTIONS.SET_SEARCH: {

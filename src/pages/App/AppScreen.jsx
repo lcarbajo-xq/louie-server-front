@@ -19,13 +19,12 @@ import './styles.scss'
 
 export const AppScreen = () => {
   useTheme()
-  const [{ bigPlayerSelected, currentTrack, accessToken }] = useAppContext()
+  const [{ bigPlayerSelected, accessToken }] = useAppContext()
   const [artist, setArtist] = useState({})
   const [album, setAlbum] = useState({})
 
   const {
     isActive,
-    isPaused,
     playbackState,
     volume,
     setSpotifyCurrentTrack,
@@ -33,7 +32,10 @@ export const AppScreen = () => {
     skipNextTrack,
     skipPrevTrack,
     seekPlaybackProgress,
-    seekVolume
+    seekVolume,
+    setMutedVolume,
+    setShuffleMode,
+    setRepeatMode
   } = useSpotifyPlayer({ token: accessToken })
 
   // const {
@@ -103,19 +105,25 @@ export const AppScreen = () => {
         <Route path='/player'>
           <NowPlayingScreen
             trackNumber={0}
-            isLast={false}
+            currentTrack={playbackState.currentTrack}
+            isLast={playbackState.isLast}
+            isFirst={playbackState.isFirst}
             ready={isActive}
-            playing={!isPaused}
+            playing={playbackState.play}
             duration={playbackState.duration}
             volume={volume}
-            mute={false}
+            shuffle={playbackState.shuffle}
+            repeat={playbackState.repeat}
+            mute={playbackState.muted}
             seek={playbackState.progress}
             onTogglePlayback={togglePlayPause}
             onVolume={seekVolume}
             onSeek={seekPlaybackProgress}
-            onMute={() => {}}
+            onMute={setMutedVolume}
             onNext={skipNextTrack}
             onPrevious={skipPrevTrack}
+            onShuffle={setShuffleMode}
+            onRepeat={setRepeatMode}
           />
           {/* <NowPlayingScreen
             trackNumber={queueTrackNumber}
@@ -169,9 +177,9 @@ export const AppScreen = () => {
 
           <SpotifyWebPlayer
             isActive={isActive}
-            isPlaying={!isPaused}
+            isPlaying={playbackState.play}
             togglePlayPause={togglePlayPause}
-            currentTrack={currentTrack}
+            currentTrack={playbackState.currentTrack}
             progressCirumference={playbackState.progressCirumference}
           />
         </footer>

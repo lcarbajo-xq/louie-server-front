@@ -1344,7 +1344,7 @@ export const AlbumScreen = ({ id }) => {
   }, [])
 
   return (
-    <div className='container mx-auto'>
+    <>
       <Header
         title={`Album: ${albumData?.name} by ${albumData?.artist?.name}`}
         static='true'
@@ -1403,7 +1403,7 @@ export const AlbumScreen = ({ id }) => {
           </HorizontalScroll>
         </>
       )}
-    </div>
+    </>
   )
 }
 

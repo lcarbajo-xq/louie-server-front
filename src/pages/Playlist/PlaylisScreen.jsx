@@ -46,7 +46,7 @@ export const PlaylisScreen = ({ id, setSpotifyCurrentTrack }) => {
               className='artist-picture'
               src={playlistData?.authorImages[0]?.url || cover}
             />
-            {playlistData?.playlist?.author?.id}
+            {playlistData?.playlist?.author?.name}
           </div>
           <div className='album-length'>{`${playlistData?.total} Songs`}</div>
           <div className='play-button'>Play</div>

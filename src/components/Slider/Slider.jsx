@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import './styles.scss'
 
 export const Slider = ({
@@ -10,6 +10,10 @@ export const Slider = ({
   value,
   type
 }) => {
+  const progressRef = useRef()
+
+  const [isDragging, setDragging] = useState(false)
+  const [hasStartedDragging, setStartedDragging] = useState(false)
   const progressValue = useMemo(() => (value / max) * 100, [value, max])
 
   useEffect(() => {
@@ -46,7 +50,7 @@ export const Slider = ({
     //     className={`range ${seekable ? 'seekable' : ''}`}
     //   ></div>
     // </div>
-    <div>
+    <div ref={progressRef}>
       <input
         type='range'
         className={type === 'progress' ? 'progressbar' : 'volume'}
@@ -55,6 +59,21 @@ export const Slider = ({
         max={max}
         value={value}
         onChange={handleChange}
+        onMouseDown={() => {
+          setStartedDragging(true)
+        }}
+        onMouseUp={(e) => {
+          if (hasStartedDragging && isDragging) {
+            setStartedDragging(false)
+            setDragging(false)
+            handleChange(e)
+          }
+        }}
+        onMouseMove={() => {
+          if (hasStartedDragging) {
+            setDragging(true)
+          }
+        }}
       />
     </div>
   )

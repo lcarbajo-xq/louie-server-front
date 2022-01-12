@@ -12,11 +12,14 @@ import { TrackList } from '../../components/Library/TrackList'
 
 export const NowPlayingScreen = ({
   ready,
+  currentTrack,
   playing,
   duration,
   volume,
   seek,
   mute,
+  repeat,
+  shuffle,
   trackNumber,
   onTogglePlayback,
   onVolume,
@@ -24,9 +27,12 @@ export const NowPlayingScreen = ({
   onMute,
   onNext,
   onPrevious,
-  isLast
+  onShuffle,
+  onRepeat,
+  isLast,
+  isFirst
 }) => {
-  const [{ currentTrack, queue }, dispatch] = useAppContext()
+  const [{ queue }, dispatch] = useAppContext()
   const [queueVisible, toggleQueueVisible] = useState(false)
   const [volumeClassName, setVolumeClassName] = useState('')
 
@@ -50,7 +56,7 @@ export const NowPlayingScreen = ({
 
   useEffect(() => {
     if (mute === true || volume === 0) setVolumeClassName('feather-volume-x')
-    else if (volume <= 0.2) setVolumeClassName(' feather-volume')
+    else if (volume > 0 && volume <= 0.2) setVolumeClassName(' feather-volume')
     else if (volume < 0.5) setVolumeClassName('feather-volume-1')
     else if (volume >= 0.5) setVolumeClassName('feather-volume-2')
   }, [volume, mute])
@@ -68,11 +74,11 @@ export const NowPlayingScreen = ({
   }
 
   const handleShuffle = () => {
-    console.log('Shuffle')
+    onShuffle()
   }
 
   const handleRepeat = () => {
-    console.log('Repeat')
+    onRepeat()
   }
 
   const handleQueue = () => {
@@ -87,9 +93,6 @@ export const NowPlayingScreen = ({
     onPrevious()
   }
 
-  const handleDrag = (e) => {
-    console.log(e)
-  }
   return (
     <div className='container mx-auto'>
       <div className='playing'>
@@ -183,14 +186,16 @@ export const NowPlayingScreen = ({
         <div className='playing-controls'>
           <div
             onClick={handleShuffle}
-            className='playing-controls-control shuffle active'
+            className={`playing-controls-control shuffle${
+              shuffle ? ' active' : ''
+            }`}
           >
             <span className='material-icons-round '>shuffle</span>
           </div>
           <div className='playing-controls-control grow'>
             <div
               onClick={handlePrevSong}
-              className={`skip${trackNumber === 0 ? ' disabled' : ''}`}
+              className={`skip${isFirst ? ' disabled' : ''}`}
             >
               <span className='material-icons-round'>skip_previous</span>
             </div>
@@ -211,7 +216,9 @@ export const NowPlayingScreen = ({
 
           <div
             onClick={handleRepeat}
-            className='playing-controls-control repeat'
+            className={`playing-controls-control repeat${
+              repeat ? ' active' : ''
+            }`}
           >
             <span className='material-icons-round'>repeat</span>
           </div>

@@ -31,11 +31,13 @@ export const useSpotifyPlayer = ({ token }) => {
   })
 
   const [isActive, setIsActive] = useState(false)
-  const [isPaused, setIsPaused] = useState(false)
   const [playbackState, setPlaybackState] = useState({
     play: false,
+    muted: false,
     shuffle: false,
     repeat: false,
+    isFirst: false,
+    isLast: false,
     progress: 0,
     progressCirumference: 0,
     duration: 0,
@@ -132,19 +134,18 @@ export const useSpotifyPlayer = ({ token }) => {
         ...state,
         play: !paused,
         shuffle: shuffle,
-        currentTrack: track_window.current_track,
+        currentTrack: {
+          ...track_window.current_track,
+          contextUri: context.uri
+        },
+        isFirst: track_window.previous_tracks.length === 0,
+        isLast: track_window.next_tracks.length === 0,
         repeat: repeat_mode !== 0,
         progress: progressInSeconds,
         progressCirumference: circularProgress,
         duration: durationInSeconds,
         updateTime: performance.now()
       }))
-      // setCurrentTrack(track_window.current_track)
-      dispatch({
-        type: DBACTIONS.SET_CURRENT_TRACK,
-        payload: { ...track_window.current_track, contextUri: context.uri }
-      })
-      setIsPaused(paused)
     })
   }
 
@@ -157,33 +158,15 @@ export const useSpotifyPlayer = ({ token }) => {
   }
 
   const togglePlayPause = () => {
-    const url = playbackState.play
-      ? 'https://api.spotify.com/v1/me/player/pause'
-      : 'https://api.spotify.com/v1/me/player/play'
-
-    const options = {
-      url,
-      method: 'PUT',
-      headers: {
-        Authorization: 'Bearer ' + token,
-        'Content-Type': 'application/json'
-      }
-    }
-
-    requestSpotifyEndpoint(options)
-      .then((response) => {
-        if (response.status !== 204) {
-          console.log(
-            `ERROR: Something went wrong! Server response: ${response}`
-          )
+    spotifyPlayerRef.current
+      .togglePlay()
+      .then(() => {
+        if (!playbackState.play) {
+          updatePlayerProgress()
         } else {
-          if (!playbackState.play) {
-            audioSeekRef.current = requestAnimationFrame(updatePlayerProgress)
-          } else {
-            cancelAnimationFrame(audioSeekRef.current)
-          }
-          setPlaybackState((state) => ({ ...state, play: !state.play }))
+          cancelAnimationFrame(audioSeekRef.current)
         }
+        setPlaybackState((state) => ({ ...state, play: !state.play }))
       })
       .catch((error) => console.log(`ERROR: ${error}`))
   }
@@ -224,25 +207,10 @@ export const useSpotifyPlayer = ({ token }) => {
     }
     const seekInMS = e.target.value * 1000
 
-    const url = `https://api.spotify.com/v1/me/player/seek?position_ms=${seekInMS}`
-
-    const options = {
-      url,
-      method: 'PUT',
-      headers: {
-        Authorization: 'Bearer ' + token,
-        'Content-Type': 'application/json'
-      }
-    }
-
-    requestSpotifyEndpoint(options)
-      .then((response) => {
-        if (response.status !== 204) {
-          console,
-            log(
-              `ERROR: Something went wrong! Server response: ${response.status}`
-            )
-        } else {
+    spotifyPlayerRef.current
+      .seek(seekInMS)
+      .then(() => {
+        if (playbackState.play) {
           audioSeekRef.current = requestAnimationFrame(updatePlayerProgress)
         }
       })
@@ -253,25 +221,11 @@ export const useSpotifyPlayer = ({ token }) => {
     if (audioSeekRef?.current) {
       cancelAnimationFrame(audioSeekRef)
     }
-    const url = 'https://api.spotify.com/v1/me/player/next'
 
-    const options = {
-      url,
-      method: 'POST',
-      headers: {
-        Authorization: 'Bearer ' + token,
-        'Content-Type': 'application/json'
-      }
-    }
-
-    requestSpotifyEndpoint(options)
-      .then((response) => {
-        if (response.status !== 204) {
-          console.log(
-            `ERROR: Something went wrong! Server response: ${response.status}`
-          )
-        }
-        audioSeekRef.current = requestAnimationFrame(updatePlayerProgress)
+    spotifyPlayerRef.current
+      .nextTrack()
+      .then(() => {
+        updatePlayerProgress()
       })
       .catch((error) => console.log(`ERROR: ${error}`))
   }
@@ -280,24 +234,10 @@ export const useSpotifyPlayer = ({ token }) => {
     if (audioSeekRef?.current) {
       cancelAnimationFrame(audioSeekRef)
     }
-    const url = 'https://api.spotify.com/v1/me/player/previous'
 
-    const options = {
-      url,
-      method: 'POST',
-      headers: {
-        Authorization: 'Bearer ' + token,
-        'Content-Type': 'application/json'
-      }
-    }
-
-    requestSpotifyEndpoint(options)
-      .then((response) => {
-        if (response.status !== 204) {
-          console.log(
-            `ERROR: Something went wrong! Server response: ${response.status}`
-          )
-        }
+    spotifyPlayerRef.current
+      .previousTrack()
+      .then(() => {
         audioSeekRef.current = requestAnimationFrame(updatePlayerProgress)
       })
       .catch((error) => console.log(`ERROR: ${error}`))
@@ -314,6 +254,68 @@ export const useSpotifyPlayer = ({ token }) => {
       .catch((error) => console.log(`ERROR: ${error}`))
   }
 
+  const setMutedVolume = () => {
+    const { muted } = playbackState
+    const newVolume = muted ? volume : 0
+
+    spotifyPlayerRef.current
+      .setVolume(newVolume)
+      .then(() => {
+        console.log(muted, volume)
+        setPlaybackState((state) => ({
+          ...state,
+          muted: !state.muted
+        }))
+      })
+      .catch((error) => console.log(`ERROR: ${error}`))
+  }
+
+  const setShuffleMode = () => {
+    const state = playbackState.shuffle ? 'false' : 'true'
+    const url = `https://api.spotify.com/v1/me/player/shuffle?state=${state}`
+    const options = {
+      url,
+      method: 'PUT',
+      headers: {
+        Authorization: 'Bearer ' + token,
+        'Content-Type': 'application/json'
+      }
+    }
+
+    requestSpotifyEndpoint(options)
+      .then(() => {
+        setPlaybackState((state) => ({
+          ...state,
+          shuffle: !state.shuffle
+        }))
+      })
+      .catch((err) => console.log(err))
+  }
+
+  const setRepeatMode = () => {
+    const state = playbackState.repeat ? 'off' : 'track'
+    const url = `https://api.spotify.com/v1/me/player/repeat?state=${state}`
+    const options = {
+      url,
+      method: 'PUT',
+      headers: {
+        Authorization: 'Bearer ' + token,
+        'Content-Type': 'application/json'
+      }
+    }
+    requestSpotifyEndpoint(options)
+      .then((response) => {
+        if (response.status !== 204) {
+          console.log('ERROR: ', response)
+        }
+        setPlaybackState((state) => ({
+          ...state,
+          repeat: !state.repeat
+        }))
+      })
+      .catch((err) => console.log(err))
+  }
+
   useEffect(() => {
     if (token) {
       createSpotifySDKScript()
@@ -328,7 +330,6 @@ export const useSpotifyPlayer = ({ token }) => {
 
   return {
     isActive,
-    isPaused,
     playbackState,
     volume,
     setSpotifyCurrentTrack,
@@ -336,6 +337,9 @@ export const useSpotifyPlayer = ({ token }) => {
     skipNextTrack,
     skipPrevTrack,
     seekPlaybackProgress,
-    seekVolume
+    seekVolume,
+    setMutedVolume,
+    setShuffleMode,
+    setRepeatMode
   }
 }

@@ -29,10 +29,10 @@ export const TrackList = ({
       </div>
       <div className='grid'>
         {tracks !== undefined &&
-          tracks?.map((track) => (
+          tracks?.map((track, i) => (
             <Track
               setSpotifyCurrentTrack={setSpotifyCurrentTrack}
-              key={track._id}
+              key={track._id + i}
               contextUri={contextUri}
               type={type}
               track={track}
