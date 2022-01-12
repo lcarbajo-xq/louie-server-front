@@ -49,7 +49,6 @@ export const NowPlayingScreen = ({
   }, [])
 
   useEffect(() => {
-    console.log('VOLUME')
     if (mute === true || volume === 0) setVolumeClassName('feather-volume-x')
     else if (volume <= 0.2) setVolumeClassName(' feather-volume')
     else if (volume < 0.5) setVolumeClassName('feather-volume-1')
@@ -125,20 +124,27 @@ export const NowPlayingScreen = ({
           <div className='image-wrap'>
             <img
               src={
-                currentTrack.album.image[0]
-                  ? `http://localhost:5000${currentTrack.album.image[0]}`
+                currentTrack?.album?.images[0].url
+                  ? currentTrack?.album?.images[0].url
                   : cover
               }
             />
+            {/* <img
+              src={
+                currentTrack?.album?.image[0]
+                  ? `http://localhost:5000${currentTrack.album.image[0]}`
+                  : cover
+              }
+            /> */}
           </div>
         </div>
         <div className='playing-track'>
           <div className='playing-track-details'>
             <div className='name'>
-              <div className='overflow-text'>{currentTrack.name}</div>
+              <div className='overflow-text'>{currentTrack?.name}</div>
             </div>
 
-            <div className='artists'>{currentTrack.artist}</div>
+            <div className='artists'>{currentTrack?.artists[0]?.name}</div>
           </div>
 
           <div className='playing-track-actions'>

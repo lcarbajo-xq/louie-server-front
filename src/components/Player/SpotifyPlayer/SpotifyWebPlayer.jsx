@@ -4,10 +4,25 @@ import './styles.scss'
 import cover from '../../../assets/app-icon.png'
 import { circumference } from '../../../constants/progressConstants'
 import { useSpotifyPlayer } from '../../../hooks/useSpotifyPlayer'
+import { useAppContext } from '../../../context/AppContext'
+import { DBACTIONS } from '../../../actions/dbActions'
+import { Link } from 'wouter'
 
-export const SpotifyWebPlayer = ({ token }) => {
-  const { currentTrack, isActive, isPaused, playbackState, togglePlayPause } =
-    useSpotifyPlayer({ token })
+export const SpotifyWebPlayer = ({
+  currentTrack,
+  progressCirumference,
+  isPlaying,
+  togglePlayPause,
+  isActive
+}) => {
+  const [, dispatch] = useAppContext()
+
+  const handleTogglePlayer = () => {
+    dispatch({
+      type: DBACTIONS.SET_BIG_PLAYER_UI,
+      payload: true
+    })
+  }
 
   if (!isActive) {
     return (
@@ -25,21 +40,21 @@ export const SpotifyWebPlayer = ({ token }) => {
   } else {
     return (
       <div className='player'>
-        <div className='player-metadata'>
+        <div className='player-metadata' onClick={handleTogglePlayer}>
           <div className='player-metadata-image'>
             <img
               src={currentTrack ? currentTrack?.album.images[0].url : cover}
               alt='cover'
             />
           </div>
-          <div href='/player' className='player-metadata-details'>
+          <Link href='/player' className='player-metadata-details'>
             <div className='player-metadata-details-artist'>
               {currentTrack?.artists[0].name}
             </div>
             <div className='player-metadata-details-song'>
               {currentTrack?.name}
             </div>
-          </div>
+          </Link>
           {/* <div className='player-metadata-details-song'>
             {duration && !isNaN(duration) && formatSeconds(duration)}
           </div> */}
@@ -47,10 +62,10 @@ export const SpotifyWebPlayer = ({ token }) => {
         {currentTrack &&
           (isActive ? (
             <PlayerControls
-              progress={playbackState.progressCirumference}
+              progress={progressCirumference}
               circumference={circumference}
               togglePlayPause={togglePlayPause}
-              isPlaying={!isPaused}
+              isPlaying={isPlaying}
             />
           ) : (
             <Spinner />

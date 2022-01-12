@@ -6,7 +6,7 @@ import { useAppContext } from '../../context/AppContext'
 import { formatSeconds } from '../../helpers/formatSeconds'
 import './styles.scss'
 
-export const TracksScreen = () => {
+export const TracksScreen = ({ setSpotifyCurrentTrack }) => {
   const [{ home }] = useAppContext()
   return (
     <>

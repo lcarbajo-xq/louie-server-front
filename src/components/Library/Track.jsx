@@ -5,15 +5,22 @@ import { formatSeconds } from '../../helpers/formatSeconds'
 import { Dropdown } from '../Dropdown/Dropdown'
 import { Tooltip } from '../Tooltip/Tooltip'
 
-export const Track = ({ contextUri, track, type, actions = true }) => {
+export const Track = ({
+  contextUri,
+  track,
+  type,
+  actions = true,
+  setSpotifyCurrentTrack
+}) => {
   const [, dispatch] = useAppContext()
   const [isHover, setIsHover] = useState(false)
 
   const handlePlay = (track) => {
-    dispatch({
-      type: DBACTIONS.SET_CURRENT_TRACK,
-      payload: { ...track, contextUri }
-    })
+    // dispatch({
+    //   type: DBACTIONS.SET_CURRENT_TRACK,
+    //   payload: { ...track, contextUri }
+    // })
+    setSpotifyCurrentTrack({ ...track, contextUri })
     // dispatch({
     //   type: DBACTIONS.SET_TRACK_LIST,
     //   payload: tracks
@@ -21,12 +28,7 @@ export const Track = ({ contextUri, track, type, actions = true }) => {
   }
 
   return (
-    <div
-      key={`search-${track._id}`}
-      className='track'
-      onMouseEnter={() => setIsHover(true)}
-      onMouseLeave={() => setIsHover(false)}
-    >
+    <div key={`search-${track._id}`} className='track'>
       {/* <div *ngIf="options.picture" appTooltip tooltip="{{ track.artist }} - {{ track.name }}" class="image">
     <img class="lazyloa
     d" [lazyLoad]="track?.album?.picture || '/assets/app-icon-text.png'" />
@@ -66,7 +68,11 @@ export const Track = ({ contextUri, track, type, actions = true }) => {
 
         <div className={isHover ? 'opacityVisible' : 'opacityZero'}>
           {actions && (
-            <div className='actions'>
+            <div
+              onMouseEnter={() => setIsHover(true)}
+              onMouseLeave={() => setIsHover(false)}
+              className='actions'
+            >
               <Dropdown
                 id={track._id}
                 dropdown

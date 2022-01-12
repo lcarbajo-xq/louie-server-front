@@ -4,7 +4,7 @@ import { TrackList } from '../../components/Library/TrackList'
 import { getPlaylistFromDB } from '../../services/databaseService'
 import cover from '../../assets/app-icon.png'
 
-export const PlaylisScreen = ({ id }) => {
+export const PlaylisScreen = ({ id, setSpotifyCurrentTrack }) => {
   const [playlistData, setPlaylistData] = useState(null)
   const [loading, setLoading] = useState(false)
 
@@ -53,6 +53,7 @@ export const PlaylisScreen = ({ id }) => {
         </div>
       </div>
       <TrackList
+        setSpotifyCurrentTrack={setSpotifyCurrentTrack}
         contextUri={playlistData?.playlist?.uri}
         tracks={playlistData?.tracks}
         type='spotify'

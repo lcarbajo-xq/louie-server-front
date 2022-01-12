@@ -664,7 +664,6 @@ export const useAudioPlayer = ({
   //Method to be called when we psuh play/pause button
 
   const animate = () => {
-    console.log('ANIMATE')
     const seek = audioElementRef?.current.currentTime
     const value = audioElementRef?.current.currentTime / audioDuration
     const seekCircumference = Math.floor(value * circumference)

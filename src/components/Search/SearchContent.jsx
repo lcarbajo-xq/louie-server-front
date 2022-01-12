@@ -4,6 +4,7 @@ import { ArtistCard } from '../Library/ArtistCard'
 import cover from '../../assets/app-icon.png'
 import { Link } from 'wouter'
 import { TrackList } from '../Library/TrackList'
+import { PlaylistCard } from '../Library/PlaylistCard'
 
 export const SearchContent = ({ title = 'Welcome!', content }) => {
   return (
@@ -15,15 +16,7 @@ export const SearchContent = ({ title = 'Welcome!', content }) => {
         <div className='playlists-scroll'>
           <HorizontalScroll>
             {content?.playlists?.map((playlist) => {
-              return (
-                <Link
-                  href={`/library/playlist/${playlist._id}`}
-                  key={`search-${playlist._id}`}
-                  className={`playlist ${playlist.private ? 'inactive' : ''}`}
-                >
-                  {playlist.name}
-                </Link>
-              )
+              return <PlaylistCard key={playlist._id} playlist={playlist} />
             })}
           </HorizontalScroll>
         </div>

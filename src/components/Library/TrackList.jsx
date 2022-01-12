@@ -3,6 +3,7 @@ import { Track } from './Track'
 export const TrackList = ({
   contextUri,
   tracks,
+  setSpotifyCurrentTrack,
   actions = true,
   title = 'Tracks',
   type = 'database'
@@ -30,6 +31,7 @@ export const TrackList = ({
         {tracks !== undefined &&
           tracks?.map((track) => (
             <Track
+              setSpotifyCurrentTrack={setSpotifyCurrentTrack}
               key={track._id}
               contextUri={contextUri}
               type={type}
