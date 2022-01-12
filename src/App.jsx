@@ -17,12 +17,11 @@ function App() {
   return (
     <>
       <AppContextProvider initialState={initialState} reducer={rootReducer}>
-        <Route path='/' component={LoginScreen} />
         <AuthRouter base='/app'>
           <AppScreen />
         </AuthRouter>
+        <Route path='/' component={LoginScreen} />
       </AppContextProvider>
-      {/* <div>Hello</div> */}
     </>
   )
 }
