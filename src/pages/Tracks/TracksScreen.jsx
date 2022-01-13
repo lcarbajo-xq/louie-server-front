@@ -3,7 +3,6 @@ import { Header } from '../../components/Header/Header'
 import { HorizontalScroll } from '../../components/HorizontalScroll/HorizontalScroll'
 import { TrackList } from '../../components/Library/TrackList'
 import { useAppContext } from '../../context/AppContext'
-import { formatSeconds } from '../../helpers/formatSeconds'
 import './styles.scss'
 
 export const TracksScreen = ({ setSpotifyCurrentTrack }) => {

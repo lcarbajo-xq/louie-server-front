@@ -1,22 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { circumference } from '../constants/progressConstants'
-import axios from 'axios'
-import { useAppContext } from '../context/AppContext'
-import { DBACTIONS } from '../actions/dbActions'
-
-// const track = {
-//   name: '',
-//   album: {
-//     images: [{ url: '' }]
-//   },
-//   artists: [{ name: '' }]
-// }
-
-const formatAudioProgress = (progress, duration) => {
-  const seekProgress = progress / duration
-  const circularProgress = Math.floor(seekProgress * circumference)
-  return { circularProgress }
-}
+import { formatAudioProgress } from '../helpers/playerHelpers'
+import { requestSpotifyEndpoint } from '../services/spotifyService'
 
 export const useSpotifyPlayer = ({ token }) => {
   const [volume, setVolume] = useState(1)
@@ -37,10 +21,6 @@ export const useSpotifyPlayer = ({ token }) => {
 
   const audioSeekRef = useRef()
   const spotifyPlayerRef = useRef()
-
-  const requestSpotifyEndpoint = async (options) => {
-    return await axios(options)
-  }
 
   const createSpotifySDKScript = useCallback(() => {
     const script = document.createElement('script')

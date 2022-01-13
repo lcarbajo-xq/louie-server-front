@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import { DBACTIONS } from '../../actions/dbActions'
 import { useAppContext } from '../../context/AppContext'
-import { formatSeconds } from '../../helpers/formatSeconds'
 import { Dropdown } from '../Dropdown/Dropdown'
 import { Tooltip } from '../Tooltip/Tooltip'
+import { formatSeconds } from '../../helpers/playerHelpers'
 
 export const Track = ({
   contextUri,
