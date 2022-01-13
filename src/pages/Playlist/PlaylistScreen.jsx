@@ -4,7 +4,7 @@ import { TrackList } from '../../components/Library/TrackList'
 import { getPlaylistFromDB } from '../../services/databaseService'
 import cover from '../../assets/app-icon.png'
 
-export const PlaylisScreen = ({ id, setSpotifyCurrentTrack }) => {
+export const PlaylistScreen = ({ id, setSpotifyCurrentTrack }) => {
   const [playlistData, setPlaylistData] = useState(null)
   const [loading, setLoading] = useState(false)
 
