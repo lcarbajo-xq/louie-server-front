@@ -19,16 +19,7 @@ const formatAudioProgress = (progress, duration) => {
 }
 
 export const useSpotifyPlayer = ({ token }) => {
-  const [, dispatch] = useAppContext()
-
   const [volume, setVolume] = useState(1)
-  const [playback, setPlayback] = useState(0)
-  const [playInfo, setPlayInfo] = useState({
-    album: {},
-    artists: [],
-    name: '',
-    id: ''
-  })
 
   const [isActive, setIsActive] = useState(false)
   const [playbackState, setPlaybackState] = useState({

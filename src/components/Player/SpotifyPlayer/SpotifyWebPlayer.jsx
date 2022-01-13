@@ -1,12 +1,12 @@
 import { Spinner } from '../../Spinner/Spinner'
 import { PlayerControls } from '../PlayerFooter/PlayerFooterControls'
-import './styles.scss'
-import cover from '../../../assets/app-icon.png'
 import { circumference } from '../../../constants/progressConstants'
-import { useSpotifyPlayer } from '../../../hooks/useSpotifyPlayer'
 import { useAppContext } from '../../../context/AppContext'
 import { DBACTIONS } from '../../../actions/dbActions'
 import { Link } from 'wouter'
+import SpotifyIcon from '../../Icons/SpotifyIcon'
+import cover from '../../../assets/app-icon.png'
+import './styles.scss'
 
 export const SpotifyWebPlayer = ({
   currentTrack,
@@ -58,7 +58,11 @@ export const SpotifyWebPlayer = ({
           {/* <div className='player-metadata-details-song'>
             {duration && !isNaN(duration) && formatSeconds(duration)}
           </div> */}
+          <div className='player-icon'>
+            <SpotifyIcon />
+          </div>
         </div>
+
         {currentTrack &&
           (isActive ? (
             <PlayerControls

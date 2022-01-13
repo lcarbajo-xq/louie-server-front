@@ -4,10 +4,14 @@
   display: grid;
   grid-template-columns: 1fr auto auto;
   color: var(--foreground-color);
+  &-icon {
+    width: 40px;
+    height: 40px;
+  }
   &-metadata {
     padding: 10px;
     display: grid;
-    grid-template-columns: auto 1fr;
+    grid-template-columns: auto 1fr auto;
     overflow: hidden;
     touch-action: none;
     white-space: nowrap;
