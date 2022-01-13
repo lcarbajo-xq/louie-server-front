@@ -13,7 +13,7 @@ import { AppRouter } from '../../routers/AppRouter'
 import { AlbumScreen } from '../Album/AlbumScreen'
 import { ArtistsScreen } from '../Artist/ArtistsScreen'
 import { NowPlayingScreen } from '../NowPlaying/NowPlayingScreen'
-import { PlaylisScreen } from '../Playlist/PlaylisScreen'
+import { PlaylistScreen } from '../Playlist/PlaylistScreen'
 import { TracksScreen } from '../Tracks/TracksScreen'
 import './styles.scss'
 
@@ -150,7 +150,7 @@ export const AppScreen = () => {
         </Route>
         <Route path='/library/playlist/:id'>
           {(params) => (
-            <PlaylisScreen
+            <PlaylistScreen
               id={params.id}
               setSpotifyCurrentTrack={setSpotifyCurrentTrack}
             />
