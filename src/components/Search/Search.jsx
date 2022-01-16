@@ -6,7 +6,7 @@ import './styles.scss'
 
 const NoResults = () => <h3>No Results found</h3>
 
-export const Search = () => {
+export const Search = ({ setCurrentTrack }) => {
   const [{ home }] = useAppContext()
 
   const loading = false
@@ -32,7 +32,7 @@ export const Search = () => {
         ) : (
           <>
             {!search.length > 0 ? (
-              <SearchContent content={home} />
+              <SearchContent content={home} setCurrentTrack={setCurrentTrack} />
             ) : (
               <SearchContent content={searchResults} title='Search Results' />
             )}

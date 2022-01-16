@@ -7,8 +7,9 @@ export const useSpotifyPlayer = ({ token }) => {
 
   const [isActive, setIsActive] = useState(false)
   const [playbackState, setPlaybackState] = useState({
-    play: false,
+    isPlaying: false,
     muted: false,
+    ready: false,
     shuffle: false,
     repeat: false,
     isFirst: false,
@@ -57,11 +58,19 @@ export const useSpotifyPlayer = ({ token }) => {
           },
           data: body
         }
+        setPlaybackState((state) => ({
+          ...state,
+          ready: true
+        }))
         requestSpotifyEndpoint(options)
       })
 
       spotifyPlayer.addListener('not_ready', ({ device_id }) => {
         console.log('Device ID has gone offline', device_id)
+        setPlaybackState((state) => ({
+          ...state,
+          ready: false
+        }))
       })
 
       spotifyPlayer.addListener('player_state_changed', (state) => {
@@ -103,7 +112,7 @@ export const useSpotifyPlayer = ({ token }) => {
 
       setPlaybackState((state) => ({
         ...state,
-        play: !paused,
+        isPlaying: !paused,
         shuffle: shuffle,
         currentTrack: {
           ...track_window.current_track,
@@ -132,12 +141,12 @@ export const useSpotifyPlayer = ({ token }) => {
     spotifyPlayerRef.current
       .togglePlay()
       .then(() => {
-        if (!playbackState.play) {
+        if (!playbackState.isPlaying) {
           updatePlayerProgress()
         } else {
           cancelAnimationFrame(audioSeekRef.current)
         }
-        setPlaybackState((state) => ({ ...state, play: !state.play }))
+        setPlaybackState((state) => ({ ...state, isPlaying: !state.isPlaying }))
       })
       .catch((error) => console.log(`ERROR: ${error}`))
   }
@@ -181,7 +190,7 @@ export const useSpotifyPlayer = ({ token }) => {
     spotifyPlayerRef.current
       .seek(seekInMS)
       .then(() => {
-        if (playbackState.play) {
+        if (playbackState.isPlaying) {
           audioSeekRef.current = requestAnimationFrame(updatePlayerProgress)
         }
       })

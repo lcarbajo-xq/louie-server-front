@@ -6,7 +6,11 @@ import { Link } from 'wouter'
 import { TrackList } from '../Library/TrackList'
 import { PlaylistCard } from '../Library/PlaylistCard'
 
-export const SearchContent = ({ title = 'Welcome!', content }) => {
+export const SearchContent = ({
+  title = 'Welcome!',
+  content,
+  setCurrentTrack
+}) => {
   return (
     <>
       <h1 className='title'>{title}</h1>
@@ -65,7 +69,10 @@ export const SearchContent = ({ title = 'Welcome!', content }) => {
         </HorizontalScroll>
       </div>
 
-      <TrackList tracks={content?.tracks} />
+      <TrackList
+        tracks={content?.tracks}
+        setSpotifyCurrentTrack={setCurrentTrack}
+      />
     </>
   )
 }

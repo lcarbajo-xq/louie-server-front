@@ -14,12 +14,14 @@ export const Track = ({
   const [, dispatch] = useAppContext()
   const [isHover, setIsHover] = useState(false)
 
-  const handlePlay = (track) => {
+  const handlePlay = () => {
     // dispatch({
     //   type: DBACTIONS.SET_CURRENT_TRACK,
     //   payload: { ...track, contextUri }
     // })
-    setSpotifyCurrentTrack({ ...track, contextUri })
+    // setSpotifyCurrentTrack({ ...track, contextUri })
+    console.log(track)
+    setSpotifyCurrentTrack(track)
     // dispatch({
     //   type: DBACTIONS.SET_TRACK_LIST,
     //   payload: tracks

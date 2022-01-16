@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
 import { DBACTIONS } from '../actions/dbActions'
 import { BASE_URLS } from '../constants/endpoints'
-import { circumference } from '../constants/progressConstants'
 import { useAppContext } from '../context/AppContext'
+import { formatAudioProgress } from '../helpers/playerHelpers'
 
 const trackList = [
   {
@@ -553,43 +553,43 @@ const trackList = [
   }
 ]
 
-export const useAudioPlayer = ({
-  preload = true,
-  autoplay = false,
-  volume = 0.5,
-  mute = false,
-  loop = false,
-  rate = 1.0
-}) => {
-  const [{ queue, home }, dispatch] = useAppContext()
-  const [audioIndex, setAudioIndex] = useState(0)
+export const useAudioPlayer = ({ autoplay = true }) => {
+  const [{ queue }, dispatch] = useAppContext()
+  const [playbackState, setPlaybackState] = useState({
+    duration: 0,
+    isFirst: false,
+    isLast: false,
+    isPlaying: false,
+    muted: false,
+    progress: 0,
+    rate: 1.0,
+    progressCirumference: 0,
+    ready: false,
+    repeat: false,
+    shuffle: false,
+    updateTime: null
+  })
   const [audioSrc, setAudioSrc] = useState('')
-  const [audioReady, setAudioReady] = useState(false)
+  const [audioIndex, setAudioIndex] = useState(0)
   const [audioLoading, setAudioLoading] = useState(true)
   const [audioError, setAudioError] = useState('')
-  const [audioPlaying, setAudioPlaying] = useState(false)
-  const [audioPaused, setAudioPaused] = useState(false)
-  const [audioDuration, setAudioDuration] = useState(0)
-  const [audioMute, setAudioMute] = useState(mute)
-  const [audioLoop, setAudioLoop] = useState(loop)
-  const [audioVolume, setAudioVolume] = useState(volume)
-  const [audioSeek, setAudioSeek] = useState(0)
-  const [audioSeekCircumference, setAudioSeekCircumference] = useState(0)
-  const [audioRate, setAudioRate] = useState(rate)
-  const [isLast, setIsLast] = useState(false)
+  const [volume, setVolume] = useState(1)
 
   const audioSeekRef = useRef()
   const audioElementRef = useRef()
 
   useEffect(() => {
-    audioElementRef.current.volume = audioVolume
+    audioElementRef.current.volume = volume
     return () => {
       audioSeekRef?.current && cancelAnimationFrame(audioSeekRef.current)
     }
   }, [])
 
   useEffect(() => {
-    setAudioSeek(0)
+    setPlaybackState((state) => ({
+      ...state,
+      progress: 0
+    }))
     if (queue[audioIndex]) {
       setAudioSrc(`${BASE_URLS.play}${queue[audioIndex]._id}`)
       dispatch({
@@ -603,27 +603,78 @@ export const useAudioPlayer = ({
   //Instance of load the Audio Element once it is created
 
   const onAbort = () => setAudioError('Abort Error')
-  const onError = () => setAudioError('Error')
+  const onError = (err) => setAudioError('Error: ', err)
   const onLoadedData = () => {
+    updatePlaybackState()
+    setAudioLoading(false)
     if (autoplay) {
-      setAudioLoading(false)
-      setAudioReady(true)
-      setAudioDuration(audioElementRef?.current.duration)
-      setAudioLoop(loop)
-      handlePlay()
-      setAudioPlaying(true)
-      setAudioPaused(false)
-      handlePlay()
-    } else {
-      setAudioLoading(false)
-      setAudioReady(true)
-      setAudioDuration(audioElementRef?.current.duration)
-      setAudioLoop(loop)
-      if (audioPlaying) {
-        cancelAnimationFrame(audioSeekRef?.current)
-        handlePlay()
-      }
+      play()
     }
+  }
+
+  const updatePlaybackState = () => {
+    const { currentTime, duration } = audioElementRef?.current
+    const { circularProgress } = formatAudioProgress(currentTime, duration)
+    setPlaybackState((state) => ({
+      ...state,
+      duration,
+      isPlaying: autoplay,
+      ready: true,
+      progress: currentTime,
+      isFirst: audioIndex === 0,
+      isLast: audioIndex === queue?.length - 1,
+      progressCirumference: circularProgress
+    }))
+  }
+
+  const updatePlayerProgress = () => {
+    if (audioSeekRef.current) {
+      cancelAnimationFrame(audioSeekRef.current)
+    }
+    const { currentTime, duration } = audioElementRef?.current
+    const { circularProgress } = formatAudioProgress(currentTime, duration)
+    setPlaybackState((state) => ({
+      ...state,
+      progressCirumference: circularProgress,
+      progress: currentTime
+    }))
+    audioSeekRef.current = requestAnimationFrame(updatePlayerProgress)
+  }
+
+  const play = () => {
+    audioElementRef.current.play()
+    audioSeekRef.current = requestAnimationFrame(updatePlayerProgress)
+  }
+
+  const pause = () => {
+    audioElementRef.current.pause()
+    cancelAnimationFrame(audioSeekRef.current)
+  }
+
+  const togglePlayPause = () => {
+    if (playbackState.isPlaying) {
+      pause()
+    } else {
+      play()
+    }
+    setPlaybackState((state) => {
+      console.log(state.isPlaying)
+      return {
+        ...state,
+        isPlaying: !state.isPlaying
+      }
+    })
+  }
+
+  const setLocalCurrentTrack = (track) => {
+    if (audioSeekRef?.current) {
+      cancelAnimationFrame(audioSeekRef.current)
+    }
+    setPlaybackState((state) => ({
+      ...state,
+      currentTrack: track
+    }))
+    // audioSeekRef.current = requestAnimationFrame(updatePlayerProgress)
   }
 
   const onSetUpTrackList = () => {
@@ -643,18 +694,23 @@ export const useAudioPlayer = ({
     })
   }
 
-  const onNext = () => {
+  const skipNextTrack = () => {
     setAudioIndex((prev) => prev + 1)
+    updatePlayerProgress()
   }
 
-  const onPrevious = () => {
+  const skipPrevTrack = () => {
     setAudioIndex((prev) => prev - 1)
+    updatePlayerProgress()
   }
 
   const onEnd = () => {
-    setAudioPlaying(false)
-    setAudioPaused(false)
-    setAudioSeek(0)
+    setPlaybackState((state) => ({
+      ...state,
+      isPlaying: false,
+      progress: 0,
+      progressCirumference: 0
+    }))
     setAudioLoading(false)
     setAudioError('')
   }
@@ -663,106 +719,124 @@ export const useAudioPlayer = ({
 
   //Method to be called when we psuh play/pause button
 
-  const animate = () => {
-    const seek = audioElementRef?.current.currentTime
-    const value = audioElementRef?.current.currentTime / audioDuration
-    const seekCircumference = Math.floor(value * circumference)
-    setAudioSeek(seek)
-    setAudioSeekCircumference(seekCircumference)
-    audioSeekRef.current = requestAnimationFrame(animate)
+  // const animate = () => {
+  //   const seek = audioElementRef?.current.currentTime
+  //   const value = audioElementRef?.current.currentTime / audioDuration
+  //   const seekCircumference = Math.floor(value * circumference)
+  //   setAudioSeek(seek)
+  //   setAudioSeekCircumference(seekCircumference)
+  //   audioSeekRef.current = requestAnimationFrame(animate)
+  // }
+
+  // const onTogglePlayback = () => {
+  //   if (!audioElementRef?.current) return
+  //   const prevIsPlaying = audioPlaying
+  //   setAudioDuration(audioElementRef.current.duration)
+  //   setAudioPlaying(!prevIsPlaying)
+
+  //   if (!prevIsPlaying) {
+  //     handlePlay()
+  //   } else {
+  //     handlePause()
+  //   }
+  // }
+
+  // const handlePlay = () => {
+  //   setAudioPaused(false)
+  //   setAudioPlaying(true)
+  //   audioElementRef?.current?.play()
+  //   audioSeekRef.current = requestAnimationFrame(animate)
+  // }
+  // const handlePause = () => {
+  //   setAudioPaused(true)
+  //   setAudioPlaying(false)
+  //   audioElementRef?.current?.pause()
+  //   cancelAnimationFrame(audioSeekRef.current)
+  // }
+
+  const setMutedVolume = () => {
+    const { muted } = playbackState
+    audioElementRef.current.muted = !muted
+    setPlaybackState((state) => ({
+      ...state,
+      muted: !state.muted
+    }))
   }
 
-  const onTogglePlayback = () => {
-    if (!audioElementRef?.current) return
-    const prevIsPlaying = audioPlaying
-    setAudioDuration(audioElementRef.current.duration)
-    setAudioPlaying(!prevIsPlaying)
-
-    if (!prevIsPlaying) {
-      handlePlay()
-    } else {
-      handlePause()
-    }
+  const setRepeatMode = () => {
+    const { repeat } = playbackState
+    audioElementRef.current.loop = !repeat
+    setPlaybackState((state) => ({
+      ...state,
+      repeat: !state.repeat
+    }))
   }
 
-  const handlePlay = () => {
-    setAudioPaused(false)
-    setAudioPlaying(true)
-    audioElementRef?.current?.play()
-    audioSeekRef.current = requestAnimationFrame(animate)
-  }
-  const handlePause = () => {
-    setAudioPaused(true)
-    setAudioPlaying(false)
-    audioElementRef?.current?.pause()
-    cancelAnimationFrame(audioSeekRef.current)
+  const setShuffleMode = () => {
+    setPlaybackState((state) => ({
+      ...state,
+      shuffle: !state.shuffle
+    }))
   }
 
-  const onMute = () => {
-    if (!audioElementRef?.current) return
-    audioElementRef.current.muted = !audioMute
-    setAudioMute(!audioMute)
-  }
-  const onLoop = () => {
-    if (!audioElementRef?.current) return
-    audioElementRef.current.loop = !audioLoop
-    setAudioLoop(!audioLoop)
-  }
-
-  const onVolume = (e) => {
-    if (!audioElementRef?.current) return
+  const seekVolume = (e) => {
     const volume = parseFloat(e.target.value)
-    setAudioMute(false)
-    setAudioVolume(volume)
+    setVolume(volume)
+    setPlaybackState((state) => ({
+      ...state,
+      muted: false
+    }))
     audioElementRef.current.muted = false
     audioElementRef.current.volume = volume
   }
 
   const onRate = (e) => {
-    if (!audioElementRef?.current) return
     const rate = parseFloat(e.target.value)
-    setAudioRate(rate)
+    setPlaybackState((state) => ({
+      ...state,
+      rate
+    }))
     audioElementRef.current.playbackRate = rate
   }
 
-  const onSeek = (e) => {
-    if (!audioElementRef?.current) return
-    // if (!audioReady) return
+  const seekPlaybackProgress = (e) => {
+    if (audioSeekRef?.current) {
+      cancelAnimationFrame(audioSeekRef.current)
+    }
+
     const seek = parseFloat(e.target.value)
-    setAudioSeek(seek)
+
     audioElementRef.current.currentTime = seek
+
+    if (playbackState.isPlaying) {
+      audioSeekRef.current = requestAnimationFrame(updatePlayerProgress)
+    }
   }
 
   return {
     audioSrc,
-    ready: audioReady,
+    playbackState,
     loading: audioLoading,
     error: audioError,
-    playing: audioPlaying,
-    paused: audioPaused,
-    duration: audioDuration,
-    mute: audioMute,
-    loop: audioLoop,
-    volume: audioVolume,
-    seek: audioSeek,
-    rate: audioRate,
-    progressCircumference: audioSeekCircumference,
+    volume: volume,
     audioElementRef,
     queueTrackNumber: audioIndex,
-    isLast,
-    onTogglePlayback,
-    onLoop,
+    setLocalCurrentTrack,
+    togglePlayPause,
+    skipNextTrack,
+    skipPrevTrack,
+    seekPlaybackProgress,
+    seekVolume,
+    setMutedVolume,
+    setShuffleMode,
+    setRepeatMode,
     onError,
+    onEnd,
     onAbort,
     // onPlay,
     // onPause,
     onSetUpTrackList,
-    onNext,
-    onPrevious,
-    onMute,
     onLoadedData,
-    onVolume,
-    onRate,
-    onSeek
+    onRate
   }
 }

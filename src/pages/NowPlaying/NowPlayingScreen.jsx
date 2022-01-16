@@ -125,20 +125,20 @@ export const NowPlayingScreen = ({
         </div>
         <div className='playing-carousel'>
           <div className='image-wrap'>
-            <img
+            {/* <img
               src={
                 currentTrack?.album?.images[0].url
                   ? currentTrack?.album?.images[0].url
                   : cover
               }
-            />
-            {/* <img
+            /> */}
+            <img
               src={
                 currentTrack?.album?.image[0]
                   ? `http://localhost:5000${currentTrack.album.image[0]}`
                   : cover
               }
-            /> */}
+            />
           </div>
         </div>
         <div className='playing-track'>

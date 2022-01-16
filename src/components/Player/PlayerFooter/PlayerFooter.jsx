@@ -8,12 +8,13 @@ import { circumference } from '../../../constants/progressConstants'
 import { Spinner } from '../../Spinner/Spinner'
 
 export const PlayerFooter = ({
+  currentTrack,
   onTogglePlayback,
   playing,
   ready,
   progressCircumference
 }) => {
-  const [{ currentTrack }, dispatch] = useAppContext()
+  const [_, dispatch] = useAppContext()
 
   const handleTogglePlayer = () => {
     dispatch({
@@ -27,6 +28,11 @@ export const PlayerFooter = ({
       <div onClick={handleTogglePlayer} className='player-metadata'>
         <div className='player-metadata-image'>
           <img
+            // src={
+            //   currentTrack
+            //     ? `http://localhost:5000${currentTrack?.album.image[0]}`
+            //     : cover
+            // }
             src={
               currentTrack
                 ? `http://localhost:5000${currentTrack?.album.image[0]}`
