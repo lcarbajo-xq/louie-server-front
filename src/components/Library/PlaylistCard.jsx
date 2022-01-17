@@ -1,7 +1,8 @@
-import React from 'react'
 import { Link } from 'wouter'
+import { useVibrantColor } from '../../hooks/useVibrantColor'
 
 export const PlaylistCard = ({ playlist }) => {
+  const { dominantColor } = useVibrantColor({ imageSrc: playlist.images[0] })
   return (
     <div className='playlist-card'>
       <div className='playlist-card-wrap-image'>
@@ -11,6 +12,7 @@ export const PlaylistCard = ({ playlist }) => {
         className={`playlist-card-wrap-info ${
           playlist.private ? 'inactive' : ''
         }`}
+        style={{ backgroundColor: dominantColor }}
       >
         <Link
           href={`/library/playlist/${playlist._id}`}
