@@ -58,8 +58,6 @@ export const AppScreen = () => {
     onError,
     onEnd,
     onAbort,
-    // onPlay,
-    // onPause,
     onSetUpTrackList,
     onLoadedData,
     onRate
@@ -80,8 +78,6 @@ export const AppScreen = () => {
           icon='settings_applications'
         />
       </section>
-      {/* <AppRouter base='/app'> */}
-      {/* <Route path='/home'> */}
       <AppRouter>
         <Route path='/home'>
           <Search setCurrentTrack={setLocalCurrentTrack} />
@@ -150,6 +146,7 @@ export const AppScreen = () => {
       <audio
         onCanPlay={onLoadedData}
         onLoadedMetadata={onLoadedData}
+        onEnded={onEnd}
         ref={audioElementRef}
         src={
           playbackState?.currentTrack &&
@@ -178,8 +175,6 @@ export const AppScreen = () => {
           /> */}
         </footer>
       )}
-      {/* </Route> */}
-      {/* </AppRouter> */}
     </div>
   )
 }

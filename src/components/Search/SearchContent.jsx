@@ -2,7 +2,6 @@ import { HorizontalScroll } from '../HorizontalScroll/HorizontalScroll'
 import { AlbumCard } from '../Library/AlbumCard'
 import { ArtistCard } from '../Library/ArtistCard'
 import cover from '../../assets/app-icon.png'
-import { Link } from 'wouter'
 import { TrackList } from '../Library/TrackList'
 import { PlaylistCard } from '../Library/PlaylistCard'
 
@@ -18,11 +17,11 @@ export const SearchContent = ({
         <h3>Playlists</h3>
 
         <div className='playlists-scroll'>
-          <HorizontalScroll>
-            {content?.playlists?.map((playlist) => {
-              return <PlaylistCard key={playlist._id} playlist={playlist} />
-            })}
-          </HorizontalScroll>
+          {/* <HorizontalScroll> */}
+          {content?.playlists?.map((playlist) => {
+            return <PlaylistCard key={playlist._id} playlist={playlist} />
+          })}
+          {/* </HorizontalScroll> */}
         </div>
       </div>
       <div className='artists-wrapper'>
