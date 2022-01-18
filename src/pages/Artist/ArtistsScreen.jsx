@@ -4,6 +4,8 @@ import { Header } from '../../components/Header/Header'
 import { HorizontalScroll } from '../../components/HorizontalScroll/HorizontalScroll'
 import { AlbumCard } from '../../components/Library/AlbumCard'
 import { TrackList } from '../../components/Library/TrackList'
+// import { getVibrantColor } from '../../helpers/getVibrantColor'
+import { useVibrantColor } from '../../hooks/useVibrantColor'
 import { getArtistFromDB } from '../../services/databaseService'
 import './styles.scss'
 const albums = [
@@ -1330,6 +1332,8 @@ const tracks = [
 export const ArtistsScreen = ({ id }) => {
   const [artistPage, setArtist] = useState(null)
   const [loading, setLoading] = useState(false)
+  const [dominantColor, setDominatColor] = useState()
+  const { getVibrantColor } = useVibrantColor()
 
   useEffect(() => {
     setLoading(true)
@@ -1339,6 +1343,11 @@ export const ArtistsScreen = ({ id }) => {
         albums: data.albums,
         total: data.totalAlbums
       })
+
+      getVibrantColor(data?.artist?.image[0]).then(
+        ({ dominantColorNoOpacity }) => setDominatColor(dominantColorNoOpacity)
+      )
+
       setLoading(false)
     })
   }, [])
@@ -1354,14 +1363,24 @@ export const ArtistsScreen = ({ id }) => {
           <img src={artist.image[0] || cover} className='artist-picture' />
         </div> */}
           <div className='artist-header-content'>
-            <div className='artist-header-background'>
+            <div
+              className='artist-header-background'
+              style={{
+                background: `rgba(${dominantColor},1)`
+              }}
+            >
               <div
                 className='artist-header-background-image'
                 style={{
                   backgroundImage: `url(${artistPage?.image[0]})` || ''
                 }}
               ></div>
-              <div className='artist-header-background-image-overlay'></div>
+              <div
+                className='artist-header-background-image-overlay'
+                style={{
+                  background: `linear-gradient(0.25turn, rgba(${dominantColor},1), rgba(${dominantColor},0))`
+                }}
+              ></div>
             </div>
             <div className='artist-header-details-wrapper'>
               <h3 className='artist-name'>{artistPage.name}</h3>

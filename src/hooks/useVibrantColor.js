@@ -1,16 +1,22 @@
 import { useEffect, useState } from 'react'
 import * as Vibrant from 'node-vibrant'
 
-export const useVibrantColor = ({ imageSrc = '' }) => {
-  const [dominantColor, setDominantColor] = useState('')
+export const useVibrantColor = ({ imageSrc = '' } = {}) => {
+  const [vibrantColor, setVibrantColor] = useState('')
   useEffect(() => {
-    Vibrant.from(imageSrc)
-      .getPalette()
-      .then((palette) => {
-        setDominantColor(`rgba(${palette.Vibrant._rgb.toString()},.6)`)
-      })
+    getVibrantColor(imageSrc).then((colors) => setVibrantColor(colors))
   }, [])
-  return {
-    dominantColor
+
+  const getVibrantColor = async (img) => {
+    const colorVibrant = await Vibrant.from(img)
+      .getPalette()
+      .then((palette) => palette.Vibrant._rgb.toString())
+
+    return {
+      dominantColor: `rgba(${colorVibrant},.6)`,
+      dominantColorNoOpacity: colorVibrant
+    }
   }
+
+  return { ...vibrantColor, getVibrantColor }
 }

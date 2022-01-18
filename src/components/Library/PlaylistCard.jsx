@@ -3,6 +3,7 @@ import { useVibrantColor } from '../../hooks/useVibrantColor'
 
 export const PlaylistCard = ({ playlist }) => {
   const { dominantColor } = useVibrantColor({ imageSrc: playlist.images[0] })
+
   return (
     <div className='playlist-card'>
       <div className='playlist-card-wrap-image'>
