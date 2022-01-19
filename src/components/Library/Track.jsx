@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useAppContext } from '../../context/AppContext'
 import { Dropdown } from '../Dropdown/Dropdown'
 import { Tooltip } from '../Tooltip/Tooltip'

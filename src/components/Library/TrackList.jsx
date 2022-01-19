@@ -4,21 +4,9 @@ export const TrackList = ({
   contextUri,
   tracks,
   setSpotifyCurrentTrack,
-  actions = true,
   title = 'Tracks',
   type = 'database'
 }) => {
-  // const handleUnmountDropdown = () => {
-  //   dispatch({
-  //     type: DBactions.SET_ACTIVE_DROPDOWN,
-  //     payload: { dropdownElement: null }
-  //   })
-  // }
-
-  // useEffect(() => {
-  //   return () => handleUnmountDropdown()
-  // }, [])
-
   return (
     <div className='tracks-wrapper'>
       <div className='title-wrapper'>
