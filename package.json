@@ -7,21 +7,23 @@
     "serve": "vite preview"
   },
   "dependencies": {
-    "axios": "^0.24.0",
-    "color.js": "^1.2.0",
-    "colorthief": "^2.3.2",
-    "intersection-observer": "^0.12.0",
-    "just-debounce-it": "^1.5.0",
-    "node-vibrant": "^3.2.1-alpha.1",
-    "react": "^17.0.0",
-    "react-dom": "^17.0.0",
-    "react-spotify-web-playback": "^0.9.1",
-    "wouter": "^2.7.5"
+    "axios": "0.24.0",
+    "intersection-observer": "0.12.0",
+    "just-debounce-it": "1.5.0",
+    "node-vibrant": "^3.1.6",
+    "react": "17.0.0",
+    "react-dom": "17.0.0",
+    "react-spotify-web-playback": "0.9.1",
+    "wouter": "2.7.5"
   },
   "devDependencies": {
-    "@vitejs/plugin-react": "^1.0.0",
-    "sass": "^1.42.1",
-    "vite": "^2.5.10"
+    "@vitejs/plugin-react": "1.0.0",
+    "eslint-config-standard": "16.0.3",
+    "eslint-plugin-import": "2.25.4",
+    "eslint-plugin-n": "14.0.0",
+    "eslint-plugin-promise": "6.0.0",
+    "sass": "1.42.1",
+    "vite": "2.5.10"
   },
   "eslintConfig": {
     "extends": "standard"
