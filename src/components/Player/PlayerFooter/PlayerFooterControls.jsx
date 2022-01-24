@@ -1,9 +1,7 @@
-import { useEffect, useRef, useState } from 'react'
-
 export const PlayerControls = ({
   isPlaying,
   togglePlayPause,
-  progress = 0,
+  progress,
   circumference
 }) => {
   return (
@@ -20,7 +18,7 @@ export const PlayerControls = ({
             r={19}
             strokeWidth='2'
             strokeDasharray={Math.floor(circumference)}
-            strokeDashoffset={progress}
+            strokeDashoffset={progress && progress}
             fillOpacity='0'
           />
         </svg>

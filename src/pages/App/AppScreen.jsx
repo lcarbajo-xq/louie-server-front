@@ -1,13 +1,10 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Route } from 'wouter'
 import { NavLink } from '../../components/Header/NavLink'
 import { Library } from '../../components/Library/Library'
 import { PlayerFooter } from '../../components/Player/PlayerFooter/PlayerFooter'
-import { SpotifyWebPlayer } from '../../components/Player/SpotifyPlayer/SpotifyWebPlayer'
 import { Search } from '../../components/Search/Search'
 import { useAppContext } from '../../context/AppContext'
-import { useAudioPlayer } from '../../hooks/useAudioPlayer'
-import { useSpotifyPlayer } from '../../hooks/useSpotifyPlayer'
 import { useTheme } from '../../hooks/useTheme'
 import { AppRouter } from '../../routers/AppRouter'
 import { AlbumScreen } from '../Album/AlbumScreen'
@@ -22,48 +19,7 @@ export const AppScreen = () => {
   const [{ bigPlayerSelected, accessToken }] = useAppContext()
   const [artist, setArtist] = useState({})
   const [album, setAlbum] = useState({})
-
-  // const {
-  //   isActive,
-  //   playbackState,
-  //   volume,
-  //   setSpotifyCurrentTrack,
-  //   togglePlayPause,
-  //   skipNextTrack,
-  //   skipPrevTrack,
-  //   seekPlaybackProgress,
-  //   seekVolume,
-  //   setMutedVolume,
-  //   setShuffleMode,
-  //   setRepeatMode
-  // } = useSpotifyPlayer({ token: accessToken })
-
-  const {
-    audioSrc,
-    playbackState,
-    loading,
-    error,
-    volume,
-    audioElementRef,
-    queueTrackNumber,
-    setLocalCurrentTrack,
-    togglePlayPause,
-    skipNextTrack,
-    skipPrevTrack,
-    seekPlaybackProgress,
-    seekVolume,
-    setMutedVolume,
-    setShuffleMode,
-    setRepeatMode,
-    onError,
-    onEnd,
-    onAbort,
-    onSetUpTrackList,
-    onLoadedData,
-    onRate
-  } = useAudioPlayer({
-    autoplay: true
-  })
+  const [currentTrack, setCurrentTrack] = useState({})
 
   return (
     <div className='app'>
@@ -80,7 +36,7 @@ export const AppScreen = () => {
       </section>
       <AppRouter>
         <Route path='/home'>
-          <Search setCurrentTrack={setLocalCurrentTrack} />
+          <Search setCurrentTrack={setCurrentTrack} />
         </Route>
         <Route path='/library'>
           <Library setArtist={setArtist} setAlbum={setAlbum} />
@@ -88,46 +44,7 @@ export const AppScreen = () => {
         <Route path='/tracks'>
           <TracksScreen />
         </Route>
-        <Route path='/player'>
-          <NowPlayingScreen
-            trackNumber={0}
-            currentTrack={playbackState.currentTrack}
-            isLast={playbackState.isLast}
-            isFirst={playbackState.isFirst}
-            ready={playbackState.ready}
-            playing={playbackState.isPlaying}
-            duration={playbackState.duration}
-            volume={volume}
-            shuffle={playbackState.shuffle}
-            repeat={playbackState.repeat}
-            mute={playbackState.muted}
-            seek={playbackState.progress}
-            onTogglePlayback={togglePlayPause}
-            onVolume={seekVolume}
-            onSeek={seekPlaybackProgress}
-            onMute={setMutedVolume}
-            onNext={skipNextTrack}
-            onPrevious={skipPrevTrack}
-            onShuffle={setShuffleMode}
-            onRepeat={setRepeatMode}
-          />
-          {/* <NowPlayingScreen
-            trackNumber={queueTrackNumber}
-            isLast={isLast}
-            ready={ready}
-            playing={playing}
-            duration={duration}
-            volume={volume}
-            mute={mute}
-            seek={seek}
-            onTogglePlayback={onTogglePlayback}
-            onVolume={onVolume}
-            onSeek={onSeek}
-            onMute={onMute}
-            onNext={onNext}
-            onPrevious={onPrevious}
-          /> */}
-        </Route>
+
         <Route path='/library/artist/:id'>
           {(params) => <ArtistsScreen artist={artist} id={params.id} />}
         </Route>
@@ -138,43 +55,13 @@ export const AppScreen = () => {
           {(params) => (
             <PlaylistScreen
               id={params.id}
-              setSpotifyCurrentTrack={setLocalCurrentTrack}
+              setSpotifyCurrentTrack={setCurrentTrack}
             />
           )}
         </Route>
       </AppRouter>
-      <audio
-        onCanPlay={onLoadedData}
-        onLoadedMetadata={onLoadedData}
-        onEnded={onEnd}
-        ref={audioElementRef}
-        src={
-          playbackState?.currentTrack &&
-          `http://localhost:5000/tracks/play/${playbackState.currentTrack._id}`
-        }
-        onError={onError}
-        onAbort={onAbort}
-        preload='metadata'
-      />
-      {!bigPlayerSelected && (
-        <footer className='app-player'>
-          <PlayerFooter
-            currentTrack={playbackState.currentTrack}
-            onTogglePlayback={togglePlayPause}
-            playing={playbackState.isPlaying}
-            ready={playbackState.ready}
-            progressCircumference={playbackState.progressCirumference}
-          />
 
-          {/* <SpotifyWebPlayer
-            isActive={isActive}
-            isPlaying={playbackState.play}
-            togglePlayPause={togglePlayPause}
-            currentTrack={playbackState.currentTrack}
-            progressCirumference={playbackState.progressCirumference}
-          /> */}
-        </footer>
-      )}
+      <PlayerFooter token={accessToken} currentTrack={currentTrack} />
     </div>
   )
 }

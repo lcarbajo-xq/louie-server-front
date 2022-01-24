@@ -135,6 +135,12 @@ export const rootReducer = (state, action) => {
         accessToken: action.payload
       }
     }
+    case DBACTIONS.SET_PLAYER_STATE: {
+      return {
+        ...state,
+        player: action.payload
+      }
+    }
     default:
       return state
   }

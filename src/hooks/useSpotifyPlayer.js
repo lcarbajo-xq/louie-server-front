@@ -116,7 +116,8 @@ export const useSpotifyPlayer = ({ token }) => {
         shuffle: shuffle,
         currentTrack: {
           ...track_window.current_track,
-          contextUri: context.uri
+          contextUri: context.uri,
+          source: 'spotify'
         },
         isFirst: track_window.previous_tracks.length === 0,
         isLast: track_window.next_tracks.length === 0,
@@ -303,6 +304,7 @@ export const useSpotifyPlayer = ({ token }) => {
     }
 
     return () => {
+      console.log('adios')
       cancelAnimationFrame(audioSeekRef.current)
       spotifyPlayerRef.current?.disconnect()
     }
