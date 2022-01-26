@@ -2,11 +2,11 @@ import { useEffect, useState } from 'react'
 
 import './styles.scss'
 
-const basic = (items) => {
-  ;({ items })
-}
+// const basic = (items) => {
+//   ;({ items })
+// }
 export const Dropdown = ({ children, hover, config }) => {
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(!hover)
   const toggleDropdown = () => {
     setIsOpen((prev) => !prev)
   }
@@ -16,7 +16,7 @@ export const Dropdown = ({ children, hover, config }) => {
   }, [hover])
 
   return (
-    <div className='dropup' onMouseLeave={toggleDropdown}>
+    <div className='dropup' onMouseLeave={() => setIsOpen(false)}>
       <div
         onClick={toggleDropdown}
         className={`dropdown-action-item${isOpen ? ' active' : ''} `}
