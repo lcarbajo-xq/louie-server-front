@@ -18,11 +18,16 @@
   },
   "devDependencies": {
     "@vitejs/plugin-react": "1.0.0",
-    "eslint-config-standard": "16.0.3",
+    "eslint": "^8.7.0",
+    "eslint-config-standard": "^16.0.3",
+    "eslint-config-standard-react": "^11.0.1",
     "eslint-plugin-import": "2.25.4",
     "eslint-plugin-n": "14.0.0",
-    "eslint-plugin-promise": "6.0.0",
+    "eslint-plugin-promise": "^6.0.0",
+    "eslint-plugin-react": "^7.28.0",
+    "eslint-plugin-standard": "^5.0.0",
     "sass": "1.42.1",
+    "standard": "^16.0.4",
     "vite": "2.5.10"
   },
   "eslintConfig": {
