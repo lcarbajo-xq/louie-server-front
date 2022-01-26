@@ -1,3 +1,12 @@
 {
-  "extends": "standard"
+  "rules": {
+    "multiline-ternary": "off",
+    "camelcase": "off",
+    "no-irregular-whitespace": 0,
+    "react/react-in-jsx-scope": "off",
+    // allow jsx syntax in js files (for next.js project)
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+    "react/prop-types": "off"
+  },
+  "extends": ["standard", "standard-react", "plugin:react/recommended"]
 }
