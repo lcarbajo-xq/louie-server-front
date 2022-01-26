@@ -33,8 +33,9 @@
 }
 
 .playlists-wrapper {
-  min-height: 224px;
+  max-height: 375px;
   margin-bottom: 16px;
+  overflow: hidden;
 }
 
 h3 {
@@ -60,6 +61,7 @@ h3 {
   row-gap: 16px;
 
   .playlist-info-title {
+    border-radius: 5px;
     display: inline;
     &:first-of-type {
       // background: blue !important;
@@ -84,9 +86,10 @@ h3 {
 .playlist-card {
   height: 80px;
   display: flex;
-  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 5px;
+  // background-color: rgba(255, 255, 255, 0.1);
   &:hover {
-    background-color: var(--accent-color);
+    opacity: 0.8;
     cursor: pointer;
   }
 }
@@ -99,11 +102,12 @@ h3 {
     object-fit: cover;
     width: 100%;
     height: 100%;
-    border-radius: 4px 0 0 4px;
+    border-radius: 5px 0 0 5px;
   }
 }
 
 .playlist-card-wrap-info {
+  border-radius: 5px;
   display: flex;
   flex: 1;
   justify-content: space-between;
@@ -257,6 +261,10 @@ h3 {
 }
 
 // TRACK LIST
+
+.tracks-wrapper {
+  padding: 0 20px;
+}
 
 .track {
   // margin-bottom: 15px;
