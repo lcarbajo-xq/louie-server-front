@@ -9,6 +9,8 @@ export const useVibrantColor = ({ imageSrc = '' } = {}) => {
 
   const getVibrantColor = async (img) => {
     const colorVibrant = await Vibrant.from(img)
+      .quality(0)
+      .maxColorCount(256)
       .getPalette()
       .then((palette) => palette.Vibrant._rgb.toString())
 
