@@ -263,7 +263,7 @@ h3 {
 // TRACK LIST
 
 .tracks-wrapper {
-  padding: 0 20px;
+  // padding: 0 20px;
 }
 
 .track {
@@ -304,7 +304,7 @@ h3 {
     text-overflow: ellipsis;
     flex: 1;
     .image {
-      min-width: 60px;
+      // min-width: 60px;
       text-align: center;
       border-radius: 50%;
 
@@ -383,6 +383,7 @@ h3 {
     // font-size: 13px;
     margin-left: 0px;
     margin-right: 0px;
+    padding: 0 5px;
 
     .image {
       padding: 10px;
