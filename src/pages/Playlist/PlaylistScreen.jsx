@@ -6,7 +6,7 @@ import cover from '../../assets/app-icon.png'
 
 export const PlaylistScreen = ({ id, setSpotifyCurrentTrack }) => {
   const [playlistData, setPlaylistData] = useState(null)
-  const [loading, setLoading] = useState(false)
+  const [, setLoading] = useState(false)
 
   useEffect(() => {
     setLoading(true)
@@ -31,7 +31,7 @@ export const PlaylistScreen = ({ id, setSpotifyCurrentTrack }) => {
         <div className='picture'>
           <img
             className='album-picture'
-            src={playlistData?.playlist?.images[0] || cover}
+            src={playlistData?.playlist?.images[0].url || cover}
           />
         </div>
         <div className='details'>
@@ -46,15 +46,18 @@ export const PlaylistScreen = ({ id, setSpotifyCurrentTrack }) => {
               className='artist-picture'
               src={playlistData?.authorImages[0]?.url || cover}
             />
-            {playlistData?.playlist?.author?.name}
+            <div>{playlistData?.playlist?.author?.name}</div>
           </div>
           <div className='album-length'>{`${playlistData?.total} Songs`}</div>
-          <div className='play-button'>Play</div>
         </div>
       </div>
       <TrackList
         setSpotifyCurrentTrack={setSpotifyCurrentTrack}
         contextUri={playlistData?.playlist?.uri}
+        context={{
+          contextUri: playlistData?.playlist?.uri,
+          contextSource: 'spotify'
+        }}
         tracks={playlistData?.tracks}
         type='spotify'
       />

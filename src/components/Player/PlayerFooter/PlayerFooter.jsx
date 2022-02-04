@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { DBACTIONS } from '../../../actions/dbActions'
 import { useAppContext } from '../../../context/AppContext'
 import { useAudioPlayer } from '../../../hooks/useAudioPlayer'
@@ -7,26 +7,29 @@ import { MinifiedPlayer } from '../MinifiedPlayer'
 import { NowPlayingPlayer } from '../NowPlayingPlayer/NowPlayingPlayer'
 import './styles.scss'
 
-export const PlayerFooter = ({ currentTrack, token }) => {
-  const [{ bigPlayerSelected }, dispatch] = useAppContext()
+export const PlayerFooter = () => {
+  const [{ bigPlayerSelected, accessToken, selectedTrack }, dispatch] =
+    useAppContext()
+  const [loading, setLoading] = useState(false)
   const localPlayer = useAudioPlayer({
-    autoplay: true,
-    track: currentTrack
+    autoplay: false
   })
 
   const spotifyPlayer = useSpotifyPlayer({
-    token
+    token: accessToken,
+    setLoading
   })
 
   useEffect(() => {
-    if (currentTrack?.source === 'spotify') {
-      spotifyPlayer?.setSpotifyCurrentTrack(currentTrack)
-    } else if (spotifyPlayer?.playbackState?.isPlaying) {
+    if (
+      selectedTrack?.source === 'local' &&
+      spotifyPlayer?.playbackState?.isPlaying
+    ) {
       spotifyPlayer?.togglePlayPause()
     }
-  }, [currentTrack])
+  }, [selectedTrack])
 
-  const player = currentTrack?.source === 'local' ? localPlayer : spotifyPlayer
+  const player = selectedTrack?.source === 'local' ? localPlayer : spotifyPlayer
 
   const handleTogglePlayer = () => {
     dispatch({
@@ -37,23 +40,28 @@ export const PlayerFooter = ({ currentTrack, token }) => {
 
   return (
     <footer className={`app-player${!bigPlayerSelected ? ' minified' : ''}`}>
-      <audio
-        onCanPlay={localPlayer?.onLoadedData}
-        onLoadedMetadata={localPlayer?.onLoadedData}
-        onEnded={localPlayer?.onEnd}
-        ref={localPlayer?.audioElementRef}
-        src={
-          currentTrack &&
-          `http://localhost:5000/tracks/play/${currentTrack._id}`
-        }
-        onError={localPlayer?.onError}
-        onAbort={localPlayer?.onAbort}
-        preload='metadata'
-      />
+      {selectedTrack?.source === 'local' && (
+        <audio
+          onCanPlay={localPlayer?.onLoadedData}
+          onEnded={localPlayer?.onEnd}
+          ref={localPlayer?.audioElementRef}
+          src={
+            selectedTrack &&
+            `http://localhost:5000/tracks/play/${selectedTrack._id}`
+          }
+          onError={localPlayer?.onError}
+          onAbort={localPlayer?.onAbort}
+          preload='metadata'
+        />
+      )}
       {bigPlayerSelected ? (
-        <NowPlayingPlayer player={player} />
+        <NowPlayingPlayer player={player} isLoading={loading} />
       ) : (
-        <MinifiedPlayer player={player} togglePlayer={handleTogglePlayer} />
+        <MinifiedPlayer
+          player={player}
+          togglePlayer={handleTogglePlayer}
+          isLoading={loading}
+        />
       )}
     </footer>
   )

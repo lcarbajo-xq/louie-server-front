@@ -1,9 +1,10 @@
-import React from 'react'
 import { useEffect } from 'react/cjs/react.production.min'
+import { useAudioPlayer } from './useAudioPlayer'
+import { useSpotifyPlayer } from './useSpotifyPlayer'
 
 export const usePlayer = ({ token, currentTrack }) => {
   const localPlayer = useAudioPlayer({
-    autoplay: true,
+    autoplay: false,
     track: currentTrack
   })
 

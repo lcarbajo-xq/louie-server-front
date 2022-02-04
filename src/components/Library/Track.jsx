@@ -1,54 +1,69 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useAppContext } from '../../context/AppContext'
 import { Dropdown } from '../Dropdown/Dropdown'
 import { Tooltip } from '../Tooltip/Tooltip'
 import { formatSeconds } from '../../helpers/playerHelpers'
+import { AlbumImage } from '../Player/AlbumImage'
+import { DBACTIONS } from '../../actions/dbActions'
+import { getTracksFromAlbum } from '../../services/databaseService'
 
-export const Track = ({
-  contextUri,
-  track,
-  type,
-  actions = true,
-  setSpotifyCurrentTrack
-}) => {
-  const [, dispatch] = useAppContext()
+export const Track = ({ context, track, type, actions = true }) => {
+  const [{ selectedTrack }, dispatch] = useAppContext()
   const [isHover, setIsHover] = useState(false)
+  const [active, setIsActive] = useState(false)
 
-  const handlePlay = () => {
+  useEffect(() => {
+    if (track.source && track.source === 'local') {
+      setIsActive(track._id === selectedTrack._id)
+    } else {
+      setIsActive(track.id === selectedTrack.id)
+    }
+  }, [selectedTrack, track])
+
+  const setCurrentTrack = () => {
     console.log(track)
     if (track.source) {
-      setSpotifyCurrentTrack(track)
+      dispatch({
+        type: DBACTIONS.SET_CURRENT_TRACK,
+        payload: { ...track }
+      })
     } else {
-      setSpotifyCurrentTrack({
-        ...track,
-        contextUri,
-        source: 'spotify'
+      dispatch({
+        type: DBACTIONS.SET_CURRENT_TRACK,
+        payload: {
+          ...track,
+          contextUri:
+            context?.contextUri || `spotify:album:${track.album.id}` || '',
+          source: type
+        }
+      })
+    }
+    if (track.source === 'local') {
+      getTracksFromAlbum(track.album._id).then((data) => {
+        dispatch({
+          type: DBACTIONS.SET_TRACK_LIST,
+          payload: data.tracks
+        })
       })
     }
   }
 
   return (
-    <div key={`search-${track._id}`} className='track'>
+    <div className={`track${active ? ' isplaying' : ''}`}>
       {/* <div *ngIf="options.picture" appTooltip tooltip="{{ track.artist }} - {{ track.name }}" class="image">
     <img class="lazyloa
     d" [lazyLoad]="track?.album?.picture || '/assets/app-icon-text.png'" />
     </div> */}
-      <div onClick={() => handlePlay(track)} className='track-metadata'>
+      <div onClick={setCurrentTrack} className='track-metadata'>
         <div className='image'>
-          <img
-            // className='lazyloadd'
-            src={
-              type === 'database'
-                ? `http://localhost:5000${track?.album?.image[0]}` ||
-                  '../../assets/app-icon.png'
-                : track.album.image
-            }
-          />
+          <AlbumImage currentTrack={track} />
         </div>
         <div className='details'>
           <div className='overflow-text'>
             <div className='title'>{track.name}</div>
-            <div className='subtitle'>{track.artist}</div>
+            <div className='subtitle'>
+              {track?.artists ? track?.artists[0]?.name : track?.artist}
+            </div>
           </div>
         </div>
       </div>
@@ -62,8 +77,8 @@ export const Track = ({
 
         <Tooltip className='duration' tooltip='duration'>
           {type === 'database'
-            ? formatSeconds(track.duration)
-            : formatSeconds(track.duration / 1000)}
+            ? formatSeconds(track.duration_ms)
+            : formatSeconds(track.duration_ms / 1000)}
         </Tooltip>
 
         <div className={isHover ? 'opacityVisible' : 'opacityZero'}>

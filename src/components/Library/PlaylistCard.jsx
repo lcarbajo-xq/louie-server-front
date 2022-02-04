@@ -2,18 +2,27 @@ import { Link } from 'wouter'
 import { useVibrantColor } from '../../hooks/useVibrantColor'
 
 export const PlaylistCard = ({ playlist }) => {
-  const { dominantColor } = useVibrantColor({ imageSrc: playlist.images[0] })
+  const { dominantColorNoOpacity } = useVibrantColor({
+    imageSrc: playlist?.images[0]?.url || '/src/assets/app-icon.png'
+  })
 
   return (
-    <div className='playlist-card'>
+    <div
+      className='playlist-card'
+      style={{
+        background: `linear-gradient(90deg , rgba(${dominantColorNoOpacity}, .6), rgba(${dominantColorNoOpacity}, .5))`
+      }}
+    >
       <div className='playlist-card-wrap-image'>
-        <img src={playlist.images[0] || '/src/assets/app-icon.png'} alt='' />
+        <img
+          src={playlist?.images[0]?.url || '/src/assets/app-icon.png'}
+          alt=''
+        />
       </div>
       <div
         className={`playlist-card-wrap-info ${
           playlist.private ? 'inactive' : ''
         }`}
-        style={{ backgroundColor: dominantColor }}
       >
         <Link
           href={`/library/playlist/${playlist._id}`}

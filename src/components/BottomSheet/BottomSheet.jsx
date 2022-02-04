@@ -3,7 +3,7 @@ import { useAppContext } from '../../context/AppContext'
 import { Header } from '../Header/Header'
 import './styles.scss'
 
-const BttomSheetHeader = ({ handleQueue }) => {
+const BottomSheetHeader = ({ handleQueue }) => {
   const [{ queue }, dispatch] = useAppContext()
   const handleRemovePlaylist = () => {
     dispatch({
@@ -50,7 +50,7 @@ export const BottomSheet = ({
 				</ng-container>
 				<ng-template #basic> */}
         <div className='bottom-sheet-header'>
-          <BttomSheetHeader handleQueue={handleQueue} />
+          <BottomSheetHeader handleQueue={handleQueue} />
           {/* <h4 className='title'>{options?.title}</h4> */}
         </div>
 

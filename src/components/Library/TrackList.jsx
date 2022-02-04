@@ -1,27 +1,24 @@
 import { Track } from './Track'
 
 export const TrackList = ({
-  contextUri,
+  context,
   tracks,
-  setSpotifyCurrentTrack,
   title = 'Tracks',
-  type = 'database'
+  type = 'spotify'
 }) => {
   return (
     <div className='tracks-wrapper'>
       <div className='title-wrapper'>
         <h3>{title}</h3>
-        <div className='action'>
-          <div className='play-button'>Play</div>
-        </div>
+        <div className='play-button'>Play</div>
       </div>
-      <div className='grid'>
+
+      <div className='grid track-list'>
         {tracks !== undefined &&
           tracks?.map((track, i) => (
             <Track
-              setSpotifyCurrentTrack={setSpotifyCurrentTrack}
-              key={track._id + i}
-              contextUri={contextUri}
+              key={track.id ? i + track.id : i + track._id}
+              context={context}
               type={type}
               track={track}
             />

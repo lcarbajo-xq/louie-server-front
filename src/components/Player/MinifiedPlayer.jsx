@@ -3,13 +3,13 @@ import { PlayerControls } from './PlayerFooter/PlayerFooterControls'
 import { PlayerPlaceholder } from './PlayerFooter/PlayerPlaceholder'
 import { PlayerMetadata } from './PlayerMetadata'
 
-export const MinifiedPlayer = ({ player, togglePlayer }) => {
+export const MinifiedPlayer = ({ player, togglePlayer, isLoading }) => {
   const { togglePlayPause, playbackState } = player
   const { progressCircumference, isPlaying, currentTrack } = playbackState
 
   return (
     <div className='player'>
-      {!currentTrack ? (
+      {!currentTrack || isLoading ? (
         <PlayerPlaceholder />
       ) : (
         <>

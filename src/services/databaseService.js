@@ -1,5 +1,7 @@
 import { BASE_URLS } from '../constants/endpoints'
 
+const { fetch } = window
+
 export const getItemsFromDB = async (name = '', limit = 20, page = 0) => {
   const url = `${BASE_URLS[name]}?limit=${limit}&skip=${page}`
   return fetch(url).then((json) => json.json())
@@ -39,5 +41,15 @@ export const fetchInitialData = async () => {
 
 export const getAccessToken = async () => {
   const url = 'http://localhost:5000/auth'
+  return fetch(url).then((json) => json.json())
+}
+
+export const fetchLikedTracks = async () => {
+  const url = 'http://localhost:5000/tracks/liked'
+  return fetch(url).then((json) => json.json())
+}
+
+export const getTracksFromAlbum = async (context) => {
+  const url = `http://localhost:5000/tracks/get/?skip=0&limit=20&album=${context}`
   return fetch(url).then((json) => json.json())
 }

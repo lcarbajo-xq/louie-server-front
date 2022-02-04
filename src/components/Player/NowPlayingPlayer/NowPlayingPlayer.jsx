@@ -1,16 +1,14 @@
-import React from 'react'
-import { Link } from 'wouter'
-import { Dropdown } from '../../Dropdown/Dropdown'
-import './styles.scss'
-import cover from '../../../assets/app-icon.png'
-import { Slider } from '../..//Slider/Slider'
-import { BottomSheet } from '../..//BottomSheet/BottomSheet'
+import { useEffect, useMemo, useState } from 'react'
+import { Slider } from '../../Slider/Slider'
+import { BottomSheet } from '../../BottomSheet/BottomSheet'
 import { useAppContext } from '../../../context/AppContext'
 import { formatSeconds } from '../../../helpers/playerHelpers'
 import { DBACTIONS } from '../../../actions/dbActions'
-import { useEffect, useMemo, useState } from 'react'
-import { TrackList } from '../..//Library/TrackList'
+import { TrackList } from '../../Library/TrackList'
 import { AlbumImage } from '../AlbumImage'
+import './styles.scss'
+import { Dropdown } from '../../Dropdown/Dropdown'
+import { Link } from 'wouter'
 
 export const NowPlayingPlayer = ({ player }) => {
   const [{ queue }, dispatch] = useAppContext()
@@ -41,10 +39,11 @@ export const NowPlayingPlayer = ({ player }) => {
   }, [queue])
 
   useEffect(() => {
-    if (playbackState.muted === true || volume === 0)
+    if (playbackState.muted === true || volume === 0) {
       setVolumeClassName('feather-volume-x')
-    else if (volume > 0 && volume <= 0.2) setVolumeClassName(' feather-volume')
-    else if (volume < 0.5) setVolumeClassName('feather-volume-1')
+    } else if (volume > 0 && volume <= 0.2) {
+      setVolumeClassName(' feather-volume')
+    } else if (volume < 0.5) setVolumeClassName('feather-volume-1')
     else if (volume >= 0.5) setVolumeClassName('feather-volume-2')
   }, [playbackState.muted, volume])
 
@@ -140,9 +139,6 @@ export const NowPlayingPlayer = ({ player }) => {
         <div className='playing-progress'>
           <div className='playing-progress-slider'>
             <Slider
-              // seekable
-              // options={{ vertical: false, autosize: false }}
-              // buffer={100}
               type='progress'
               handleChange={seekPlaybackProgress}
               value={playbackState.progress}
@@ -160,10 +156,7 @@ export const NowPlayingPlayer = ({ player }) => {
               </div>
             </div>
           </div>
-          {/* <app-slider [seekable]="!(buffering && playing)" [options]="{vertical: false, autoSize: false}"
-  				[buffer]="buffer" [value]="progress" (valueChange)="onProgress($event)">
-  			</app-slider>
-                				<app-loading [loading]="buffering && playing"></app-loading>*/}
+          {/* <app-slider [seekable]="!(buffering && playing)" [options]="{vertical: false, autoSize: false}" [buffer]="buffer" [value]="progress" (valueChange)="onProgress($event)"></app-slider><app-loading [loading]="buffering && playing"></app-loading> */}
         </div>
 
         <div className='playing-controls'>
@@ -212,9 +205,7 @@ export const NowPlayingPlayer = ({ player }) => {
               <i className={volumeClassName} />
             </div>
             <div className='playing-volume-controls-slider'>
-              {/* <app-slider [options]="{vertical: false, autoSize: false}" [value]="volume"
-  					(valueChange)="onVolume($event)">
-  				</app-slider> */}
+              {/* <app-slider [options]="{vertical: false, autoSize: false}" [value]="volume"(valueChange)="onVolume($event)"></app-slider> */}
               <Slider
                 options={{ vertical: false, autosize: false }}
                 type='volume'

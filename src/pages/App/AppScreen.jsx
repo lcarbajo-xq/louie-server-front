@@ -9,17 +9,15 @@ import { useTheme } from '../../hooks/useTheme'
 import { AppRouter } from '../../routers/AppRouter'
 import { AlbumScreen } from '../Album/AlbumScreen'
 import { ArtistsScreen } from '../Artist/ArtistsScreen'
-import { NowPlayingScreen } from '../NowPlaying/NowPlayingScreen'
 import { PlaylistScreen } from '../Playlist/PlaylistScreen'
 import { TracksScreen } from '../Tracks/TracksScreen'
 import './styles.scss'
 
 export const AppScreen = () => {
   useTheme()
-  const [{ bigPlayerSelected, accessToken }] = useAppContext()
+  const [{ accessToken }] = useAppContext()
   const [artist, setArtist] = useState({})
   const [album, setAlbum] = useState({})
-  const [currentTrack, setCurrentTrack] = useState({})
 
   return (
     <div className='app'>
@@ -36,7 +34,7 @@ export const AppScreen = () => {
       </section>
       <AppRouter>
         <Route path='/home'>
-          <Search setCurrentTrack={setCurrentTrack} />
+          <Search />
         </Route>
         <Route path='/library'>
           <Library setArtist={setArtist} setAlbum={setAlbum} />
@@ -52,16 +50,11 @@ export const AppScreen = () => {
           {(params) => <AlbumScreen album={album} id={params.id} />}
         </Route>
         <Route path='/library/playlist/:id'>
-          {(params) => (
-            <PlaylistScreen
-              id={params.id}
-              setSpotifyCurrentTrack={setCurrentTrack}
-            />
-          )}
+          {(params) => <PlaylistScreen id={params.id} />}
         </Route>
       </AppRouter>
 
-      <PlayerFooter token={accessToken} currentTrack={currentTrack} />
+      <PlayerFooter token={accessToken} />
     </div>
   )
 }

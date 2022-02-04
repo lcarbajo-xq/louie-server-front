@@ -78,6 +78,26 @@ export const rootReducer = (state, action) => {
         }
       }
     }
+    case DBACTIONS.GET_TRACKS_FROM_SPOTIFY: {
+      const { tracks } = action.payload
+      return {
+        ...state,
+        library: {
+          ...state.library,
+          tracks
+        },
+        home: {
+          ...state.home,
+          tracks
+        }
+      }
+    }
+    case DBACTIONS.SET_CURRENT_TRACK: {
+      return {
+        ...state,
+        selectedTrack: { ...action.payload }
+      }
+    }
     case DBACTIONS.SET_NEXT_PAGE: {
       const { page, limit } = state.library
       return {
@@ -126,7 +146,7 @@ export const rootReducer = (state, action) => {
     case DBACTIONS.SET_TRACK_LIST: {
       return {
         ...state,
-        queue: [...action.payload]
+        queue: action.payload
       }
     }
     case DBACTIONS.SET_ACCESS_TOKEN: {

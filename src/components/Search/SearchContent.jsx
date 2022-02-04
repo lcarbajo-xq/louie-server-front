@@ -5,11 +5,7 @@ import cover from '../../assets/app-icon.png'
 import { TrackList } from '../Library/TrackList'
 import { PlaylistCard } from '../Library/PlaylistCard'
 
-export const SearchContent = ({
-  title = 'Welcome!',
-  content,
-  setCurrentTrack
-}) => {
+export const SearchContent = ({ title = 'Welcome!', content }) => {
   return (
     <>
       <h1 className='title'>{title}</h1>
@@ -18,8 +14,10 @@ export const SearchContent = ({
 
         <div className='playlists-scroll'>
           {/* <HorizontalScroll> */}
-          {content?.playlists?.map((playlist) => {
-            return <PlaylistCard key={playlist._id} playlist={playlist} />
+          {content?.playlists?.map((playlist, i) => {
+            if (i < 4) {
+              return <PlaylistCard key={playlist._id} playlist={playlist} />
+            } else return null
           })}
           {/* </HorizontalScroll> */}
         </div>
@@ -68,10 +66,7 @@ export const SearchContent = ({
         </HorizontalScroll>
       </div>
 
-      <TrackList
-        tracks={content?.tracks}
-        setSpotifyCurrentTrack={setCurrentTrack}
-      />
+      <TrackList title='Recently Played' tracks={content?.tracks} />
     </>
   )
 }

@@ -1,8 +1,12 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { useAppContext } from '../context/AppContext'
 import { formatAudioProgress } from '../helpers/playerHelpers'
 import { requestSpotifyEndpoint } from '../services/spotifyService'
 
-export const useSpotifyPlayer = ({ token }) => {
+const { requestAnimationFrame, cancelAnimationFrame, localStorage } = window
+
+export const useSpotifyPlayer = ({ token, setLoading }) => {
+  const [{ selectedTrack }, dispatch] = useAppContext()
   const [volume, setVolume] = useState(1)
 
   const [isActive, setIsActive] = useState(false)
@@ -15,9 +19,10 @@ export const useSpotifyPlayer = ({ token }) => {
     isFirst: false,
     isLast: false,
     progress: 0,
-    progressCirumference: 0,
+    progressCircumference: 0,
     duration: 0,
-    updateTime: null
+    updateTime: null,
+    source: 'spotify'
   })
 
   const audioSeekRef = useRef()
@@ -79,7 +84,7 @@ export const useSpotifyPlayer = ({ token }) => {
         }
 
         updatePlaybackState()
-
+        setLoading(false)
         spotifyPlayer.getCurrentState().then((state) => {
           !state ? setIsActive(false) : setIsActive(true)
         })
@@ -110,23 +115,29 @@ export const useSpotifyPlayer = ({ token }) => {
       const durationInSeconds = Math.floor(duration / 1000)
       const progressInSeconds = Math.floor(position / 1000)
 
+      const playbackTrack = {
+        ...track_window.current_track,
+        contextUri: context.uri,
+        source: 'spotify'
+      }
+
       setPlaybackState((state) => ({
         ...state,
         isPlaying: !paused,
         shuffle: shuffle,
-        currentTrack: {
-          ...track_window.current_track,
-          contextUri: context.uri,
-          source: 'spotify'
-        },
+        currentTrack: playbackTrack,
         isFirst: track_window.previous_tracks.length === 0,
         isLast: track_window.next_tracks.length === 0,
         repeat: repeat_mode !== 0,
         progress: progressInSeconds,
-        progressCirumference: circularProgress,
+        progressCircumference: circularProgress,
         duration: durationInSeconds,
         updateTime: performance.now()
       }))
+
+      if (selectedTrack?.source === 'spotify') {
+        localStorage.setItem('current-track', JSON.stringify(playbackTrack))
+      }
     })
   }
 
@@ -156,6 +167,9 @@ export const useSpotifyPlayer = ({ token }) => {
     if (audioSeekRef?.current) {
       cancelAnimationFrame(audioSeekRef)
     }
+
+    setLoading(true)
+
     const url = 'https://api.spotify.com/v1/me/player/play'
 
     const body = {
@@ -177,6 +191,7 @@ export const useSpotifyPlayer = ({ token }) => {
       if (response?.status !== 204) {
         console.log(`ERROR: Something went wrong! Server response: ${response}`)
       } else {
+        setLoading(false)
         audioSeekRef.current = requestAnimationFrame(updatePlayerProgress)
       }
     })
@@ -299,22 +314,29 @@ export const useSpotifyPlayer = ({ token }) => {
 
   useEffect(() => {
     if (token) {
+      setLoading(true)
       createSpotifySDKScript()
       initializeSpotifyWebPlayback()
     }
 
     return () => {
-      console.log('adios')
       cancelAnimationFrame(audioSeekRef.current)
       spotifyPlayerRef.current?.disconnect()
     }
   }, [token])
 
+  useEffect(() => {
+    if (selectedTrack?.source === 'spotify') {
+      if (selectedTrack?._id !== playbackState?.currentTrack?.id) {
+        setSpotifyCurrentTrack(selectedTrack)
+      }
+    }
+  }, [selectedTrack])
+
   return {
     isActive,
     playbackState,
     volume,
-    setSpotifyCurrentTrack,
     togglePlayPause,
     skipNextTrack,
     skipPrevTrack,

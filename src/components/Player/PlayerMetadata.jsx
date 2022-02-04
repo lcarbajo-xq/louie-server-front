@@ -9,9 +9,9 @@ export const PlayerMetadata = ({ currentTrack }) => {
       {/* <Link href='/player' className='player-metadata-details'> */}
       <div className='player-metadata-details'>
         <div className='player-metadata-details-artist'>
-          {currentTrack.source === 'local'
+          {currentTrack?.source === 'local'
             ? currentTrack?.artist
-            : currentTrack?.artists[0].name}
+            : currentTrack?.artists[0]?.name}
         </div>
         <div className='player-metadata-details-song'>{currentTrack?.name}</div>
       </div>
